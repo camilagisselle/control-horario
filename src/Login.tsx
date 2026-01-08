@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom"; // 👈 Agrega esta línea
 import "./Login.css";
 
 const Login: React.FC = () => {
-  const [avatar, setAvatar] = useState("/avatar.jpeg"); // archivo en /public
+  const [avatar, setAvatar] = useState("/avatar.jpeg");
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -28,7 +29,6 @@ const Login: React.FC = () => {
             <label htmlFor="avatar-upload">
               <img src={avatar} alt="avatar" className="login-avatar" />
             </label>
-
             <input
               id="avatar-upload"
               type="file"
@@ -44,7 +44,11 @@ const Login: React.FC = () => {
           <input type="password" placeholder="Contraseña" />
 
           <button>Ingresar</button>
-          <a href="#">Recuperar contraseña</a>
+
+          {/* 👇 Reemplaza el <a> por esto */}
+          <Link to="/recuperar" className="recuperar-link">
+            Recuperar contraseña
+          </Link>
         </div>
       </div>
     </div>

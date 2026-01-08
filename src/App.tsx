@@ -1,15 +1,15 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./Login";
-import RecupContrasena from "./RecupContrasena";
+import RecupContraseña from "./Recupcontrasena";
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/recuperar" element={<RecupContrasena />} />
+        <Route path="/recuperar" element={<RecupContraseña />} />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
 
