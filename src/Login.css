@@ -1,0 +1,117 @@
+/* CONTENEDOR PRINCIPAL */
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 70px;
+  padding: 40px;
+  background: linear-gradient(135deg, #c9f2f5, #b7d4ff);
+}
+
+/* LOGO */
+.login-left {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-logo {
+  width: 350 px;
+  max-width: 100%;
+  height: auto;
+  filter: drop-shadow(0 12px 25px rgba(0, 0, 0, 0.15));
+}
+
+/* TARJETA LOGIN */
+.login-card {
+  width: 380px;
+  background: white;
+  padding: 40px 30px;
+  border-radius: 22px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  position: relative;
+}
+
+/* AVATAR */
+.avatar-container {
+  position: relative;
+  top: -70px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: -50px;
+}
+
+.login-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 5px solid white;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  background-color: #fff;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-avatar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(107, 78, 255, 0.4);
+}
+
+/* TÍTULO */
+.login-card h2 {
+  color: #6b4eff;
+  margin-bottom: 25px;
+  font-size: 1.5rem;
+}
+
+/* INPUTS */
+.login-card input {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+/* BOTÓN */
+.login-card button {
+  width: 100%;
+  padding: 14px;
+  background: #b392ff;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.login-card button:hover {
+  background: #9d78ff;
+}
+
+/* LINK */
+.login-card a {
+  display: block;
+  margin-top: 18px;
+  color: #6b4eff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .login-logo {
+    width: 200px;
+  }
+}

@@ -1,0 +1,22 @@
+/* 🔹 Reinicio básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+/* 🔹 Fondo general */
+body {
+  background-color: linear-gradient(135deg, #c9f2f5, #b7d4ff);
+  color: #333;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 🔹 Contenedor raíz (donde se carga Login) */
+#root {
+  width: 100%;
+}
