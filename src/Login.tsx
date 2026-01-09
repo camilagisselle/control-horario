@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom"; // 👈 Agrega esta línea
+import { Link, useNavigate } from "react-router-dom"; // 👈 agregamos useNavigate
 import "./Login.css";
 
 const Login: React.FC = () => {
   const [avatar, setAvatar] = useState("/avatar.jpeg");
+  const navigate = useNavigate(); // 👈 hook de navegación
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -12,6 +13,12 @@ const Login: React.FC = () => {
       reader.onloadend = () => setAvatar(reader.result as string);
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleIngresar = () => {
+    // Aquí después puedes validar usuario y contraseña
+    // Por ahora simplemente enviamos a Registro
+    navigate("/registro");
   };
 
   return (
@@ -43,9 +50,9 @@ const Login: React.FC = () => {
           <input type="text" placeholder="Usuario" />
           <input type="password" placeholder="Contraseña" />
 
-          <button>Ingresar</button>
+          {/* 👇 BOTÓN CONECTADO A REGISTRO */}
+          <button onClick={handleIngresar}>Ingresar</button>
 
-          {/* 👇 Reemplaza el <a> por esto */}
           <Link to="/recuperar" className="recuperar-link">
             Recuperar contraseña
           </Link>

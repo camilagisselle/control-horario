@@ -1,120 +1,99 @@
 .recuperar-container {
+  width: 100vw;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background: linear-gradient(to right, #b7f3c1, #a3d5f7);
+  background: linear-gradient(135deg, #c9f7dd, #a7c7ff);
 }
 
+/* Tarjeta */
 .recuperar-card {
-  background-color: white;
-  padding: 2rem;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  padding: 40px 50px;
+  border-radius: 22px;
+  width: 520px;
+  max-width: 95%;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
   text-align: center;
-  width: 320px;
 }
 
-.recuperar-logo {
-  width: 80px;
-  margin-bottom: 10px;
-}
-
+/* Título */
 h2 {
-  color: #2056a4;
-  margin-bottom: 20px;
+  color: #2b4fb8;
+  font-size: 26px;
+  margin-bottom: 30px;
+  font-weight: 700;
 }
 
+/* Form */
 form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 18px;
 }
 
-input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-button {
-  background-color: #9b5de5;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-button:hover {
-  background-color: #7d3cc7;
-}
-
-.reenviar {
-  background: none;
-  color: #1e4fad;
-  text-decoration: underline;
-  font-size: 14px;
-  margin-top: 10px;
-}
-.recuperar-container {
+/* Fila */
+.form-row {
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: 100vh;
-  background: linear-gradient(to right, #b7f3c1, #a3d5f7);
+  justify-content: space-between;
+  gap: 15px;
 }
 
-.recuperar-card {
-  background-color: white;
-  padding: 2rem;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  text-align: center;
-  width: 320px;
+/* Label */
+.form-row label {
+  width: 45%;
+  text-align: left;
+  font-weight: 600;
+  color: #2b4fb8;
+  font-size: 14px;
 }
 
-.recuperar-logo {
-  width: 80px;
-  margin-bottom: 10px;
+/* Input */
+.form-row input {
+  width: 55%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #b8c7ff;
+  font-size: 14px;
+  outline: none;
+  background: #fff;
 }
 
-h2 {
-  color: #2056a4;
-  margin-bottom: 20px;
+.form-row input:focus {
+  border-color: #7f9cff;
+  box-shadow: 0 0 0 2px rgba(127, 156, 255, 0.2);
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
+/* Botón */
 button {
-  background-color: #9b5de5;
+  margin-top: 25px;
+  align-self: center;
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
   color: white;
   border: none;
-  padding: 10px;
-  border-radius: 6px;
+  padding: 12px 40px;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
-  font-weight: bold;
+  transition: 0.25s ease;
 }
 
 button:hover {
-  background-color: #7d3cc7;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(139, 92, 246, 0.4);
 }
 
+/* Reenviar */
 .reenviar {
+  margin-top: 15px;
   background: none;
-  color: #1e4fad;
-  text-decoration: underline;
+  border: none;
+  color: #2b4fb8;
   font-size: 14px;
-  margin-top: 10px;
+  cursor: pointer;
+  text-decoration: underline;
 }
