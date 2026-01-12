@@ -3,13 +3,14 @@
   font-family: "Segoe UI", sans-serif;
 }
 
+/* Layout general */
 .dashboard {
   display: flex;
   height: 100vh;
   background: linear-gradient(135deg, #c9f7dd, #a7c7ff);
 }
 
-/* Sidebar */
+/* ================= SIDEBAR ================= */
 .sidebar {
   width: 260px;
   padding: 25px;
@@ -25,16 +26,22 @@
   align-items: center;
 }
 
+/* AVATAR */
 .avatar {
-  font-size: 36px;
-  background: #6c5ce7;
-  color: white;
-  border-radius: 50%;
   width: 55px;
   height: 55px;
+  border-radius: 50%;
+  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: #6c5ce7;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .menu {
@@ -59,7 +66,7 @@
   color: #4b4b4b;
 }
 
-/* Contenido */
+/* ================= CONTENIDO ================= */
 .contenido {
   position: relative;
   flex: 1;
@@ -78,31 +85,45 @@
   margin-top: 80px;
 }
 
-.hora {
-  margin: 20px auto;
-  padding: 30px 40px; /* esto se queda igual */
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(6px);
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  color: #1e40af;
-  font-size: 2.4rem; /* ⬅ aquí crece el reloj */
+.registro-titulo {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #6c5ce7;
+  font-size: 36px;
   font-weight: 700;
-  width: fit-content;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  z-index: 10;
 }
 
-.acciones {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
 .registro-logo {
   position: absolute;
   top: -50px;
   right: 30px;
   width: 250px;
   opacity: 0.95;
+}
+
+/* ================= RELOJ ================= */
+.hora {
+  margin: 20px auto;
+  padding: 30px 40px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(6px);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #1e40af;
+  font-size: 2.4rem;
+  font-weight: 700;
+  width: fit-content;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* ================= BOTONES ================= */
+.acciones {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
 }
 
 .acciones button {
@@ -115,7 +136,14 @@
   cursor: pointer;
 }
 
-/* Modal */
+/* Botones de colación */
+.acciones button:nth-child(3),
+.acciones button:nth-child(4) {
+  background: #8b5cf6;
+  color: white;
+}
+
+/* ================= MODALES ================= */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -150,6 +178,7 @@
   border: none;
   padding: 12px 30px;
   border-radius: 12px;
+  cursor: pointer;
 }
 
 .cancelar {
@@ -157,22 +186,5 @@
   border: none;
   padding: 12px 30px;
   border-radius: 12px;
-}
-.registro-titulo {
-  position: absolute;
-  top: 40px; /* lo empuja un poco hacia arriba */
-  left: 50%;
-  transform: translateX(-50%);
-  color: #6c5ce7;
-  font-size: 36px;
-  font-weight: 700;
-  z-index: 10;
-}
-
-/* Colores de los botones de colación */
-.acciones button:nth-child(3),
-.acciones button:nth-child(4) {
-  background: #8b5cf6;
-  color: white;
-  border: none;
+  cursor: pointer;
 }

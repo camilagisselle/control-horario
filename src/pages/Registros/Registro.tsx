@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 import "./Registro.css";
+import { useNavigate } from "react-router-dom";
 
 export default function Registro() {
   const [hora, setHora] = useState("");
   const [mostrarModal, setMostrarModal] = useState(false);
   const [mostrarConfirmado, setMostrarConfirmado] = useState(false);
   const [accion, setAccion] = useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const actualizarHora = () => {
@@ -25,7 +28,6 @@ export default function Registro() {
 
   const confirmar = () => {
     setMostrarModal(false);
-
     setTimeout(() => {
       setMostrarConfirmado(true);
     }, 200);
@@ -36,7 +38,20 @@ export default function Registro() {
       {/* Sidebar */}
       <aside className="sidebar">
         <div className="usuario">
-          <div className="avatar">👩</div>
+          {/* AVATAR CLICKEABLE */}
+          <div
+            className="avatar"
+            onClick={() => navigate("/perfil")}
+            title="Ver perfil"
+            style={{ cursor: "pointer" }}
+          >
+            <img
+              src="/avatar.jpeg"
+              alt="Avatar usuario"
+              className="avatar-img"
+            />
+          </div>
+
           <div>
             <p>Usuario:</p>
             <strong>Camila Pinilla Cabrera</strong>
@@ -53,7 +68,12 @@ export default function Registro() {
       <main className="contenido">
         <div className="panel">
           <h1 className="registro-titulo">Registro de asistencia</h1>
-          <img src="/krono2.1.png" className="registro-logo" alt="Logo" />
+
+          <img
+            src="/krono2.1.png"
+            className="registro-logo"
+            alt="Logo"
+          />
 
           <div className="hora">{hora}</div>
 
@@ -61,7 +81,9 @@ export default function Registro() {
             <button onClick={() => abrirConfirmacion("Entrada")}>
               Entrada
             </button>
-            <button onClick={() => abrirConfirmacion("Salida")}>Salida</button>
+            <button onClick={() => abrirConfirmacion("Salida")}>
+              Salida
+            </button>
             <button onClick={() => abrirConfirmacion("Inicio colación")}>
               Inicio colación
             </button>
@@ -72,7 +94,7 @@ export default function Registro() {
         </div>
       </main>
 
-      {/* Modal de confirmación */}
+      {/* Modal confirmación */}
       {mostrarModal && (
         <div className="modal-backdrop">
           <div className="modal">
@@ -93,7 +115,7 @@ export default function Registro() {
         </div>
       )}
 
-      {/* Modal de registro confirmado */}
+      {/* Modal confirmado */}
       {mostrarConfirmado && (
         <div className="modal-backdrop">
           <div className="modal">
