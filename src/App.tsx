@@ -11,9 +11,10 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/recuperar" element={<RecupContrasena />} />
         <Route path="/registro" element={<Registro />} />
+        <Route path="/historial" element={<Historial />} /> {/* ← agregar */}
       </Routes>
     </Router>
   );
 }
- 
+
 export default App;

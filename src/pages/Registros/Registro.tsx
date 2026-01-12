@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Registro.css";
 
 export default function Registro() {
@@ -6,6 +7,7 @@ export default function Registro() {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [mostrarConfirmado, setMostrarConfirmado] = useState(false);
   const [accion, setAccion] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const actualizarHora = () => {
@@ -33,7 +35,6 @@ export default function Registro() {
 
   return (
     <div className="dashboard">
-      {/* Sidebar */}
       <aside className="sidebar">
         <div className="usuario">
           <div className="avatar">👩</div>
@@ -43,13 +44,18 @@ export default function Registro() {
           </div>
         </div>
 
-        <button className="menu activo">✔ Registrar</button>
-        <button className="menu">📄 Historial</button>
+        <button className="menu activo" onClick={() => navigate("/registro")}>
+          ✔ Registrar
+        </button>
+        <button className="menu" onClick={() => navigate("/historial")}>
+          📄 Historial
+        </button>
 
-        <div className="logout">↩ Cerrar sesión</div>
+        <div className="logout" onClick={() => navigate("/")}>
+          ↩ Cerrar sesión
+        </div>
       </aside>
 
-      {/* Contenido */}
       <main className="contenido">
         <div className="panel">
           <h1 className="registro-titulo">Registro de asistencia</h1>
@@ -72,7 +78,6 @@ export default function Registro() {
         </div>
       </main>
 
-      {/* Modal de confirmación */}
       {mostrarModal && (
         <div className="modal-backdrop">
           <div className="modal">
@@ -93,7 +98,6 @@ export default function Registro() {
         </div>
       )}
 
-      {/* Modal de registro confirmado */}
       {mostrarConfirmado && (
         <div className="modal-backdrop">
           <div className="modal">
