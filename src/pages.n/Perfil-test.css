@@ -1,0 +1,23 @@
+.perfil-root {
+  width: 100vw;
+  height: 100vh;
+
+  /* ANULA el centrado del body */
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+
+  background: #f4f6fb;
+}
+
+.perfil-sidebar {
+  width: 260px;
+  background: #8b5cf6;
+  color: white;
+  padding: 30px;
+}
+
+.perfil-contenido {
+  flex: 1;
+  padding: 40px;
+}
