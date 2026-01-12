@@ -1,4 +1,4 @@
-import "./HistorialPage.css";
+import "./Historialpaginas.css";
 
 type Registro = {
   fecha: string;
