@@ -97,3 +97,56 @@ button:hover {
   cursor: pointer;
   text-decoration: underline;
 }
+
+/* ===== MODAL ===== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-box {
+  background: white;
+  padding: 45px 50px;
+  border-radius: 22px;
+  width: 380px;
+  max-width: 90%;
+  text-align: center;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+  animation: modalIn 0.35s ease;
+}
+
+.modal-box h2 {
+  color: #8b5cf6;
+  font-size: 26px;
+  margin-bottom: 10px;
+}
+
+.modal-box p {
+  font-size: 18px;
+  color: #374151;
+  margin-bottom: 30px;
+}
+
+.modal-box button {
+  margin-top: 0;
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+  padding: 12px 45px;
+}
+
+/* Animación elegante */
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
