@@ -1,4 +1,6 @@
-/* CONTENEDOR PRINCIPAL */
+/* ===============================
+   CONTENEDOR PRINCIPAL
+================================ */
 .login-container {
   min-height: 100vh;
   display: flex;
@@ -9,7 +11,9 @@
   background: linear-gradient(135deg, #c9f7dd, #a7c7ff);
 }
 
-/* LOGO */
+/* ===============================
+   LOGO
+================================ */
 .login-left {
   display: flex;
   justify-content: center;
@@ -17,13 +21,15 @@
 }
 
 .login-logo {
-  width: 350 px;
+  width: 350px; /* ← corregido */
   max-width: 100%;
   height: auto;
   filter: drop-shadow(0 12px 25px rgba(0, 0, 0, 0.15));
 }
 
-/* TARJETA LOGIN */
+/* ===============================
+   TARJETA LOGIN
+================================ */
 .login-card {
   width: 380px;
   background: white;
@@ -34,7 +40,9 @@
   position: relative;
 }
 
-/* AVATAR */
+/* ===============================
+   AVATAR
+================================ */
 .avatar-container {
   position: relative;
   top: -70px;
@@ -60,14 +68,18 @@
   box-shadow: 0 0 15px rgba(107, 78, 255, 0.4);
 }
 
-/* TÍTULO */
+/* ===============================
+   TEXTO
+================================ */
 .login-card h2 {
   color: #6b4eff;
   margin-bottom: 25px;
   font-size: 1.5rem;
 }
 
-/* INPUTS */
+/* ===============================
+   INPUTS
+================================ */
 .login-card input {
   width: 100%;
   padding: 14px;
@@ -77,7 +89,9 @@
   font-size: 16px;
 }
 
-/* BOTÓN */
+/* ===============================
+   BOTÓN
+================================ */
 .login-card button {
   width: 100%;
   padding: 14px;
@@ -95,7 +109,9 @@
   background: #9d78ff;
 }
 
-/* LINK */
+/* ===============================
+   LINK
+================================ */
 .login-card a {
   display: block;
   margin-top: 18px;
@@ -104,14 +120,23 @@
   font-weight: 500;
 }
 
-/* RESPONSIVE */
+/* ===============================
+   RESPONSIVE (LOGIN BLINDADO)
+   Mantiene dos columnas
+================================ */
 @media (max-width: 768px) {
   .login-container {
-    flex-direction: column;
-    gap: 30px;
+    flex-direction: row; /* ← NO se apila */
+    gap: 20px;
+    padding: 20px;
   }
 
   .login-logo {
     width: 200px;
+  }
+
+  .login-card {
+    width: 100%;
+    max-width: 360px;
   }
 }
