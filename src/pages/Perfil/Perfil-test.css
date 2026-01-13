@@ -21,3 +21,10 @@
   flex: 1;
   padding: 40px;
 }
+
+@media (max-width: 768px) {
+}
+.login-container {
+  flex-direction: column;
+  gap: 30px;
+}
