@@ -53,13 +53,16 @@
 }
 
 /* LOGO */
-.logo {
-  display: flex;
-  align-items: center;
+.registro-logo {
+  position: absolute;
+  top: -50px;
+  right: 30px;
+  width: 250px;
+  opacity: 0.95;
 }
 
 .logo img {
-  height: 100px;   /* antes 32px */
+  height: 250px;   /* antes 32px */
   width: auto;
   object-fit: contain;
 }

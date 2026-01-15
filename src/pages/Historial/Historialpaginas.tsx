@@ -1,8 +1,9 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // 🔹 IMPORTANTE
 import "./Historialpaginas.css";
 
 type Registro = {
-  fecha: string; // formato DD/MM/YYYY
+  fecha: string;
   entrada: string;
   inicioColacion: string;
   finColacion: string;
@@ -11,45 +12,21 @@ type Registro = {
 };
 
 const registros: Registro[] = [
-  {
-    fecha: "23/10/2023",
-    entrada: "08:00",
-    inicioColacion: "13:14",
-    finColacion: "14:14",
-    salida: "17:00",
-    total: "9.0 hrs",
-  },
-  {
-    fecha: "24/10/2023",
-    entrada: "08:15",
-    inicioColacion: "13:00",
-    finColacion: "14:00",
-    salida: "17:15",
-    total: "9.0 hrs",
-  },
-  {
-    fecha: "25/11/2023",
-    entrada: "07:55",
-    inicioColacion: "13:05",
-    finColacion: "14:05",
-    salida: "16:55",
-    total: "9.0 hrs",
-  },
+  { fecha: "23/10/2023", entrada: "08:00", inicioColacion: "13:14", finColacion: "14:14", salida: "17:00", total: "9.0 hrs" },
+  { fecha: "24/10/2023", entrada: "08:15", inicioColacion: "13:00", finColacion: "14:00", salida: "17:15", total: "9.0 hrs" },
+  { fecha: "25/11/2023", entrada: "07:55", inicioColacion: "13:05", finColacion: "14:05", salida: "16:55", total: "9.0 hrs" },
 ];
 
 export default function HistorialPage() {
-  /* 🟢 PASO 1: estados */
+  const navigate = useNavigate();
   const [filtro, setFiltro] = useState<"dia" | "mes" | "anio">("dia");
   const [mostrarMenu, setMostrarMenu] = useState(false);
 
-  /* 🟢 PASO 2: aplicar filtro */
   const registrosFiltrados = registros.filter((r) => {
     const [, mes, anio] = r.fecha.split("/");
-
     if (filtro === "dia") return true;
     if (filtro === "mes") return mes === "10";
     if (filtro === "anio") return anio === "2023";
-
     return true;
   });
 
@@ -66,16 +43,13 @@ export default function HistorialPage() {
         </div>
 
         <div className="logo">
-          <img src="/krono.png" alt="Krono" />
+          <img src="/krono2.1.png" alt="Krono" />
         </div>
       </header>
 
       {/* BOTÓN FILTROS */}
       <div className="filtros-container">
-        <button
-          className="btn-filtros"
-          onClick={() => setMostrarMenu(!mostrarMenu)}
-        >
+        <button className="btn-filtros" onClick={() => setMostrarMenu(!mostrarMenu)}>
           Filtros ▾
         </button>
 
@@ -104,9 +78,7 @@ export default function HistorialPage() {
           <tbody>
             {registrosFiltrados.map((r, index) => (
               <tr key={index}>
-                <td>
-                  <span className="fecha-pill">{r.fecha}</span>
-                </td>
+                <td><span className="fecha-pill">{r.fecha}</span></td>
                 <td>{r.entrada}</td>
                 <td>{r.inicioColacion}</td>
                 <td>{r.finColacion}</td>
@@ -123,6 +95,11 @@ export default function HistorialPage() {
         <button>&lt; ANTERIOR</button>
         <button className="pagina-activa">1</button>
         <button>SIGUIENTE &gt;</button>
+      </div>
+
+      {/* 🔹 BOTÓN CERRAR SESIÓN */}
+      <div className="logout" onClick={() => navigate("/")}>
+        ↩ Cerrar sesión
       </div>
     </div>
   );
