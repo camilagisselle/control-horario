@@ -1,6 +1,9 @@
 .historial-container {
-  min-height: 100vh;
-  padding: 30px;
+  height: 100vh;              /* CAMBIO */
+  box-sizing: border-box;     /* CAMBIO */
+  padding: 5px 30px;   
+  overflow: hidden;           /* CAMBIO */
+
   background: linear-gradient(
     135deg,
     #d9f7d6 0%,
@@ -9,13 +12,18 @@
     #b7d4ff 100%
   );
   font-family: Arial, Helvetica, sans-serif;
+
+  display: flex;              /* CAMBIO */
+  flex-direction: column;     /* CAMBIO */
 }
 
 /* HEADER */
 .historial-header {
+  margin-top: -5px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;         /* CAMBIO */
 }
 
 /* USUARIO */
@@ -37,39 +45,35 @@
 
 /* AVATAR 👩 */
 .avatar {
-  width: 48px;     /* antes 32px */
+  width: 48px;
   height: 48px;
-
-  font-size: 38px; /* antes 18px */
-
+  font-size: 38px;
   background: #6c5ce7;
   border-radius: 50%;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   line-height: 1;
 }
 
 /* LOGO */
 .registro-logo {
   position: absolute;
-  top: -50px;
+  top: 0;                     /* CAMBIO */
   right: 30px;
-  width: 250px;
+  width: 220px;               /* CAMBIO leve */
   opacity: 0.95;
 }
 
 .logo img {
-  height: 250px;   /* antes 32px */
+  height: 220px;              
   width: auto;
   object-fit: contain;
 }
 
 /* FILTROS */
 .btn-filtros {
-  margin: 20px 0;
+  margin: 16px 0;             
   background: #9b7bff;
   color: white;
   border: none;
@@ -83,6 +87,9 @@
   background: #e7ddff;
   padding: 15px;
   border-radius: 12px;
+
+  flex: 1;                    /* CAMBIO */
+  overflow: hidden;           /* CAMBIO */
 }
 
 table {
@@ -116,32 +123,30 @@ td {
   justify-content: flex-end;
   align-items: center;
   gap: 10px;
-  margin-top: 20px;
+  margin-top: 10px;           /* CAMBIO */
 }
 
 .paginacion button {
   height: 40px;
   padding: 0 18px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   background: #f4f7ff;
   border: 2px solid #2f3cff;
   border-radius: 10px;
-
   color: #2f3cff;
   font-weight: 600;
   cursor: pointer;
 }
 
-/* BOTÓN 1 */
+/* BOTÓN ACTIVO */
 .paginacion .pagina-activa {
   width: 40px;
   padding: 0;
   border-radius: 6px;
 }
+
 /* FILTROS */
 .filtros-container {
   position: relative;
@@ -171,4 +176,21 @@ td {
 
 .menu-filtros button:hover {
   background: #ef6def;
+}
+.logout {
+  position: fixed;
+  bottom: 20px;
+  left: 30px;
+  cursor: pointer;
+  z-index: 20;
+}
+.registro-titulo {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #6c5ce7;
+  font-size: 36px;
+  font-weight: 700;
+  z-index: 10;
 }
