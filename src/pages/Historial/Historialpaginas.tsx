@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./Historialpaginas.css";
 
 type Registro = {
-  fecha: string; // formato DD/MM/YYYY
+  fecha: string;
   entrada: string;
   inicioColacion: string;
   finColacion: string;
@@ -38,18 +38,15 @@ const registros: Registro[] = [
 ];
 
 export default function HistorialPage() {
-  /* 🟢 PASO 1: estados */
   const [filtro, setFiltro] = useState<"dia" | "mes" | "anio">("dia");
-  const [mostrarMenu, setMostrarMenu] = useState(false);
+  const [mostrarFiltros, setMostrarFiltros] = useState(false);
+  const [menuAvatar, setMenuAvatar] = useState(false);
 
-  /* 🟢 PASO 2: aplicar filtro */
   const registrosFiltrados = registros.filter((r) => {
     const [, mes, anio] = r.fecha.split("/");
-
     if (filtro === "dia") return true;
     if (filtro === "mes") return mes === "10";
     if (filtro === "anio") return anio === "2023";
-
     return true;
   });
 
@@ -58,11 +55,22 @@ export default function HistorialPage() {
       {/* HEADER */}
       <header className="historial-header">
         <div className="usuario-info">
-          <div className="avatar">👩</div>
+          <div className="avatar" onClick={() => setMenuAvatar(!menuAvatar)}>
+            👩
+          </div>
+
           <div>
             <p className="usuario-label">Usuario:</p>
             <h2 className="usuario-nombre">Camila Pinilla Cabrera</h2>
           </div>
+
+          {menuAvatar && (
+            <div className="avatar-menu">
+              <button>Registro</button>
+              <button>Historial</button>
+              <button className="cerrar">Cerrar sesión</button>
+            </div>
+          )}
         </div>
 
         <div className="logo">
@@ -70,16 +78,16 @@ export default function HistorialPage() {
         </div>
       </header>
 
-      {/* BOTÓN FILTROS */}
+      {/* FILTROS */}
       <div className="filtros-container">
         <button
           className="btn-filtros"
-          onClick={() => setMostrarMenu(!mostrarMenu)}
+          onClick={() => setMostrarFiltros(!mostrarFiltros)}
         >
           Filtros ▾
         </button>
 
-        {mostrarMenu && (
+        {mostrarFiltros && (
           <div className="menu-filtros">
             <button onClick={() => setFiltro("dia")}>Por día</button>
             <button onClick={() => setFiltro("mes")}>Por mes</button>
@@ -89,7 +97,7 @@ export default function HistorialPage() {
       </div>
 
       {/* TABLA */}
-      <div className="tabla-container">
+      <div className="tabla-container desktop-only">
         <table>
           <thead>
             <tr>
@@ -118,11 +126,39 @@ export default function HistorialPage() {
         </table>
       </div>
 
+      {/* MOBILE CARDS */}
+      <div className="mobile-only">
+        {registrosFiltrados.map((r, index) => (
+          <div key={index} className="historial-card">
+            <div className="card-fecha">{r.fecha}</div>
+
+            <div className="card-row">
+              <span>Entrada</span>
+              <strong>{r.entrada}</strong>
+            </div>
+            <div className="card-row">
+              <span>Inicio colación</span>
+              <strong>{r.inicioColacion}</strong>
+            </div>
+            <div className="card-row">
+              <span>Fin colación</span>
+              <strong>{r.finColacion}</strong>
+            </div>
+            <div className="card-row">
+              <span>Salida</span>
+              <strong>{r.salida}</strong>
+            </div>
+
+            <div className="card-total">{r.total}</div>
+          </div>
+        ))}
+      </div>
+
       {/* PAGINACIÓN */}
       <div className="paginacion">
-        <button>&lt; ANTERIOR</button>
+        <button>&lt; Anterior</button>
         <button className="pagina-activa">1</button>
-        <button>SIGUIENTE &gt;</button>
+        <button>Siguiente &gt;</button>
       </div>
     </div>
   );

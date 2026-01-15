@@ -9,6 +9,8 @@
   gap: 70px;
   padding: 40px;
   background: linear-gradient(135deg, #c9f7dd, #a7c7ff);
+
+  flex-wrap: wrap; /* ← clave para responsive real */
 }
 
 /* ===============================
@@ -18,10 +20,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex: 1 1 300px;
 }
 
 .login-logo {
-  width: 350px; /* ← corregido */
+  width: 350px;
   max-width: 100%;
   height: auto;
   filter: drop-shadow(0 12px 25px rgba(0, 0, 0, 0.15));
@@ -32,12 +35,14 @@
 ================================ */
 .login-card {
   width: 380px;
+  max-width: 100%;
   background: white;
   padding: 40px 30px;
   border-radius: 22px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
   text-align: center;
   position: relative;
+  flex: 1 1 360px;
 }
 
 /* ===============================
@@ -121,22 +126,19 @@
 }
 
 /* ===============================
-   RESPONSIVE (LOGIN BLINDADO)
-   Mantiene dos columnas
+   RESPONSIVE FINO
 ================================ */
 @media (max-width: 768px) {
   .login-container {
-    flex-direction: row; /* ← NO se apila */
     gap: 20px;
     padding: 20px;
   }
 
   .login-logo {
-    width: 200px;
+    width: 180px;
   }
 
   .login-card {
-    width: 100%;
-    max-width: 360px;
+    padding: 30px 20px;
   }
 }

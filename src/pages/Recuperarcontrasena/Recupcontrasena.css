@@ -150,3 +150,48 @@ button:hover {
     transform: scale(1) translateY(0);
   }
 }
+@media (max-width: 700px) {
+  .recuperar-card {
+    padding: 30px 24px;
+    width: 100%;
+    max-width: 380px;
+  }
+
+  h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+
+  .form-row {
+    gap: 10px;
+  }
+
+  .form-row label {
+    width: 40%;
+    font-size: 13px;
+  }
+
+  .form-row input {
+    width: 60%;
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+
+  button {
+    font-size: 14px;
+    padding: 10px 30px;
+  }
+
+  .modal-box {
+    padding: 30px 24px;
+    max-width: 320px;
+  }
+
+  .modal-box h2 {
+    font-size: 22px;
+  }
+
+  .modal-box p {
+    font-size: 15px;
+  }
+}

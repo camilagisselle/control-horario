@@ -37,7 +37,7 @@
 
 /* AVATAR 👩 */
 .avatar {
-  width: 48px;     /* antes 32px */
+  width: 48px; /* antes 32px */
   height: 48px;
 
   font-size: 38px; /* antes 18px */
@@ -59,7 +59,7 @@
 }
 
 .logo img {
-  height: 100px;   /* antes 32px */
+  height: 100px; /* antes 32px */
   width: auto;
   object-fit: contain;
 }
@@ -168,4 +168,83 @@ td {
 
 .menu-filtros button:hover {
   background: #ef6def;
+}
+/* ===== MODO MOBILE ===== */
+
+.desktop-only {
+  display: block;
+}
+
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .historial-container {
+    padding: 15px;
+  }
+
+  .historial-header {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .logo img {
+    height: 60px;
+  }
+
+  .usuario-info {
+    justify-content: center;
+  }
+
+  .desktop-only {
+    display: none;
+  }
+
+  .mobile-only {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 10px;
+  }
+
+  .historial-card {
+    background: white;
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+  }
+
+  .card-fecha {
+    font-weight: 700;
+    color: #4f46e5;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .card-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+
+  .card-row span {
+    color: #6b7280;
+  }
+
+  .card-total {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #e5e7eb;
+    font-weight: 700;
+    color: #111827;
+    text-align: right;
+  }
+
+  .paginacion {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
 }
