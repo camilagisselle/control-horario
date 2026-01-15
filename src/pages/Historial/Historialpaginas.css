@@ -1,9 +1,8 @@
 .historial-container {
-  height: 100vh; /* CAMBIO */
-  box-sizing: border-box; /* CAMBIO */
+  height: 100vh;
+  box-sizing: border-box;
   padding: 5px 30px;
-  overflow: hidden; /* CAMBIO */
-
+  overflow: auto; /* 🔧 antes decía hidden */
   background: linear-gradient(
     135deg,
     #d9f7d6 0%,
@@ -12,9 +11,8 @@
     #b7d4ff 100%
   );
   font-family: Arial, Helvetica, sans-serif;
-
-  display: flex; /* CAMBIO */
-  flex-direction: column; /* CAMBIO */
+  display: flex;
+  flex-direction: column;
 }
 
 /* HEADER */
@@ -23,19 +21,19 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: relative; /* CAMBIO */
+  position: relative;
 }
 
 /* USUARIO */
-.usuario-label {
-  color: #4c6ef5;
-  margin: 0;
-}
-
 .usuario-info {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.usuario-label {
+  color: #4c6ef5;
+  margin: 0;
 }
 
 .usuario-nombre {
@@ -43,35 +41,47 @@
   margin: 0;
 }
 
-/* AVATAR 👩 */
 .avatar {
-  width: 48px; /* antes 32px */
-  height: 48px;
-  font-size: 38px;
-  background: #6c5ce7;
+  width: 55px;
+  height: 55px;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid #4f46e5;
+  flex-shrink: 0;
+  background: #eee;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Recorta sin deformar */
+  border-radius: 50%;
 }
 
 /* LOGO */
-.registro-logo {
+.historial-header {
+  position: relative;
+}
+
+/* Logo flotante */
+.logo {
   position: absolute;
-  top: 0; /* CAMBIO */
-  right: 30px;
-  width: 220px; /* CAMBIO leve */
-  opacity: 0.95;
+  top: -70px; /* súbelo */
+  right: 20px;
 }
 
 .logo img {
-  height: 100px; /* antes 32px */
+  height: 250px; /* tamaño grande */
   width: auto;
-  object-fit: contain;
 }
 
 /* FILTROS */
+.filtros-container {
+  position: relative;
+  display: inline-block;
+}
+
 .btn-filtros {
   margin: 16px 0;
   background: #9b7bff;
@@ -80,77 +90,6 @@
   padding: 10px 20px;
   border-radius: 20px;
   cursor: pointer;
-}
-
-/* TABLA */
-.tabla-container {
-  background: #e7ddff;
-  padding: 15px;
-  border-radius: 12px;
-
-  flex: 1; /* CAMBIO */
-  overflow: hidden; /* CAMBIO */
-}
-
-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 10px;
-}
-
-th {
-  background: #e2d7ff;
-  padding: 12px;
-  border-radius: 8px;
-}
-
-td {
-  background: #e2d7ff;
-  padding: 12px;
-  text-align: center;
-  border-radius: 8px;
-}
-
-.fecha-pill {
-  background: #cfc2ff;
-  padding: 6px 12px;
-  border-radius: 20px;
-}
-
-/* PAGINACIÓN */
-.paginacion {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 10px;
-  margin-top: 10px; /* CAMBIO */
-}
-
-.paginacion button {
-  height: 40px;
-  padding: 0 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #f4f7ff;
-  border: 2px solid #2f3cff;
-  border-radius: 10px;
-  color: #2f3cff;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-/* BOTÓN ACTIVO */
-.paginacion .pagina-activa {
-  width: 40px;
-  padding: 0;
-  border-radius: 6px;
-}
-
-/* FILTROS */
-.filtros-container {
-  position: relative;
-  display: inline-block;
 }
 
 .menu-filtros {
@@ -172,8 +111,131 @@ td {
   border: none;
   text-align: left;
   cursor: pointer;
+  color: white;
 }
 
 .menu-filtros button:hover {
   background: #ef6def;
+}
+
+/* TABLA */
+.tabla-container {
+  background: #e7ddff;
+  padding: 15px;
+  border-radius: 12px;
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+thead {
+  background: #bfaaff;
+  color: #1c1c3c;
+}
+
+th,
+td {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+tbody tr:hover {
+  background: #f0e8ff;
+}
+
+.fecha-pill {
+  background: #9b7bff;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
+/* TARJETAS MOBILE */
+.historial-card {
+  background: #e7ddff;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-fecha {
+  font-weight: bold;
+  color: #4c3ecb;
+  margin-bottom: 6px;
+}
+
+.card-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 4px 0;
+}
+
+.card-total {
+  margin-top: 8px;
+  font-weight: bold;
+  text-align: right;
+  color: #1c2d8f;
+}
+
+/* PAGINACIÓN */
+.paginacion {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.paginacion button {
+  background: #9b7bff;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.pagina-activa {
+  background: #6c5ce7;
+}
+
+/* 🧩 RESPONSIVE CONTROL */
+.desktop-only {
+  display: block;
+}
+
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none;
+  }
+
+  .mobile-only {
+    display: block;
+  }
+}
+.historial-header {
+  position: relative; /* esto es CLAVE */
+}
+
+.historial-titulo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1c2d8f;
+  pointer-events: none; /* no bloquea clicks */
 }

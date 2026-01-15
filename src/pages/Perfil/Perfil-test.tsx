@@ -43,7 +43,7 @@ export default function PerfilTest() {
       <main className="perfil-contenido">
         <div className="perfil-top">
           <h1>Perfil</h1>
-          <img src="/krono.png" className="perfil-logo" />
+          <img src="/krono2.1.png" className="perfil-logo" />
         </div>
 
         <div className="perfil-card">

@@ -39,10 +39,7 @@ const registros: Registro[] = [
 ];
 
 export default function HistorialPage() {
-<<<<<<< HEAD
-=======
   const navigate = useNavigate();
->>>>>>> 274a723decf0db1b597e2a0120e4a1b17f5d97d2
   const [filtro, setFiltro] = useState<"dia" | "mes" | "anio">("dia");
   const [mostrarFiltros, setMostrarFiltros] = useState(false);
   const [menuAvatar, setMenuAvatar] = useState(false);
@@ -57,12 +54,13 @@ export default function HistorialPage() {
 
   return (
     <div className="historial-container">
-<<<<<<< HEAD
       {/* HEADER */}
       <header className="historial-header">
         <div className="usuario-info">
+          <h1 className="historial-titulo">Historial</h1>
+
           <div className="avatar" onClick={() => setMenuAvatar(!menuAvatar)}>
-            👩
+            <img src="/avatar.jpeg" alt="Avatar" />
           </div>
 
           <div>
@@ -72,50 +70,17 @@ export default function HistorialPage() {
 
           {menuAvatar && (
             <div className="avatar-menu">
-              <button>Registro</button>
-              <button>Historial</button>
-              <button className="cerrar">Cerrar sesión</button>
-=======
-        <h1 className="registro-titulo">Historial</h1>
-      {/* CONTENIDO SUPERIOR */}
-      <div className="contenido-principal">
-        {/* HEADER */}
-        <header className="historial-header">
-          <div className="usuario-info">
-            <div className="avatar">👩</div>
-            <div>
-              <p className="usuario-label">Usuario:</p>
-              <h2 className="usuario-nombre">Camila Pinilla Cabrera</h2>
-            </div>
-          </div>
-
-          <div className="logo">
-            <img src="/krono2.1.png" alt="Krono" />
-          </div>
-        </header>
-
-        {/* FILTROS */}
-        <div className="filtros-container">
-          <button
-            className="btn-filtros"
-            onClick={() => setMostrarMenu(!mostrarMenu)}
-          >
-            Filtros ▾
-          </button>
-
-          {mostrarMenu && (
-            <div className="menu-filtros">
-              <button onClick={() => setFiltro("dia")}>Por día</button>
-              <button onClick={() => setFiltro("mes")}>Por mes</button>
-              <button onClick={() => setFiltro("anio")}>Por año</button>
->>>>>>> 274a723decf0db1b597e2a0120e4a1b17f5d97d2
+              <button onClick={() => navigate("/registro")}>Registro</button>
+              <button onClick={() => navigate("/historial")}>Historial</button>
+              <button className="cerrar" onClick={() => navigate("/")}>
+                Cerrar sesión
+              </button>
             </div>
           )}
         </div>
 
-<<<<<<< HEAD
         <div className="logo">
-          <img src="/krono.png" alt="Krono" />
+          <img src="/krono2.1.png" alt="Krono" />
         </div>
       </header>
 
@@ -137,7 +102,7 @@ export default function HistorialPage() {
         )}
       </div>
 
-      {/* TABLA */}
+      {/* TABLA - DESKTOP */}
       <div className="tabla-container desktop-only">
         <table>
           <thead>
@@ -161,48 +126,13 @@ export default function HistorialPage() {
                 <td>{r.finColacion}</td>
                 <td>{r.salida}</td>
                 <td>{r.total}</td>
-=======
-        {/* TABLA */}
-        <div className="tabla-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Fecha</th>
-                <th>Entrada</th>
-                <th>Inicio colación</th>
-                <th>Fin colación</th>
-                <th>Salida</th>
-                <th>Total</th>
->>>>>>> 274a723decf0db1b597e2a0120e4a1b17f5d97d2
               </tr>
-            </thead>
-            <tbody>
-              {registrosFiltrados.map((r, index) => (
-                <tr key={index}>
-                  <td>
-                    <span className="fecha-pill">{r.fecha}</span>
-                  </td>
-                  <td>{r.entrada}</td>
-                  <td>{r.inicioColacion}</td>
-                  <td>{r.finColacion}</td>
-                  <td>{r.salida}</td>
-                  <td>{r.total}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* PAGINACIÓN */}
-        <div className="paginacion">
-          <button>&lt; ANTERIOR</button>
-          <button className="pagina-activa">1</button>
-          <button>SIGUIENTE &gt;</button>
-        </div>
+            ))}
+          </tbody>
+        </table>
       </div>
 
-<<<<<<< HEAD
-      {/* MOBILE CARDS */}
+      {/* TARJETAS - MOBILE */}
       <div className="mobile-only">
         {registrosFiltrados.map((r, index) => (
           <div key={index} className="historial-card">
@@ -235,11 +165,6 @@ export default function HistorialPage() {
         <button>&lt; Anterior</button>
         <button className="pagina-activa">1</button>
         <button>Siguiente &gt;</button>
-=======
-      {/* CERRAR SESIÓN FIJO ABAJO */}
-      <div className="logout" onClick={() => navigate("/")}>
-        ↩ Cerrar sesión
->>>>>>> 274a723decf0db1b597e2a0120e4a1b17f5d97d2
       </div>
     </div>
   );

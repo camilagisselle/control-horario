@@ -1,6 +1,3 @@
-/* ===============================
-   CONTENEDOR PRINCIPAL
-================================ */
 .login-container {
   min-height: 100vh;
   display: flex;
@@ -13,9 +10,6 @@
   flex-wrap: wrap; /* ← clave para responsive real */
 }
 
-/* ===============================
-   LOGO
-================================ */
 .login-left {
   display: flex;
   justify-content: center;
@@ -30,9 +24,6 @@
   filter: drop-shadow(0 12px 25px rgba(0, 0, 0, 0.15));
 }
 
-/* ===============================
-   TARJETA LOGIN
-================================ */
 .login-card {
   width: 380px;
   max-width: 100%;
@@ -45,9 +36,6 @@
   flex: 1 1 360px;
 }
 
-/* ===============================
-   AVATAR
-================================ */
 .avatar-container {
   position: relative;
   top: -70px;
@@ -73,18 +61,12 @@
   box-shadow: 0 0 15px rgba(107, 78, 255, 0.4);
 }
 
-/* ===============================
-   TEXTO
-================================ */
 .login-card h2 {
   color: #6b4eff;
   margin-bottom: 25px;
   font-size: 1.5rem;
 }
 
-/* ===============================
-   INPUTS
-================================ */
 .login-card input {
   width: 100%;
   padding: 14px;
@@ -94,9 +76,6 @@
   font-size: 16px;
 }
 
-/* ===============================
-   BOTÓN
-================================ */
 .login-card button {
   width: 100%;
   padding: 14px;
@@ -114,9 +93,6 @@
   background: #9d78ff;
 }
 
-/* ===============================
-   LINK
-================================ */
 .login-card a {
   display: block;
   margin-top: 18px;
@@ -125,9 +101,6 @@
   font-weight: 500;
 }
 
-/* ===============================
-   RESPONSIVE FINO
-================================ */
 @media (max-width: 768px) {
   .login-container {
     gap: 20px;
