@@ -9,6 +9,9 @@ export default function Registro() {
   const [accion, setAccion] = useState("");
   const [menuAvatar, setMenuAvatar] = useState(false);
 
+  // NUEVO ESTADO: Para controlar si el sidebar lateral está visible en móvil
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,7 +19,6 @@ export default function Registro() {
       const now = new Date();
       setHora(now.toLocaleTimeString("es-CL"));
     };
-
     actualizarHora();
     const intervalo = setInterval(actualizarHora, 1000);
     return () => clearInterval(intervalo);
@@ -29,20 +31,32 @@ export default function Registro() {
 
   const confirmar = () => {
     setMostrarModal(false);
-    setTimeout(() => {
-      setMostrarConfirmado(true);
-    }, 200);
+    setTimeout(() => setMostrarConfirmado(true), 200);
   };
 
   return (
     <div className="dashboard">
-      <aside className="sidebar">
+      
+      {/* NUEVO: Botón Hamburguesa (Solo visible en móvil por CSS) */}
+      <button 
+        className="btn-hamburguesa" 
+        onClick={() => setSidebarOpen(true)}
+      >
+        ☰
+      </button>
+
+      {/* NUEVO: Overlay oscuro para cerrar menú al hacer click afuera */}
+      <div 
+        className={`overlay ${sidebarOpen ? 'active' : ''}`} 
+        onClick={() => setSidebarOpen(false)}
+      ></div>
+
+      {/* SIDEBAR: Agregamos lógica para la clase 'active' */}
+      <aside className={`sidebar ${sidebarOpen ? 'active' : ''}`}>
         <div className="usuario">
-          {/* AVATAR → MENÚ */}
           <div
             className="avatar"
             onClick={() => setMenuAvatar(!menuAvatar)}
-            style={{ cursor: "pointer" }}
           >
             <img
               src="/avatar.jpeg"
@@ -70,18 +84,18 @@ export default function Registro() {
       </aside>
 
       <main className="contenido">
+        <h1 className="registro-titulo">Registro de asistencia</h1>
+
         <div className="panel">
-          <h1 className="registro-titulo">Registro de asistencia</h1>
-
-          <img src="/krono2.1.png" className="registro-logo" alt="Logo" />
-
           <div className="hora">{hora}</div>
 
           <div className="acciones">
             <button onClick={() => abrirConfirmacion("Entrada")}>
               Entrada
             </button>
-            <button onClick={() => abrirConfirmacion("Salida")}>Salida</button>
+            <button onClick={() => abrirConfirmacion("Salida")}>
+              Salida
+            </button>
             <button onClick={() => abrirConfirmacion("Inicio colación")}>
               Inicio colación
             </button>
@@ -90,6 +104,9 @@ export default function Registro() {
             </button>
           </div>
         </div>
+
+        {/* LOGO */}
+        <img src="/krono2.1.png" className="registro-logo" alt="Logo" />
       </main>
 
       {mostrarModal && (
