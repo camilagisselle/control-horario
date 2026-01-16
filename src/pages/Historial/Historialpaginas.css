@@ -1,8 +1,15 @@
-.historial-container {
-  height: 100vh;
+* {
   box-sizing: border-box;
-  padding: 5px 30px;
-  overflow: auto; /* 🔧 antes decía hidden */
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/*  LAYOUT */
+.dashboard-historial {
+  display: flex;
+  height: 100vh;
+  /* Tus colores de fondo originales */
   background: linear-gradient(
     135deg,
     #d9f7d6 0%,
@@ -10,122 +17,167 @@
     #cfe3ff 65%,
     #b7d4ff 100%
   );
-  font-family: Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 260px;
+  padding: 25px;
+  background: linear-gradient(180deg, #d9f7d6, #b7d4ff);
   display: flex;
   flex-direction: column;
+  gap: 25px;
+  transition: transform 0.3s ease;
+  z-index: 1000;
+  border-right: 1px solid rgba(255,255,255,0.5);
 }
 
-/* HEADER */
-.historial-header {
-  margin-top: -5px;
+/* Usuario dentro del Sidebar */
+.usuario-info-sidebar {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center; /* Centrado en sidebar */
   position: relative;
-}
-
-/* USUARIO */
-.usuario-info {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  text-align: center;
 }
 
 .usuario-label {
   color: #4c6ef5;
   margin: 0;
+  font-size: 14px;
 }
 
 .usuario-nombre {
   color: #1c2d8f;
-  margin: 0;
+  margin: 5px 0 0;
+  font-size: 18px;
 }
 
 .avatar {
-  width: 55px;
-  height: 55px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   overflow: hidden;
   cursor: pointer;
-  border: 2px solid #4f46e5;
-  flex-shrink: 0;
+  border: 3px solid #4f46e5;
   background: #eee;
 }
 
 .avatar img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Recorta sin deformar */
-  border-radius: 50%;
+  object-fit: cover;
 }
 
-/* LOGO */
-.historial-header {
-  position: relative;
-}
-
-/* Logo flotante */
-.logo {
+/* Menú desplegable Avatar */
+.avatar-menu {
   position: absolute;
-  top: -70px; /* súbelo */
+  top: 80px; /* Debajo del avatar */
+  width: 200px;
+  background: white;
+  border-radius: 12px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  z-index: 50;
+}
+
+.avatar-menu button {
+  background: transparent;
+  border: none;
+  text-align: center;
+  font-weight: 600;
+  padding: 10px;
+  cursor: pointer;
+  color: #333;
+  border-radius: 8px;
+}
+
+.avatar-menu button:hover { background: #f0f0f0; }
+.avatar-menu .cerrar { color: #dc2626; }
+
+/*  CONTENIDO PRINCIPAL  */
+.historial-contenido {
+  flex: 1;
+  padding: 30px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.historial-titulo {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1c2d8f;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/*  LOGO */
+.logo-img {
+  position: absolute;
+  top: -50px; /* Súbelo como pediste */
   right: 20px;
-}
-
-.logo img {
-  height: 250px; /* tamaño grande */
+  height: 250px;
   width: auto;
+  z-index: 10;
+  pointer-events: none; /* Para que no tape clicks si está muy encima */
 }
 
-/* FILTROS */
+/*  FILTROS  */
 .filtros-container {
   position: relative;
-  display: inline-block;
+  margin-bottom: 20px;
 }
 
 .btn-filtros {
-  margin: 16px 0;
   background: #9b7bff;
   color: white;
   border: none;
   padding: 10px 20px;
   border-radius: 20px;
   cursor: pointer;
+  font-weight: bold;
 }
 
 .menu-filtros {
   position: absolute;
   top: 45px;
   left: 0;
-  background: rgba(113, 110, 110, 0.317);
+  background: white;
   border-radius: 10px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
   overflow: hidden;
-  z-index: 10;
+  z-index: 20;
+  min-width: 150px;
 }
 
 .menu-filtros button {
   display: block;
   width: 100%;
   padding: 10px 16px;
-  background: rgb(157, 21, 185);
+  background: white; /* Cambié a blanco para legibilidad */
   border: none;
   text-align: left;
   cursor: pointer;
-  color: white;
+  color: #333;
+  border-bottom: 1px solid #eee;
 }
 
-.menu-filtros button:hover {
-  background: #ef6def;
-}
+.menu-filtros button:hover { background: #ef6def; color: white; }
 
-/* TABLA */
+/*TABLA */
 .tabla-container {
   background: #e7ddff;
   padding: 15px;
   border-radius: 12px;
-  flex: 1;
-  overflow-y: auto;
-  min-height: 0;
+  margin-bottom: 20px;
+  overflow-x: auto;
 }
 
 table {
@@ -134,62 +186,33 @@ table {
   text-align: center;
 }
 
-thead {
-  background: #bfaaff;
-  color: #1c1c3c;
-}
-
-th,
-td {
-  padding: 10px;
-  border-bottom: 1px solid #ccc;
-}
-
-tbody tr:hover {
-  background: #f0e8ff;
-}
-
-.fecha-pill {
-  background: #9b7bff;
-  color: white;
-  padding: 4px 8px;
-  border-radius: 8px;
-}
+thead { background: #bfaaff; color: #1c1c3c; }
+th, td { padding: 10px; border-bottom: 1px solid #ccc; }
+tbody tr:hover { background: #f0e8ff; }
+.fecha-pill { background: #9b7bff; color: white; padding: 4px 8px; border-radius: 8px; }
 
 /* TARJETAS MOBILE */
+.mobile-only { display: none; } /* Oculto por defecto */
+
 .historial-card {
   background: #e7ddff;
   border-radius: 12px;
-  padding: 12px;
-  margin-bottom: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.card-fecha {
-  font-weight: bold;
-  color: #4c3ecb;
-  margin-bottom: 6px;
-}
-
-.card-row {
-  display: flex;
-  justify-content: space-between;
-  margin: 4px 0;
-}
-
-.card-total {
-  margin-top: 8px;
-  font-weight: bold;
-  text-align: right;
-  color: #1c2d8f;
-}
+.card-fecha { font-weight: bold; color: #4c3ecb; margin-bottom: 10px; font-size: 1.1em; }
+.card-row { display: flex; justify-content: space-between; margin: 6px 0; border-bottom: 1px dashed rgba(0,0,0,0.1); padding-bottom: 4px; }
+.card-total { margin-top: 10px; font-weight: bold; text-align: right; color: #1c2d8f; font-size: 1.2em; }
 
 /* PAGINACIÓN */
 .paginacion {
   display: flex;
   justify-content: center;
   gap: 8px;
-  margin-top: 16px;
+  margin-top: auto; /* Empuja hacia abajo si sobra espacio */
+  padding-bottom: 20px;
 }
 
 .paginacion button {
@@ -201,41 +224,65 @@ tbody tr:hover {
   cursor: pointer;
 }
 
-.pagina-activa {
-  background: #6c5ce7;
-}
+.pagina-activa { background: #6c5ce7; }
 
-/* 🧩 RESPONSIVE CONTROL */
-.desktop-only {
-  display: block;
-}
-
-.mobile-only {
+/* BOTÓN HAMBURGUESA & OVERLAY */
+.btn-hamburguesa {
   display: none;
-}
-
-@media (max-width: 768px) {
-  .desktop-only {
-    display: none;
-  }
-
-  .mobile-only {
-    display: block;
-  }
-}
-.historial-header {
-  position: relative; /* esto es CLAVE */
-}
-
-.historial-titulo {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  top: 25px;
+  left: 25px;
+  font-size: 30px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #4f46e5;
+  z-index: 1100;
+  padding: 0;
+}
 
-  margin: 0;
-  font-size: 28px;
-  font-weight: 700;
-  color: #1c2d8f;
-  pointer-events: none; /* no bloquea clicks */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 900;
+}
+.overlay.active { display: block; }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  
+  /* 1. Hamburguesa visible */
+  .btn-hamburguesa { display: block; }
+
+  /* 2. Sidebar Oculto a la izquierda */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 100vh;
+    width: 280px;
+    transform: translateX(-100%);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.2);
+  }
+  .sidebar.active { transform: translateX(0); }
+
+  /* 3. Ajuste Contenido */
+  .historial-contenido {
+    padding: 80px 20px 20px; /* Más padding arriba para no chocar con botón */
+  }
+
+  /* 4. Swtich de Tabla a Tarjetas */
+  .desktop-only { display: none; }
+  .mobile-only { display: block; }
+
+  /* 5. LOGO AL FINAL (ABAJO) */
+  .logo-img {
+    position: static; /* Deja de flotar */
+    display: block;
+    margin: 40px auto 0; /* Centrado abajo con margen superior */
+    height: auto;
+    width: 150px; /* Más pequeño para móvil */
+    order: 100; /* Se va al final del flex container */
+  }
 }
