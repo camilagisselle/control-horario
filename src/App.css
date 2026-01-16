@@ -1,13 +1,13 @@
-.recuperar-link {
-  display: block;
-  margin-top: 10px;
-  color: #8e44ad; /* morado como tu botón */
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s ease;
+* {
+  box-sizing: border-box;
 }
 
-.recuperar-link:hover {
-  color: #732d91;
-  text-decoration: underline;
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
 }

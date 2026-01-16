@@ -7,8 +7,9 @@ export default function Registro() {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [mostrarConfirmado, setMostrarConfirmado] = useState(false);
   const [accion, setAccion] = useState("");
-  const navigate = useNavigate();
+  const [menuAvatar, setMenuAvatar] = useState(false);
 
+  const navigate = useNavigate();
 
   useEffect(() => {
     const actualizarHora = () => {
@@ -37,11 +38,10 @@ export default function Registro() {
     <div className="dashboard">
       <aside className="sidebar">
         <div className="usuario">
-          {/* AVATAR CLICKEABLE */}
+          {/* AVATAR → MENÚ */}
           <div
             className="avatar"
-            onClick={() => navigate("/perfil")}
-            title="Ver perfil"
+            onClick={() => setMenuAvatar(!menuAvatar)}
             style={{ cursor: "pointer" }}
           >
             <img
@@ -55,17 +55,17 @@ export default function Registro() {
             <p>Usuario:</p>
             <strong>Camila Pinilla Cabrera</strong>
           </div>
-        </div>
 
-        <button className="menu activo" onClick={() => navigate("/registro")}>
-          ✔ Registrar
-        </button>
-        <button className="menu" onClick={() => navigate("/historial")}>
-          📄 Historial
-        </button>
-
-        <div className="logout" onClick={() => navigate("/")}>
-          ↩ Cerrar sesión
+          {menuAvatar && (
+            <div className="avatar-menu">
+              <button onClick={() => navigate("/perfil")}>Perfil</button>
+              <button onClick={() => navigate("/registro")}>Registro</button>
+              <button onClick={() => navigate("/historial")}>Historial</button>
+              <button className="cerrar" onClick={() => navigate("/")}>
+                Cerrar sesión
+              </button>
+            </div>
+          )}
         </div>
       </aside>
 
@@ -73,11 +73,7 @@ export default function Registro() {
         <div className="panel">
           <h1 className="registro-titulo">Registro de asistencia</h1>
 
-          <img
-            src="/krono2.1.png"
-            className="registro-logo"
-            alt="Logo"
-          />
+          <img src="/krono2.1.png" className="registro-logo" alt="Logo" />
 
           <div className="hora">{hora}</div>
 
@@ -85,9 +81,7 @@ export default function Registro() {
             <button onClick={() => abrirConfirmacion("Entrada")}>
               Entrada
             </button>
-            <button onClick={() => abrirConfirmacion("Salida")}>
-              Salida
-            </button>
+            <button onClick={() => abrirConfirmacion("Salida")}>Salida</button>
             <button onClick={() => abrirConfirmacion("Inicio colación")}>
               Inicio colación
             </button>

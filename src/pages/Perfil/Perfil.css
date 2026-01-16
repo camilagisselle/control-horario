@@ -1,23 +1,150 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+}
+
 .perfil-root {
   width: 100vw;
   height: 100vh;
-
-  /* ANULA el centrado del body */
   display: flex;
-  align-items: stretch;
-  justify-content: flex-start;
-
-  background: #f4f6fb;
+  background: linear-gradient(135deg, #c9f7dd, #a7c7ff);
 }
 
+/* ================== SIDEBAR ================== */
 .perfil-sidebar {
-  width: 260px;
-  background: #8b5cf6;
-  color: white;
+  width: 280px;
   padding: 30px;
+  background: linear-gradient(180deg, #c7f3e6, #b6daf7);
 }
 
+.perfil-user {
+  display: flex;
+  gap: 15px;
+  cursor: pointer;
+  align-items: center;
+}
+
+.perfil-user img {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+}
+
+.perfil-user p {
+  font-size: 14px;
+  color: #4a6ee0;
+}
+
+.perfil-user strong {
+  color: #1f3bb3;
+}
+
+.perfil-menu {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.perfil-menu button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #6a3df0;
+  cursor: pointer;
+  text-align: left;
+}
+
+/* ================== CONTENIDO ================== */
 .perfil-contenido {
   flex: 1;
   padding: 40px;
+}
+
+/* Barra superior */
+.perfil-top {
+  position: relative;
+  display: flex;
+  justify-content: center; /* centra el título */
+  align-items: center;
+  height: 100px;
+  margin-bottom: 40px;
+}
+
+/* Título */
+.perfil-top h1 {
+  font-size: 40px;
+  font-weight: 800;
+  color: #1f3bb3;
+  margin: 0;
+}
+
+/* Logo arriba a la derecha */
+.perfil-logo {
+  position: absolute;
+  top: -70;
+  right: 0;
+  height: 250px;
+  width: auto;
+}
+
+/* ================== TARJETA ================== */
+.perfil-card {
+  background: #e9f9f6;
+  border-radius: 20px;
+  padding: 40px;
+  display: flex;
+  gap: 40px;
+  max-width: 900px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+}
+
+/* Avatar grande */
+.perfil-avatar-grande {
+  position: relative;
+}
+
+.perfil-avatar-grande img {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: #00bcd4;
+  padding: 10px;
+}
+
+/* Ícono editar */
+.perfil-avatar-grande span {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  background: #6a3df0;
+  color: white;
+  border-radius: 50%;
+  padding: 6px;
+  font-size: 14px;
+}
+
+/* ================== INFO ================== */
+.perfil-info label {
+  color: #4a6ee0;
+  font-size: 14px;
+}
+
+.perfil-info p {
+  font-size: 20px;
+  font-weight: bold;
+  color: #1f3bb3;
+  margin-bottom: 20px;
+}
+
+.perfil-info input {
+  width: 280px;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 8px;
+  border: none;
+  background: #f2f6ff;
+  font-size: 16px;
+  color: #1f3bb3;
 }
