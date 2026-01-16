@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Registro.css";
 
 export default function Registro() {
@@ -6,6 +7,9 @@ export default function Registro() {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [mostrarConfirmado, setMostrarConfirmado] = useState(false);
   const [accion, setAccion] = useState("");
+  const [menuAvatar, setMenuAvatar] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const actualizarHora = () => {
@@ -25,7 +29,6 @@ export default function Registro() {
 
   const confirmar = () => {
     setMostrarModal(false);
-
     setTimeout(() => {
       setMostrarConfirmado(true);
     }, 200);
@@ -33,26 +36,43 @@ export default function Registro() {
 
   return (
     <div className="dashboard">
-      {/* Sidebar */}
       <aside className="sidebar">
         <div className="usuario">
-          <div className="avatar">👩</div>
+          {/* AVATAR → MENÚ */}
+          <div
+            className="avatar"
+            onClick={() => setMenuAvatar(!menuAvatar)}
+            style={{ cursor: "pointer" }}
+          >
+            <img
+              src="/avatar.jpeg"
+              alt="Avatar usuario"
+              className="avatar-img"
+            />
+          </div>
+
           <div>
             <p>Usuario:</p>
             <strong>Camila Pinilla Cabrera</strong>
           </div>
+
+          {menuAvatar && (
+            <div className="avatar-menu">
+              <button onClick={() => navigate("/perfil")}>Perfil</button>
+              <button onClick={() => navigate("/registro")}>Registro</button>
+              <button onClick={() => navigate("/historial")}>Historial</button>
+              <button className="cerrar" onClick={() => navigate("/")}>
+                Cerrar sesión
+              </button>
+            </div>
+          )}
         </div>
-
-        <button className="menu activo">✔ Registrar</button>
-        <button className="menu">📄 Historial</button>
-
-        <div className="logout">↩ Cerrar sesión</div>
       </aside>
 
-      {/* Contenido */}
       <main className="contenido">
         <div className="panel">
           <h1 className="registro-titulo">Registro de asistencia</h1>
+
           <img src="/krono2.1.png" className="registro-logo" alt="Logo" />
 
           <div className="hora">{hora}</div>
@@ -72,7 +92,6 @@ export default function Registro() {
         </div>
       </main>
 
-      {/* Modal de confirmación */}
       {mostrarModal && (
         <div className="modal-backdrop">
           <div className="modal">
@@ -93,7 +112,6 @@ export default function Registro() {
         </div>
       )}
 
-      {/* Modal de registro confirmado */}
       {mostrarConfirmado && (
         <div className="modal-backdrop">
           <div className="modal">
