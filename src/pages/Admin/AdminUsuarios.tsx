@@ -1,35 +1,61 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./AdminUsuarios.css";
 
 function AdminUsuarios() {
+  const navigate = useNavigate();
 
-  const adminNombre = "Francisca Andrade";
+  // Leemos la sesión para mostrar nombre (si existe)
+  const stored = typeof window !== "undefined" ? localStorage.getItem("user") : null;
+  const adminNombre = stored
+    ? (() => {
+        try {
+          const u = JSON.parse(stored) as { name?: string };
+          return u?.name ?? "Francisca Andrade";
+        } catch {
+          return "Francisca Andrade";
+        }
+      })()
+    : "Francisca Andrade";
+
+  // Avatar: si guardas un avatar en localStorage con la clave "avatar", se usará.
+  const adminAvatarSrc =
+    typeof window !== "undefined"
+      ? localStorage.getItem("avatar") || "/avatar.jpeg"
+      : "/avatar.jpeg";
 
   const [menuAbierto, setMenuAbierto] = useState(false);
 
   const [usuarios, setUsuarios] = useState([
     {
       id: 1,
-      nombre: "Juanito",
-      apellido: "Perez",
-      correo: "juanito@indracompany.cl",
-      rol: "Administrador",
+      nombre: "Camila",
+      apellido: "Pinilla",
+      correo: "camila@indracompany.cl",
+      rol: "Colaborador",
       activo: true,
     },
     {
       id: 2,
-      nombre: "María",
-      apellido: "López",
-      correo: "maria@indracompany.cl",
+      nombre: "Noemi",
+      apellido: "Muñoz",
+      correo: "noemi@indracompany.cl",
       rol: "Colaborador",
       activo: true,
     },
     {
       id: 3,
-      nombre: "Camila",
-      apellido: "Pinilla",
-      correo: "camila@indracompany.cl",
+      nombre: "Juanito",
+      apellido: "Perez",
+      correo: "juanito@indracompany.cl",
+      rol: "Colaborador",
+      activo: true,
+    },
+    {
+      id: 4,
+      nombre: "María",
+      apellido: "López",
+      correo: "maria@indracompany.cl",
       rol: "Colaborador",
       activo: true,
     },
@@ -37,11 +63,11 @@ function AdminUsuarios() {
 
   const [busqueda, setBusqueda] = useState("");
 
-  // 🔴 CAMBIO: CONTROL DEL MODAL
+  // CONTROL DEL MODAL
   const [mostrarModal, setMostrarModal] = useState(false);
   const [usuarioEditando, setUsuarioEditando] = useState<number | null>(null);
 
-  // 🔴 FORMULARIO COMPLETO
+  // FORMULARIO
   const [formulario, setFormulario] = useState({
     nombre: "",
     apellido: "",
@@ -51,8 +77,11 @@ function AdminUsuarios() {
     repetirPassword: "",
   });
 
-  // FUNCIONES
- 
+  const logout = () => {
+    localStorage.removeItem("user");
+    navigate("/");
+  };
+
   const toggleActivo = (id: number) => {
     setUsuarios((prev) =>
       prev.map((u) => (u.id === id ? { ...u, activo: !u.activo } : u))
@@ -64,7 +93,6 @@ function AdminUsuarios() {
     setUsuarios((prev) => prev.filter((u) => u.id !== id));
   };
 
-  // 🔴 GUARDAR (NUEVO / EDITAR)
   const guardarUsuario = () => {
     if (!formulario.nombre || !formulario.apellido || !formulario.correo) {
       alert("Completa todos los campos");
@@ -110,32 +138,19 @@ function AdminUsuarios() {
       u.correo.toLowerCase().includes(busqueda.toLowerCase())
   );
 
-  // Mostrar tooltips en móvil (touch)
-
+  // tooltips touch
   useEffect(() => {
     const onTouchStart = (e: TouchEvent) => {
       const target = e.target as HTMLElement | null;
       if (!target) return;
-
-      // encuentra el elemento .has-tooltip más cercano (si existe)
       const tooltipEl = target.closest(".has-tooltip") as HTMLElement | null;
-
-      // oculta todos los tooltips visibles
       const visibles = document.querySelectorAll(".has-tooltip.tooltip-visible");
       visibles.forEach((el) => el.classList.remove("tooltip-visible"));
-
-      if (tooltipEl) {
-        // muestra solo el tocado
-        tooltipEl.classList.add("tooltip-visible");
-      } else {
-        // tocó fuera -> se cierran (ya se removieron arriba)
-      }
+      if (tooltipEl) tooltipEl.classList.add("tooltip-visible");
     };
-
     document.addEventListener("touchstart", onTouchStart, { passive: true });
 
     const onClick = (e: MouseEvent) => {
-      // click con mouse: ocultar tooltips si se hace click fuera
       const target = e.target as HTMLElement | null;
       const tooltipEl = target?.closest(".has-tooltip") as HTMLElement | null;
       if (!tooltipEl) {
@@ -155,10 +170,16 @@ function AdminUsuarios() {
     <div className="layout">
       {/* SIDEBAR */}
       <aside className={`sidebar ${menuAbierto ? "open" : ""}`}>
-        <div className="sidebar-avatar">👩 Administrador: {adminNombre}</div>
+        <div className="sidebar-avatar">
+          <img src={adminAvatarSrc} alt="avatar admin" className="admin-avatar" />
+          <div className="admin-info">
+            <div>👩 {adminNombre}</div>
+            <div className="role">Administrador</div>
+          </div>
+        </div>
 
         <Link
-          to="/usuarios"
+          to="/admin/usuarios"
           className="menu active has-tooltip"
           data-tooltip="Ir a usuarios"
         >
@@ -166,7 +187,7 @@ function AdminUsuarios() {
         </Link>
 
         <Link
-          to="/historial"
+          to="/admin/historial"
           className="menu has-tooltip"
           data-tooltip="Ver historial"
         >
@@ -177,6 +198,7 @@ function AdminUsuarios() {
           className="logout has-tooltip"
           data-tooltip="Cerrar sesión"
           role="button"
+          onClick={logout}
         >
           🚪 Cerrar sesión
         </div>
@@ -213,7 +235,6 @@ function AdminUsuarios() {
               />
             </div>
 
-            {/* 🔴 BOTÓN NUEVO */}
             <button
               className="btn-nuevo has-tooltip"
               onClick={() => {
@@ -308,92 +329,27 @@ function AdminUsuarios() {
         </section>
       </main>
 
-      {/* 
-          🔴 MODAL POPUP REAL (ENCIMA DE TODO)
-      */}
+      {/* MODAL */}
       {mostrarModal && (
         <div className="modal-backdrop" onClick={() => setMostrarModal(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h2>
-              {usuarioEditando !== null ? "Editar usuario" : "Nuevo usuario"}
-            </h2>
+            <h2>{usuarioEditando !== null ? "Editar usuario" : "Nuevo usuario"}</h2>
 
             <div className="modal-grid">
-              <input
-                placeholder="Nombre"
-                value={formulario.nombre}
-                onChange={(e) =>
-                  setFormulario({ ...formulario, nombre: e.target.value })
-                }
-                data-tooltip="Nombre del usuario"
-                className="has-tooltip"
-              />
-
-              <input
-                placeholder="Apellido"
-                value={formulario.apellido}
-                onChange={(e) =>
-                  setFormulario({ ...formulario, apellido: e.target.value })
-                }
-                data-tooltip="Apellido del usuario"
-                className="has-tooltip"
-              />
-
-              <input
-                placeholder="Correo"
-                value={formulario.correo}
-                onChange={(e) =>
-                  setFormulario({ ...formulario, correo: e.target.value })
-                }
-                data-tooltip="Correo electrónico"
-                className="has-tooltip"
-              />
-
-              <select
-                value={formulario.rol}
-                onChange={(e) =>
-                  setFormulario({ ...formulario, rol: e.target.value })
-                }
-                data-tooltip="Rol del usuario"
-                className="has-tooltip"
-              >
+              <input placeholder="Nombre" value={formulario.nombre} onChange={(e) => setFormulario({ ...formulario, nombre: e.target.value })} />
+              <input placeholder="Apellido" value={formulario.apellido} onChange={(e) => setFormulario({ ...formulario, apellido: e.target.value })} />
+              <input placeholder="Correo" value={formulario.correo} onChange={(e) => setFormulario({ ...formulario, correo: e.target.value })} />
+              <select value={formulario.rol} onChange={(e) => setFormulario({ ...formulario, rol: e.target.value })}>
                 <option>Colaborador</option>
                 <option>Administrador</option>
               </select>
-
-              <input
-                type="password"
-                placeholder="Contraseña"
-                value={formulario.password}
-                onChange={(e) =>
-                  setFormulario({ ...formulario, password: e.target.value })
-                }
-                data-tooltip="Contraseña"
-                className="has-tooltip"
-              />
-
-              <input
-                type="password"
-                placeholder="Repetir contraseña"
-                value={formulario.repetirPassword}
-                onChange={(e) =>
-                  setFormulario({
-                    ...formulario,
-                    repetirPassword: e.target.value,
-                  })
-                }
-                data-tooltip="Repetir contraseña"
-                className="has-tooltip"
-              />
+              <input type="password" placeholder="Contraseña" value={formulario.password} onChange={(e) => setFormulario({ ...formulario, password: e.target.value })} />
+              <input type="password" placeholder="Repetir contraseña" value={formulario.repetirPassword} onChange={(e) => setFormulario({ ...formulario, repetirPassword: e.target.value })} />
             </div>
 
             <div className="modal-actions">
-              <button onClick={guardarUsuario} data-tooltip="Guardar cambios" className="has-tooltip">
-                Guardar
-              </button>
-              <button onClick={() => setMostrarModal(false)} data-tooltip="Cancelar" className="has-tooltip">
-                Cancelar
-              </button>
+              <button onClick={guardarUsuario}>Guardar</button>
+              <button onClick={() => setMostrarModal(false)}>Cancelar</button>
             </div>
           </div>
         </div>
