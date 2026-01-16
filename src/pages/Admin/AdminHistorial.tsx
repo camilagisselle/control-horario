@@ -41,9 +41,7 @@ const isWeekday = (d: Date) => {
 function AdminHistorial() {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // ----------------------
-  // filtros
-  // ----------------------
+
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState<string>(
     "Todos"
   );
@@ -65,9 +63,7 @@ function AdminHistorial() {
     new Date().getFullYear()
   );
 
-  // ----------------------
-  // datos de ejemplo
-  // ----------------------
+
   const historial: HistorialItem[] = [
     {
       id: 1,
@@ -221,9 +217,7 @@ function AdminHistorial() {
     historial,
   ]);
 
-  // =========================
-  // Mostrar tooltips en móvil (touch)
-  // =========================
+
   useEffect(() => {
     const onTouchStart = (e: TouchEvent) => {
       const target = e.target as HTMLElement | null;

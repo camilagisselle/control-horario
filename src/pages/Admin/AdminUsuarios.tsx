@@ -3,14 +3,9 @@ import { Link } from "react-router-dom";
 import "./AdminUsuarios.css";
 
 function AdminUsuarios() {
-  // =========================
-  // ADMIN
-  // =========================
+
   const adminNombre = "Francisca Andrade";
 
-  // =========================
-  // ESTADOS
-  // =========================
   const [menuAbierto, setMenuAbierto] = useState(false);
 
   const [usuarios, setUsuarios] = useState([
@@ -56,9 +51,8 @@ function AdminUsuarios() {
     repetirPassword: "",
   });
 
-  // =========================
   // FUNCIONES
-  // =========================
+ 
   const toggleActivo = (id: number) => {
     setUsuarios((prev) =>
       prev.map((u) => (u.id === id ? { ...u, activo: !u.activo } : u))
@@ -116,9 +110,8 @@ function AdminUsuarios() {
       u.correo.toLowerCase().includes(busqueda.toLowerCase())
   );
 
-  // =========================
   // Mostrar tooltips en móvil (touch)
-  // =========================
+
   useEffect(() => {
     const onTouchStart = (e: TouchEvent) => {
       const target = e.target as HTMLElement | null;
@@ -158,9 +151,6 @@ function AdminUsuarios() {
     };
   }, []);
 
-  // =========================
-  // JSX
-  // =========================
   return (
     <div className="layout">
       {/* SIDEBAR */}
@@ -318,9 +308,9 @@ function AdminUsuarios() {
         </section>
       </main>
 
-      {/* ==================================================
+      {/* 
           🔴 MODAL POPUP REAL (ENCIMA DE TODO)
-      ================================================== */}
+      */}
       {mostrarModal && (
         <div className="modal-backdrop" onClick={() => setMostrarModal(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
