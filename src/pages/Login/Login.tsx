@@ -53,7 +53,7 @@ const Login: React.FC = () => {
           {/* 👇 BOTÓN CONECTADO A REGISTRO */}
           <button onClick={handleIngresar}>Ingresar</button>
 
-          <Link to="/recuperar" className="recuperar-link">
+          <Link to="/Recuperarpassword" className="recuperar-link">
             Recuperar contraseña
           </Link>
         </div>
