@@ -5,7 +5,7 @@
   padding: 0;
 }
 
-/* ================= LAYOUT GENERAL ================= */
+/* LAYOUT GENERAL */
 .dashboard {
   display: flex;
   height: 100vh;
@@ -13,7 +13,7 @@
   overflow-x: hidden;
 }
 
-/* ================= SIDEBAR (Escritorio) ================= */
+/*SIDEBAR */
 .sidebar {
   width: 260px;
   padding: 25px;
@@ -50,7 +50,7 @@
   object-fit: cover;
 }
 
-/* ================= MENÚ AVATAR ================= */
+/* MENÚ DEL AVATAR  */
 .avatar-menu {
   position: absolute;
   top: 70px;
@@ -83,21 +83,28 @@
   font-weight: 700;
 }
 
-/* ================= BOTÓN HAMBURGUESA (Móvil) ================= */
-.btn-hamburguesa {
-  display: none;
-  position: absolute;
-  top: 25px;
-  left: 25px;
-  font-size: 30px;
-  background: none;
+/* Animación */
+@keyframes avatarSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* BOTONES DEL MENÚ  */
+.menu {
+  background: transparent;
   border: none;
   cursor: pointer;
   color: #6c5ce7;
   z-index: 1100;
 }
 
-/* ================= OVERLAY (Fondo oscuro móvil) ================= */
+/* (Fondo oscuro móvil)*/
 .overlay {
   display: none;
   position: fixed;
@@ -113,7 +120,6 @@
   display: block;
 }
 
-/* ================= CONTENIDO ================= */
 .contenido {
   flex: 1;
   display: flex;
@@ -146,18 +152,17 @@
   white-space: nowrap;
 }
 
-/* ================= LOGO (RESTAURADO) ================= */
-/* Vuelve a ser como tu código original */
+/* LOGO */
 .registro-logo {
   position: absolute;
-  top: -50px;    /* Original */
+  top: -50px;    
   right: 30px;
-  width: 250px;  /* Original */
+  width: 250px;  
   opacity: 0.95;
   z-index: 10;
 }
 
-/* RELOJ */
+/* RELOJ*/
 .hora {
   margin: 20px auto;
   padding: 30px 40px;
@@ -170,7 +175,7 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* BOTONES ACCIONES */
+/* BOTONES */
 .acciones {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -193,7 +198,7 @@
   color: white;
 }
 
-/* MODALES */
+/*MODALES*/
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -219,7 +224,7 @@
   margin-top: 20px;
 }
 
-/* ================= RESPONSIVE (MÓVIL) ================= */
+/* MOBILE */
 @media (max-width: 900px) {
   
   .btn-hamburguesa {
@@ -276,5 +281,40 @@
 
   .acciones {
     grid-template-columns: 1fr;
+  }
+
+  .modal {
+    width: 90%;
+    max-width: 360px;
+    padding: 24px;
+  }
+
+  /* Menú avatar estilo app */
+  .avatar-menu {
+    position: fixed;
+    inset: 0;
+    border-radius: 0;
+    padding: 40px 24px;
+    background: linear-gradient(180deg, #c9f7dd, #a7c7ff);
+  }
+
+  .avatar-menu button {
+    font-size: 22px;
+    padding: 18px;
+  }
+}
+/* MOBILE: ocultar sidebar*/
+@media (max-width: 900px) {
+  .sidebar {
+    display: none;
+  }
+
+  .dashboard {
+    flex-direction: column;
+  }
+
+  .contenido {
+    width: 100%;
+    padding: 16px;
   }
 }

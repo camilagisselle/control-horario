@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import "./Perfil-test.css";
+import "./Perfil.css";
 
 export default function PerfilTest() {
   const navigate = useNavigate();
