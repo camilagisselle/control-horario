@@ -1,7 +1,13 @@
 .historial-container {
   min-height: 100vh;
   padding: 30px;
-  background: linear-gradient(135deg, #c8f3e7, #b8d9ff);
+  background: linear-gradient(
+    135deg,
+    #d9f7d6 0%,
+    #c9f2f5 30%,
+    #cfe3ff 65%,
+    #b7d4ff 100%
+  );
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -12,9 +18,16 @@
   align-items: center;
 }
 
+/* USUARIO */
 .usuario-label {
   color: #4c6ef5;
   margin: 0;
+}
+
+.usuario-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .usuario-nombre {
@@ -22,10 +35,33 @@
   margin: 0;
 }
 
+/* AVATAR 👩 */
+.avatar {
+  width: 48px;     /* antes 32px */
+  height: 48px;
+
+  font-size: 38px; /* antes 18px */
+
+  background: #6c5ce7;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  line-height: 1;
+}
+
+/* LOGO */
 .logo {
-  font-size: 28px;
-  font-weight: bold;
-  color: #5b5be0;
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  height: 100px;   /* antes 32px */
+  width: auto;
+  object-fit: contain;
 }
 
 /* FILTROS */
@@ -75,22 +111,61 @@ td {
 .paginacion {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   gap: 10px;
   margin-top: 20px;
 }
 
 .paginacion button {
-  background: #eaf0ff;
+  height: 40px;
+  padding: 0 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #f4f7ff;
   border: 2px solid #2f3cff;
-  padding: 8px 14px;
   border-radius: 10px;
+
+  color: #2f3cff;
+  font-weight: 600;
   cursor: pointer;
 }
 
-.pagina-activa {
-  background: #eaf0ff;
-  border: 2px solid #2f3cff;
-  padding: 8px 14px;
+/* BOTÓN 1 */
+.paginacion .pagina-activa {
+  width: 40px;
+  padding: 0;
+  border-radius: 6px;
+}
+/* FILTROS */
+.filtros-container {
+  position: relative;
+  display: inline-block;
+}
+
+.menu-filtros {
+  position: absolute;
+  top: 45px;
+  left: 0;
+  background: rgba(113, 110, 110, 0.317);
   border-radius: 10px;
-  font-weight: bold;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  z-index: 10;
+}
+
+.menu-filtros button {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  background: rgb(157, 21, 185);
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.menu-filtros button:hover {
+  background: #ef6def;
 }

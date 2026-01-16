@@ -1,7 +1,8 @@
+import { useState } from "react";
 import "./Historialpaginas.css";
 
 type Registro = {
-  fecha: string;
+  fecha: string; // formato DD/MM/YYYY
   entrada: string;
   inicioColacion: string;
   finColacion: string;
@@ -12,61 +13,80 @@ type Registro = {
 const registros: Registro[] = [
   {
     fecha: "23/10/2023",
-    entrada: "08:00 AM",
-    inicioColacion: "13:14 PM",
-    finColacion: "14:14 PM",
-    salida: "17:00 PM",
+    entrada: "08:00",
+    inicioColacion: "13:14",
+    finColacion: "14:14",
+    salida: "17:00",
     total: "9.0 hrs",
   },
   {
     fecha: "24/10/2023",
-    entrada: "08:15 AM",
-    inicioColacion: "13:00 PM",
-    finColacion: "14:00 PM",
-    salida: "17:15 PM",
+    entrada: "08:15",
+    inicioColacion: "13:00",
+    finColacion: "14:00",
+    salida: "17:15",
     total: "9.0 hrs",
   },
   {
-    fecha: "25/10/2023",
-    entrada: "07:55 AM",
-    inicioColacion: "13:05 PM",
-    finColacion: "14:05 PM",
-    salida: "16:55 PM",
+    fecha: "25/11/2023",
+    entrada: "07:55",
+    inicioColacion: "13:05",
+    finColacion: "14:05",
+    salida: "16:55",
     total: "9.0 hrs",
-  },
-  {
-    fecha: "26/10/2023",
-    entrada: "08:05 AM",
-    inicioColacion: "13:00 PM",
-    finColacion: "14:00 PM",
-    salida: "18:05 PM",
-    total: "10.0 hrs",
-  },
-  {
-    fecha: "27/10/2023",
-    entrada: "08:00 AM",
-    inicioColacion: "13:30 PM",
-    finColacion: "14:30 PM",
-    salida: "15:00 PM",
-    total: "5.0 hrs",
   },
 ];
 
 export default function HistorialPage() {
+  /* 🟢 PASO 1: estados */
+  const [filtro, setFiltro] = useState<"dia" | "mes" | "anio">("dia");
+  const [mostrarMenu, setMostrarMenu] = useState(false);
+
+  /* 🟢 PASO 2: aplicar filtro */
+  const registrosFiltrados = registros.filter((r) => {
+    const [, mes, anio] = r.fecha.split("/");
+
+    if (filtro === "dia") return true;
+    if (filtro === "mes") return mes === "10";
+    if (filtro === "anio") return anio === "2023";
+
+    return true;
+  });
+
   return (
     <div className="historial-container">
       {/* HEADER */}
       <header className="historial-header">
-        <div>
-          <p className="usuario-label">Usuario:</p>
-          <h2 className="usuario-nombre">Camila Pinilla Cabrera</h2>
+        <div className="usuario-info">
+          <div className="avatar">👩</div>
+          <div>
+            <p className="usuario-label">Usuario:</p>
+            <h2 className="usuario-nombre">Camila Pinilla Cabrera</h2>
+          </div>
         </div>
 
-        <div className="logo">KRONO</div>
+        <div className="logo">
+          <img src="/krono.png" alt="Krono" />
+        </div>
       </header>
 
       {/* BOTÓN FILTROS */}
-      <button className="btn-filtros">Filtros ▼</button>
+      <div className="filtros-container">
+        <button
+          className="btn-filtros"
+          onClick={() => setMostrarMenu(!mostrarMenu)}
+        >
+          Filtros ▾
+        </button>
+
+        {mostrarMenu && (
+          <div className="menu-filtros">
+            <button onClick={() => setFiltro("dia")}>Por día</button>
+            <button onClick={() => setFiltro("mes")}>Por mes</button>
+            <button onClick={() => setFiltro("anio")}>Por año</button>
+          </div>
+        )}
+      </div>
 
       {/* TABLA */}
       <div className="tabla-container">
@@ -74,16 +94,15 @@ export default function HistorialPage() {
           <thead>
             <tr>
               <th>Fecha</th>
-              <th>Hora Entrada</th>
-              <th>Inicio Colación</th>
-              <th>Fin Colación</th>
-              <th>Hora Salida</th>
-              <th>Total de Horas</th>
+              <th>Entrada</th>
+              <th>Inicio colación</th>
+              <th>Fin colación</th>
+              <th>Salida</th>
+              <th>Total</th>
             </tr>
           </thead>
-
           <tbody>
-            {registros.map((r, index) => (
+            {registrosFiltrados.map((r, index) => (
               <tr key={index}>
                 <td>
                   <span className="fecha-pill">{r.fecha}</span>
@@ -102,7 +121,7 @@ export default function HistorialPage() {
       {/* PAGINACIÓN */}
       <div className="paginacion">
         <button>&lt; ANTERIOR</button>
-        <span className="pagina-activa">1</span>
+        <button className="pagina-activa">1</button>
         <button>SIGUIENTE &gt;</button>
       </div>
     </div>
