@@ -1,22 +1,22 @@
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./AdminUsuarios.css";
 
 function AdminUsuarios() {
   const navigate = useNavigate();
 
-  // Leemos la sesión para mostrar nombre (si existe)
+  // Leemos la sesión para mostrar nombre
   const stored = typeof window !== "undefined" ? localStorage.getItem("user") : null;
-  const adminNombre = stored
+  const adminData = stored
     ? (() => {
         try {
-          const u = JSON.parse(stored) as { name?: string };
-          return u?.name ?? "Francisca Andrade";
+          const u = JSON.parse(stored) as { name?: string; role?: string };
+          return { name: u?.name ?? "Francisca Andrade", role: u?.role ?? "admin" };
         } catch {
-          return "Francisca Andrade";
+          return { name: "Francisca Andrade", role: "admin" };
         }
       })()
-    : "Francisca Andrade";
+    : { name: "Francisca Andrade", role: "admin" };
 
   // Avatar: si guardas un avatar en localStorage con la clave "avatar", se usará.
   const adminAvatarSrc =
@@ -24,6 +24,11 @@ function AdminUsuarios() {
       ? localStorage.getItem("avatar") || "/avatar.jpeg"
       : "/avatar.jpeg";
 
+  // Estado del menú desplegable del avatar
+  const [menuAvatarOpen, setMenuAvatarOpen] = useState(false);
+  const menuAvatarRef = useRef<HTMLDivElement>(null);
+
+  // Estado del sidebar (hamburger)
   const [menuAbierto, setMenuAbierto] = useState(false);
 
   const [usuarios, setUsuarios] = useState([
@@ -81,6 +86,31 @@ function AdminUsuarios() {
     localStorage.removeItem("user");
     navigate("/");
   };
+
+  // Cerrar menú del avatar al hacer clic fuera
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuAvatarRef.current && !menuAvatarRef.current.contains(event.target as Node)) {
+        setMenuAvatarOpen(false);
+      }
+    };
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMenuAvatarOpen(false);
+      }
+    };
+
+    if (menuAvatarOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("keydown", handleEscape);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [menuAvatarOpen]);
 
   const toggleActivo = (id: number) => {
     setUsuarios((prev) =>
@@ -170,29 +200,14 @@ function AdminUsuarios() {
     <div className="layout">
       {/* SIDEBAR */}
       <aside className={`sidebar ${menuAbierto ? "open" : ""}`}>
-        <div className="sidebar-avatar">
-          <img src={adminAvatarSrc} alt="avatar admin" className="admin-avatar" />
-          <div className="admin-info">
-            <div>👩 {adminNombre}</div>
-            <div className="role">Administrador</div>
-          </div>
+        <div className="sidebar-info">
+          <div>👩 {adminData.name}</div>
+          <div className="role">Administrador</div>
         </div>
 
-        <Link
-          to="/admin/usuarios"
-          className="menu active has-tooltip"
-          data-tooltip="Ir a usuarios"
-        >
-          👥 Usuarios
-        </Link>
-
-        <Link
-          to="/admin/historial"
-          className="menu has-tooltip"
-          data-tooltip="Ver historial"
-        >
-          📄 Historial
-        </Link>
+        <a href="/admin/perfil" className="menu has-tooltip" data-tooltip="Ver perfil">👤 Perfil</a>
+        <a href="/admin/usuarios" className="menu active has-tooltip" data-tooltip="Ir a usuarios">👥 Usuarios</a>
+        <a href="/admin/historial" className="menu has-tooltip" data-tooltip="Ver historial">📄 Historial</a>
 
         <div
           className="logout has-tooltip"
@@ -216,7 +231,34 @@ function AdminUsuarios() {
             ☰
           </button>
 
-          <h1>ADMINISTRADOR DE USUARIOS</h1>
+          <div className="perfil-top">
+            <h1>ADMINISTRADOR DE USUARIOS</h1>
+          </div>
+
+          <div className="header-avatar-container" ref={menuAvatarRef}>
+            <button 
+              className="header-avatar-button" 
+              onClick={() => setMenuAvatarOpen(!menuAvatarOpen)}
+              aria-label="Abrir menú de usuario"
+            >
+              <img src={adminAvatarSrc} alt="Avatar" className="header-avatar-img" />
+            </button>
+
+            {menuAvatarOpen && (
+              <div className="avatar-dropdown-menu">
+                <div className="avatar-dropdown-header">
+                  <div className="avatar-dropdown-name">{adminData.name}</div>
+                  <div className="avatar-dropdown-role">Administrador</div>
+                </div>
+                <div className="avatar-dropdown-divider"></div>
+                <a href="/admin/perfil" className="avatar-dropdown-item">👤 Perfil</a>
+                <a href="/admin/usuarios" className="avatar-dropdown-item">👥 Usuarios</a>
+                <a href="/admin/historial" className="avatar-dropdown-item">📄 Historial</a>
+                <div className="avatar-dropdown-divider"></div>
+                <button onClick={logout} className="avatar-dropdown-item avatar-dropdown-logout">🚪 Cerrar sesión</button>
+              </div>
+            )}
+          </div>
 
           <img src="/krono2.1.png" className="logo" alt="Krono logo" />
         </header>
