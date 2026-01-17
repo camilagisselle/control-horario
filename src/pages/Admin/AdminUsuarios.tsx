@@ -251,9 +251,9 @@ function AdminUsuarios() {
                   <div className="avatar-dropdown-role">Administrador</div>
                 </div>
                 <div className="avatar-dropdown-divider"></div>
-                <a href="/admin/perfil" className="avatar-dropdown-item">👤 Perfil</a>
-                <a href="/admin/usuarios" className="avatar-dropdown-item">👥 Usuarios</a>
-                <a href="/admin/historial" className="avatar-dropdown-item">📄 Historial</a>
+                <button onClick={() => navigate("/admin/perfil")} className="avatar-dropdown-item">👤 Perfil</button>
+                <button onClick={() => navigate("/admin/usuarios")} className="avatar-dropdown-item">👥 Usuarios</button>
+                <button onClick={() => navigate("/admin/historial")} className="avatar-dropdown-item">📄 Historial</button>
                 <div className="avatar-dropdown-divider"></div>
                 <button onClick={logout} className="avatar-dropdown-item avatar-dropdown-logout">🚪 Cerrar sesión</button>
               </div>
