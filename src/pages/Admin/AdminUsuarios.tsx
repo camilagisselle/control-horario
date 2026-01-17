@@ -81,6 +81,7 @@ function AdminUsuarios() {
 
   const logout = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("avatar");
     navigate("/");
   };
 

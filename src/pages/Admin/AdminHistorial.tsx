@@ -139,6 +139,7 @@ const AdminHistorial: React.FC = () => {
 
   const logout = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("avatar");
     navigate("/");
   };
 

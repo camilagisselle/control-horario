@@ -72,6 +72,7 @@ const AdminPerfil: React.FC = () => {
 
   const logout = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("avatar");
     navigate("/");
   };
 
