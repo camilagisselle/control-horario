@@ -56,15 +56,15 @@ const AdminHistorial: React.FC = () => {
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState<string>("Todos");
   const [filtroTabla, setFiltroTabla] = useState<string>("");
 
-  // Datos de ejemplo (reemplaza con datos reales si los tienes)
-  const historial: HistorialItem[] = [
+  // Datos de ejemplo (reemplaza con datos reales si los tienes) - wrapped in useMemo
+  const historial: HistorialItem[] = useMemo(() => [
     { id: 1, usuario: "Camila Pinilla", fecha: "2026-01-05", entrada: "08:00", inicioColacion: "12:30", finColacion: "13:15", salida: "17:30", totalHoras: "9.25" },
     { id: 2, usuario: "Noemi Muñoz",  fecha: "2026-01-06", entrada: "08:10", inicioColacion: "12:30", finColacion: "13:15", salida: "17:40", totalHoras: "9.0" },
     { id: 3, usuario: "Juanito Perez", fecha: "2026-01-05", entrada: "08:30", inicioColacion: "12:30", finColacion: "13:00", salida: "17:30", totalHoras: "8.5" },
     { id: 4, usuario: "María López",   fecha: "2026-01-07", entrada: "08:15", inicioColacion: "13:00", finColacion: "14:00", salida: "17:15", totalHoras: "9.0" },
     { id: 5, usuario: "Camila Pinilla", fecha: "2025-12-01", entrada: "08:00", inicioColacion: "13:14", finColacion: "14:14", salida: "17:00", totalHoras: "9.0" },
     { id: 6, usuario: "Francisca Andrade", fecha: "2025-12-10", entrada: "08:00", inicioColacion: "13:00", finColacion: "14:00", salida: "18:00", totalHoras: "10.0" },
-  ];
+  ], []);
 
   // Mapa por usuario para accesos rápidos (opcional)
   const mapa = useMemo(() => {
