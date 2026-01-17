@@ -1,38 +1,42 @@
-:root{
+:root {
   --primary: #6b4eff;
+  --title-blue: #1f3bb3;
   --bg-gradient: linear-gradient(135deg, #dff7f2, #9bbcff);
   --text: #333333;
   --muted: #6b6b6b;
   --card-bg: #ffffff;
-  --radius: 12px;
-  --shadow: 0 12px 25px rgba(0,0,0,0.08);
+  --shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
   --font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
-* { box-sizing: border-box; }
-body, .layout, .content {
+* {
+  box-sizing: border-box;
+}
+body,
+.layout,
+.content {
   font-family: var(--font-family);
   color: var(--text);
   font-size: 16px;
-  line-height: 1.4;
+  margin: 0;
+  padding: 0;
 }
 
-/* LAYOUT */
 .layout {
   display: flex;
   min-height: 100vh;
   background: var(--bg-gradient);
 }
 
-/* SIDEBAR */
+/* Sidebar */
 .sidebar {
   width: 240px;
   padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 18px;
+  background: transparent;
 }
-
 .sidebar-info {
   display: flex;
   align-items: center;
@@ -40,19 +44,20 @@ body, .layout, .content {
   padding-bottom: 6px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
-
-.sidebar-info .admin-info {
+.admin-info {
   display: flex;
   flex-direction: column;
   font-size: 14px;
 }
-.sidebar-info .admin-info .role {
+.role {
   font-size: 13px;
   color: var(--muted);
 }
 
-/* MENU */
+/* Menu */
 .menu {
+  background: transparent;
+  border: none;
   text-decoration: none;
   color: var(--text);
   padding: 10px 12px;
@@ -60,15 +65,14 @@ body, .layout, .content {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  cursor: pointer;
+  text-align: left;
   font-size: 15px;
 }
-
 .menu.active {
   background: var(--primary);
   color: white;
-  box-shadow: 0 6px 18px rgba(107, 78, 255, 0.12);
 }
-
 .logout {
   margin-top: auto;
   cursor: pointer;
@@ -78,29 +82,29 @@ body, .layout, .content {
   color: var(--text);
 }
 
-/* CONTENT */
+/* Content */
 .content {
   flex: 1;
   padding: 28px;
 }
 
-/* HEADER */
+/* Header */
 .header {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 22px;
   gap: 16px;
+  margin-bottom: 22px;
 }
 .header-title {
   flex: 1;
   text-align: center;
 }
-.header-title h1,
-.header h1 {
-  font-size: 20px;
-  color: var(--text);
+.header-title h1 {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--title-blue);
   margin: 0;
 }
 
@@ -174,136 +178,106 @@ body, .layout, .content {
   pointer-events: none;
 }
 
-/* CARD */
+/* Card */
 .card {
   background: var(--card-bg);
   border-radius: 14px;
-  padding: 18px;
+  padding: 24px;
   box-shadow: var(--shadow);
   position: relative;
   z-index: 1;
 }
 
-/* Search / actions */
-.actions {
+/* Perfil card specific */
+.perfil-card {
   display: flex;
-  gap: 12px;
-  align-items: center;
-  margin-bottom: 12px;
-}
-.search-box input, .filter select, .filter input {
-  padding: 8px 10px;
-  border-radius: 10px;
-  border: 1px solid rgba(0,0,0,0.08);
-  font-size: 14px;
+  gap: 40px;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-/* Buttons */
-.btn-nuevo {
+.perfil-avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.perfil-avatar-grande {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.perfil-avatar-grande img {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  border: 6px solid #e0e7ff;
+  object-fit: cover;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.edit-icon {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
   background: var(--primary);
   color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 14px;
+  border-radius: 50%;
+  padding: 8px 10px;
+  font-size: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* Tabla */
-table {
-  width: 100%;
-  border-collapse: collapse;
+.perfil-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-field label {
   font-size: 14px;
-}
-th, td {
-  padding: 10px 12px;
-  text-align: left;
-  border-bottom: 1px solid rgba(0,0,0,0.06);
-}
-th {
-  color: var(--muted);
   font-weight: 600;
+  color: var(--muted);
 }
 
-/* Modal */
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.modal {
-  background: var(--card-bg);
-  border-radius: 12px;
-  padding: 16px;
-  width: 520px;
-  max-width: calc(100% - 32px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.12);
-}
-/* --- Correcciones visuales para evitar que el logo y el botón grande se superpongan --- */
-
-/* Asegura que el header esté alineado y el logo tenga tamaño máximo */
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  position: relative; /* mantiene el flujo normal */
+.form-field input {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #f9fafb;
+  font-size: 15px;
+  color: var(--text);
 }
 
-/* Tamaño seguro para el logo (evita que crezca demasiado) */
-.header .logo,
-.logo {
-  width: 120px;        /* tamaño deseado del logo */
-  max-width: 20%;      /* no más de 20% del ancho del header */
-  height: auto;
-  object-fit: contain;
-  display: block;
+.form-field input:disabled {
+  background: #e5e7eb;
+  cursor: not-allowed;
 }
 
-/* Si el logo sigue apareciendo grande en pantallas pequeñas, lo reducimos */
-@media (max-width: 900px) {
-  .header .logo,
-  .logo {
-    width: 90px;
-    max-width: 120px;
-  }
-}
-
-/* Asegura que la tarjeta (card) quede por encima del fondo pero sin que el logo la tape */
-.card {
-  position: relative;
-  z-index: 1;
-  margin-top: 12px;
-}
-
-/* Si por alguna razón el logo tiene z-index alto, forzamos que el header no lo haga sobresalir
-   y permitimos que el contenido (tabla) quede claramente visible */
-.header .logo {
-  z-index: 0;
-  pointer-events: none;
-}
-
-/* Ajuste del botón 'hamburger' — tamaño y estilo coherente */
+/* Hamburger */
 .hamburger {
-  width: 56px;
-  height: 56px;
-  border-radius: 18px;
-  background: rgba(107,78,255,0.25);
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(107, 78, 255, 0.15);
   border: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background 0.2s;
 }
-
-/* Asegurar que la tabla esté por encima si aún hay solapamiento */
-.table-wrap,
-.table-wrap table {
-  position: relative;
-  z-index: 2;
+.hamburger:hover {
+  background: rgba(107, 78, 255, 0.25);
 }
 
 /* Tooltips */
@@ -335,6 +309,16 @@ th {
 }
 
 /* Responsive */
+@media (max-width: 900px) {
+  .logo {
+    width: 80px;
+    max-width: 100px;
+  }
+  .perfil-card {
+    flex-direction: column;
+    align-items: center;
+  }
+}
 @media (max-width: 560px) {
   .sidebar {
     display: none;
@@ -349,6 +333,6 @@ th {
     z-index: 999;
   }
   .header-title h1 {
-    font-size: 16px;
+    font-size: 24px;
   }
 }

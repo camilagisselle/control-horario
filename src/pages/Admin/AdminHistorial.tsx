@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./AdminHistorial.css";
 
@@ -34,22 +34,24 @@ const AdminHistorial: React.FC = () => {
 
   // Leer sesión para mostrar nombre / avatar en sidebar (si existen)
   const stored = typeof window !== "undefined" ? localStorage.getItem("user") : null;
-  const adminNombre = stored
+  const adminUser = stored
     ? (() => {
         try {
-          const u = JSON.parse(stored) as { name?: string };
-          return u?.name ?? "Francisca Andrade";
+          const u = JSON.parse(stored) as { name?: string; role?: string };
+          return { name: u?.name ?? "Francisca Andrade", role: u?.role ?? "admin" };
         } catch {
-          return "Francisca Andrade";
+          return { name: "Francisca Andrade", role: "admin" };
         }
       })()
-    : "Francisca Andrade";
+    : { name: "Francisca Andrade", role: "admin" };
 
   const adminAvatarSrc = typeof window !== "undefined" ? localStorage.getItem("avatar") || "/avatar.jpeg" : "/avatar.jpeg";
 
   const [menuOpen, setMenuOpen] = useState(false);
+  const [avatarMenuOpen, setAvatarMenuOpen] = useState(false);
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState<string>("Todos");
   const [filtroTabla, setFiltroTabla] = useState<string>("");
+  const avatarMenuRef = useRef<HTMLDivElement>(null);
 
   // Datos de ejemplo (reemplaza con datos reales si los tienes)
   const historial: HistorialItem[] = [
@@ -95,6 +97,18 @@ const AdminHistorial: React.FC = () => {
     );
   }, [filtroTabla, filas]);
 
+  // Cerrar menú avatar al hacer click fuera
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (avatarMenuRef.current && !avatarMenuRef.current.contains(event.target as Node)) {
+        setAvatarMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   // Tooltips / touch behavior (mantengo tal cual)
   useEffect(() => {
     const onTouchStart = (e: TouchEvent) => {
@@ -133,14 +147,14 @@ const AdminHistorial: React.FC = () => {
   return (
     <div className="layout">
       <aside className={`sidebar ${menuOpen ? "open" : ""}`}>
-        <div className="sidebar-avatar">
-          <img src={adminAvatarSrc} alt="avatar admin" className="admin-avatar" />
+        <div className="sidebar-info">
           <div className="admin-info">
-            <div>👩 {adminNombre}</div>
+            <div>👩 {adminUser.name}</div>
             <div className="role">Administrador</div>
           </div>
         </div>
 
+        <Link to="/admin/perfil" className="menu has-tooltip" data-tooltip="Ver perfil">👤 Perfil</Link>
         <Link to="/admin/usuarios" className="menu has-tooltip" data-tooltip="Ir a usuarios">👥 Usuarios</Link>
         <Link to="/admin/historial" className="menu active has-tooltip" data-tooltip="Ir al historial">📄 Historial</Link>
 
@@ -151,8 +165,35 @@ const AdminHistorial: React.FC = () => {
         <header className="header">
           <button className="hamburger has-tooltip" onClick={() => setMenuOpen(!menuOpen)} data-tooltip="Abrir menú">☰</button>
 
-          <div className="perfil-top">
+          <div className="header-title">
             <h1>Historial</h1>
+          </div>
+
+          <div className="header-right" ref={avatarMenuRef}>
+            <img
+              src={adminAvatarSrc}
+              className="header-avatar has-tooltip"
+              alt="avatar"
+              onClick={() => setAvatarMenuOpen(!avatarMenuOpen)}
+              data-tooltip="Abrir menú"
+            />
+
+            {avatarMenuOpen && (
+              <div className="avatar-dropdown">
+                <button onClick={() => { setAvatarMenuOpen(false); navigate("/admin/perfil"); }}>
+                  👤 Perfil
+                </button>
+                <button onClick={() => { setAvatarMenuOpen(false); navigate("/admin/usuarios"); }}>
+                  👥 Usuarios
+                </button>
+                <button onClick={() => { setAvatarMenuOpen(false); navigate("/admin/historial"); }}>
+                  📄 Historial
+                </button>
+                <button className="logout-btn" onClick={logout}>
+                  🚪 Cerrar sesión
+                </button>
+              </div>
+            )}
           </div>
 
           <img src="/krono2.1.png" className="logo" alt="Krono logo" />

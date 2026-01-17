@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./AdminUsuarios.css";
 
@@ -7,16 +7,16 @@ function AdminUsuarios() {
 
   // Leemos la sesión para mostrar nombre (si existe)
   const stored = typeof window !== "undefined" ? localStorage.getItem("user") : null;
-  const adminNombre = stored
+  const adminUser = stored
     ? (() => {
         try {
-          const u = JSON.parse(stored) as { name?: string };
-          return u?.name ?? "Francisca Andrade";
+          const u = JSON.parse(stored) as { name?: string; role?: string };
+          return { name: u?.name ?? "Francisca Andrade", role: u?.role ?? "admin" };
         } catch {
-          return "Francisca Andrade";
+          return { name: "Francisca Andrade", role: "admin" };
         }
       })()
-    : "Francisca Andrade";
+    : { name: "Francisca Andrade", role: "admin" };
 
   // Avatar: si guardas un avatar en localStorage con la clave "avatar", se usará.
   const adminAvatarSrc =
@@ -25,6 +25,8 @@ function AdminUsuarios() {
       : "/avatar.jpeg";
 
   const [menuAbierto, setMenuAbierto] = useState(false);
+  const [avatarMenuOpen, setAvatarMenuOpen] = useState(false);
+  const avatarMenuRef = useRef<HTMLDivElement>(null);
 
   const [usuarios, setUsuarios] = useState([
     {
@@ -81,6 +83,18 @@ function AdminUsuarios() {
     localStorage.removeItem("user");
     navigate("/");
   };
+
+  // Cerrar menú avatar al hacer click fuera
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (avatarMenuRef.current && !avatarMenuRef.current.contains(event.target as Node)) {
+        setAvatarMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const toggleActivo = (id: number) => {
     setUsuarios((prev) =>
@@ -170,13 +184,20 @@ function AdminUsuarios() {
     <div className="layout">
       {/* SIDEBAR */}
       <aside className={`sidebar ${menuAbierto ? "open" : ""}`}>
-        <div className="sidebar-avatar">
-          <img src={adminAvatarSrc} alt="avatar admin" className="admin-avatar" />
+        <div className="sidebar-info">
           <div className="admin-info">
-            <div>👩 {adminNombre}</div>
+            <div>👩 {adminUser.name}</div>
             <div className="role">Administrador</div>
           </div>
         </div>
+
+        <Link
+          to="/admin/perfil"
+          className="menu has-tooltip"
+          data-tooltip="Ver perfil"
+        >
+          👤 Perfil
+        </Link>
 
         <Link
           to="/admin/usuarios"
@@ -216,7 +237,36 @@ function AdminUsuarios() {
             ☰
           </button>
 
-          <h1>ADMINISTRADOR DE USUARIOS</h1>
+          <div className="header-title">
+            <h1>ADMINISTRADOR DE USUARIOS</h1>
+          </div>
+
+          <div className="header-right" ref={avatarMenuRef}>
+            <img
+              src={adminAvatarSrc}
+              className="header-avatar has-tooltip"
+              alt="avatar"
+              onClick={() => setAvatarMenuOpen(!avatarMenuOpen)}
+              data-tooltip="Abrir menú"
+            />
+
+            {avatarMenuOpen && (
+              <div className="avatar-dropdown">
+                <button onClick={() => { setAvatarMenuOpen(false); navigate("/admin/perfil"); }}>
+                  👤 Perfil
+                </button>
+                <button onClick={() => { setAvatarMenuOpen(false); navigate("/admin/usuarios"); }}>
+                  👥 Usuarios
+                </button>
+                <button onClick={() => { setAvatarMenuOpen(false); navigate("/admin/historial"); }}>
+                  📄 Historial
+                </button>
+                <button className="logout-btn" onClick={logout}>
+                  🚪 Cerrar sesión
+                </button>
+              </div>
+            )}
+          </div>
 
           <img src="/krono2.1.png" className="logo" alt="Krono logo" />
         </header>
