@@ -10,6 +10,7 @@ import Perfil from "./pages/Perfil/Perfil";
 // Admin pages
 import AdminHistorial from "./pages/Admin/AdminHistorial";
 import AdminUsuarios from "./pages/Admin/AdminUsuarios";
+import AdminPerfil from "./pages/Admin/AdminPerfil";
 
 /**
  * RequireAuth:
@@ -69,6 +70,14 @@ function App() {
         />
 
         {/* Rutas exclusivas de admin */}
+        <Route
+          path="/admin/perfil"
+          element={
+            <RequireAuth role="admin">
+              <AdminPerfil />
+            </RequireAuth>
+          }
+        />
         <Route
           path="/admin/usuarios"
           element={
