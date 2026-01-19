@@ -22,14 +22,17 @@ const RequireAuth: React.FC<{ role?: "admin" | "user"; children: React.ReactElem
   const stored = typeof window !== "undefined" ? localStorage.getItem("user") : null;
   if (!stored) return <Navigate to="/" replace />;
 
+  let isAuthorized = false;
   try {
     const user = JSON.parse(stored) as { role?: string };
-    if (role && user.role !== role) return <Navigate to="/" replace />;
+    if (!role || user.role === role) {
+      isAuthorized = true;
+    }
   } catch {
     localStorage.removeItem("user");
-    return <Navigate to="/" replace />;
   }
 
+  if (!isAuthorized) return <Navigate to="/" replace />;
   return children;
 };
 

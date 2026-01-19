@@ -11,8 +11,8 @@ export default function PerfilTest() {
   const [password, setPassword] = useState("123456");
   const [avatar, setAvatar] = useState("/avatar.jpeg");
 
-  const cambiarAvatar = (e: any) => {
-    const file = e.target.files[0];
+  const cambiarAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (!file) return;
 
     const reader = new FileReader();
