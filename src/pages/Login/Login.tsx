@@ -1,24 +1,58 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom"; // 👈 agregamos useNavigate
+import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
 
 const Login: React.FC = () => {
-  const [avatar, setAvatar] = useState("/avatar.jpeg");
-  const navigate = useNavigate(); // 👈 hook de navegación
+  const [avatar, setAvatar] = useState<string>(() => {
+    try {
+      return (localStorage.getItem("avatar") as string) || "/avatar.jpeg";
+    } catch {
+      return "/avatar.jpeg";
+    }
+  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  // Credenciales fijas para demo local
+  const ADMIN = { email: "admin@correo.cl", password: "12345", role: "admin", name: "Francisca Andrade" };
+  const USER = { email: "usuario@correo.cl", password: "12345", role: "user", name: "Camila Pinilla" };
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => setAvatar(reader.result as string);
+      reader.onloadend = () => {
+        const dataUrl = reader.result as string;
+        setAvatar(dataUrl);
+        // Guardamos avatar en localStorage para que otras páginas lo usen
+        try {
+          localStorage.setItem("avatar", dataUrl);
+        } catch {
+          // si falla, seguimos sin bloquear
+        }
+      };
       reader.readAsDataURL(file);
     }
   };
 
   const handleIngresar = () => {
-    // Aquí después puedes validar usuario y contraseña
-    // Por ahora simplemente enviamos a Registro
-    navigate("/registro");
+    // validación simple con credenciales fijas
+    if (email === ADMIN.email && password === ADMIN.password) {
+      const user = { email: ADMIN.email, role: ADMIN.role, name: ADMIN.name };
+      localStorage.setItem("user", JSON.stringify(user)); // guardamos sesión localmente
+      navigate("/admin/historial"); // admin -> página de historial admin
+      return;
+    }
+
+    if (email === USER.email && password === USER.password) {
+      const user = { email: USER.email, role: USER.role, name: USER.name };
+      localStorage.setItem("user", JSON.stringify(user));
+      navigate("/registro"); // usuario normal -> página de registro
+      return;
+    }
+
+    alert("Usuario o contraseña incorrectos. Usa admin@correo.cl / 12345 o usuario@correo.cl / 12345");
   };
 
   return (
@@ -47,15 +81,28 @@ const Login: React.FC = () => {
 
           <h2>Inicio de sesión</h2>
 
-          <input type="text" placeholder="Usuario" />
-          <input type="password" placeholder="Contraseña" />
+          <input
+            type="text"
+            placeholder="Usuario (email)"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="Contraseña"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-          {/* 👇 BOTÓN CONECTADO A REGISTRO */}
           <button onClick={handleIngresar}>Ingresar</button>
 
-          <Link to="/Recuperarpassword" className="recuperar-link">
+          <Link to="/recuperarpassword" className="recuperar-link">
             Recuperar contraseña
           </Link>
+
+          <div style={{ marginTop: 12, fontSize: 14, color: "#555" }}>
+            También puedes registrarte: <Link to="/registro">Registro</Link>
+          </div>
         </div>
       </div>
     </div>
