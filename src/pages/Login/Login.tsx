@@ -15,8 +15,18 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
 
   // Credenciales fijas para demo local
-  const ADMIN = { email: "admin@correo.cl", password: "12345", role: "admin", name: "Francisca Andrade" };
-  const USER = { email: "usuario@correo.cl", password: "12345", role: "user", name: "Camila Pinilla" };
+  const ADMIN = {
+    email: "admin@correo.cl",
+    password: "12345",
+    role: "admin",
+    name: "Francisca Andrade",
+  };
+  const USER = {
+    email: "usuario@correo.cl",
+    password: "12345",
+    role: "user",
+    name: "Camila Pinilla",
+  };
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -52,7 +62,9 @@ const Login: React.FC = () => {
       return;
     }
 
-    alert("Usuario o contraseña incorrectos. Usa admin@correo.cl / 12345 o usuario@correo.cl / 12345");
+    alert(
+      "Usuario o contraseña incorrectos. Usa admin@correo.cl / 12345 o usuario@correo.cl / 12345",
+    );
   };
 
   return (
@@ -99,10 +111,6 @@ const Login: React.FC = () => {
           <Link to="/recuperarpassword" className="recuperar-link">
             Recuperar contraseña
           </Link>
-
-          <div style={{ marginTop: 12, fontSize: 14, color: "#555" }}>
-            También puedes registrarte: <Link to="/registro">Registro</Link>
-          </div>
         </div>
       </div>
     </div>
