@@ -22,6 +22,7 @@ export default function PerfilTest() {
 
   return (
     <div className="perfil-root">
+      {/* SIDEBAR DESKTOP */}
       <aside className="perfil-sidebar">
         <div className="perfil-user" onClick={() => setMenu(!menu)}>
           <img src={avatar} />
@@ -40,12 +41,28 @@ export default function PerfilTest() {
         )}
       </aside>
 
+      {/* CONTENIDO */}
       <main className="perfil-contenido">
+        {/* HAMBURGUESA MOBILE */}
+        <button className="hamburguesa" onClick={() => setMenu(!menu)}>
+          ☰
+        </button>
+
+        {/* HEADER */}
         <div className="perfil-top">
           <h1>Perfil</h1>
-          <img src="/krono2.1.png" className="perfil-logo" />
         </div>
 
+        {/* MENÚ MOBILE */}
+        {menu && (
+          <div className="perfil-menu">
+            <button onClick={() => navigate("/registro")}>Registrar</button>
+            <button onClick={() => navigate("/historial")}>Historial</button>
+            <button onClick={() => navigate("/")}>Cerrar sesión</button>
+          </div>
+        )}
+
+        {/* TARJETA */}
         <div className="perfil-card">
           <div className="perfil-avatar-grande">
             <label htmlFor="avatarInput">
@@ -85,6 +102,9 @@ export default function PerfilTest() {
             </div>
           </div>
         </div>
+
+        {/* LOGO ABAJO */}
+        <img src="/krono2.1.png" className="perfil-logo" />
       </main>
     </div>
   );
