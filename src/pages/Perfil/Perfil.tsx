@@ -22,8 +22,8 @@ export default function PerfilTest() {
 
   return (
     <div className="perfil-root">
-      {/* SIDEBAR DESKTOP */}
-      <aside className="perfil-sidebar">
+      {/* SIDEBAR */}
+      <aside className={`perfil-sidebar ${menu ? "open" : ""}`}>
         <div className="perfil-user" onClick={() => setMenu(!menu)}>
           <img src={avatar} />
           <div>
@@ -32,6 +32,7 @@ export default function PerfilTest() {
           </div>
         </div>
 
+        {/* ✅ MENÚ: UN SOLO RENDER */}
         {menu && (
           <div className="perfil-menu">
             <button onClick={() => navigate("/registro")}>Registrar</button>
@@ -43,26 +44,16 @@ export default function PerfilTest() {
 
       {/* CONTENIDO */}
       <main className="perfil-contenido">
-        {/* HAMBURGUESA MOBILE */}
+        {/* BOTÓN MOBILE */}
         <button className="hamburguesa" onClick={() => setMenu(!menu)}>
           ☰
         </button>
 
-        {/* HEADER */}
         <div className="perfil-top">
           <h1>Perfil</h1>
         </div>
 
-        {/* MENÚ MOBILE */}
-        {menu && (
-          <div className="perfil-menu">
-            <button onClick={() => navigate("/registro")}>Registrar</button>
-            <button onClick={() => navigate("/historial")}>Historial</button>
-            <button onClick={() => navigate("/")}>Cerrar sesión</button>
-          </div>
-        )}
-
-        {/* TARJETA */}
+        {/* TARJETA PERFIL */}
         <div className="perfil-card">
           <div className="perfil-avatar-grande">
             <label htmlFor="avatarInput">
@@ -103,7 +94,6 @@ export default function PerfilTest() {
           </div>
         </div>
 
-        {/* LOGO ABAJO */}
         <img src="/krono2.1.png" className="perfil-logo" />
       </main>
     </div>
