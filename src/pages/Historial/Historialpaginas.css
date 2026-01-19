@@ -5,11 +5,10 @@
   padding: 0;
 }
 
-/*  LAYOUT */
+/* LAYOUT */
 .dashboard-historial {
   display: flex;
   height: 100vh;
-  /* Tus colores de fondo originales */
   background: linear-gradient(
     135deg,
     #d9f7d6 0%,
@@ -20,7 +19,7 @@
   overflow-x: hidden;
 }
 
-/* SIDEBAR */
+/* SIDEBAR  */
 .sidebar {
   width: 260px;
   padding: 25px;
@@ -33,25 +32,24 @@
   border-right: 1px solid rgba(255,255,255,0.5);
 }
 
-/* Usuario dentro del Sidebar */
+/* Usuario */
 .usuario-info-sidebar {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  align-items: center; /* Centrado en sidebar */
+  align-items: center;
   position: relative;
   text-align: center;
 }
 
 .usuario-label {
   color: #4c6ef5;
-  margin: 0;
   font-size: 14px;
 }
 
 .usuario-nombre {
   color: #1c2d8f;
-  margin: 5px 0 0;
+  margin-top: 5px;
   font-size: 18px;
 }
 
@@ -71,10 +69,10 @@
   object-fit: cover;
 }
 
-/* Menú desplegable Avatar */
+/* Menú avatar */
 .avatar-menu {
   position: absolute;
-  top: 80px; /* Debajo del avatar */
+  top: 80px;
   width: 200px;
   background: white;
   border-radius: 12px;
@@ -82,7 +80,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
   z-index: 50;
 }
 
@@ -97,10 +95,15 @@
   border-radius: 8px;
 }
 
-.avatar-menu button:hover { background: #f0f0f0; }
-.avatar-menu .cerrar { color: #dc2626; }
+.avatar-menu button:hover {
+  background: #f0f0f0;
+}
 
-/*  CONTENIDO PRINCIPAL  */
+.avatar-menu .cerrar {
+  color: #dc2626;
+}
+
+/* CONTENIDO */
 .historial-contenido {
   flex: 1;
   padding: 30px;
@@ -121,12 +124,12 @@
 /*  LOGO */
 .logo-img {
   position: absolute;
-  top: -50px; /* Súbelo como pediste */
+  top: -50px;
   right: 20px;
   height: 250px;
   width: auto;
   z-index: 10;
-  pointer-events: none; /* Para que no tape clicks si está muy encima */
+  pointer-events: none;
 }
 
 /*  FILTROS  */
@@ -151,17 +154,16 @@
   left: 0;
   background: white;
   border-radius: 10px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
   overflow: hidden;
   z-index: 20;
   min-width: 150px;
 }
 
 .menu-filtros button {
-  display: block;
   width: 100%;
   padding: 10px 16px;
-  background: white; /* Cambié a blanco para legibilidad */
+  background: white;
   border: none;
   text-align: left;
   cursor: pointer;
@@ -169,9 +171,11 @@
   border-bottom: 1px solid #eee;
 }
 
-.menu-filtros button:hover { background: #ef6def; color: white; }
+.menu-filtros button:hover {
+  background: #ef6def;
+  color: white;
+}
 
-/*TABLA */
 .tabla-container {
   background: #e7ddff;
   padding: 15px;
@@ -180,38 +184,81 @@
   overflow-x: auto;
 }
 
+table,
+thead,
+tbody,
+tr,
+th,
+td {
+  background: transparent;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
   text-align: center;
 }
 
-thead { background: #bfaaff; color: #1c1c3c; }
-th, td { padding: 10px; border-bottom: 1px solid #ccc; }
-tbody tr:hover { background: #f0e8ff; }
-.fecha-pill { background: #9b7bff; color: white; padding: 4px 8px; border-radius: 8px; }
+thead {
+  color: #1c1c3c;
+}
 
-/* TARJETAS MOBILE */
-.mobile-only { display: none; } /* Oculto por defecto */
+th,
+td {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+tbody tr:hover {
+  background: #f0e8ff;
+}
+
+.fecha-pill {
+  background: #9b7bff;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
+/* MOBILE CARDS  */
+.mobile-only {
+  display: none;
+}
 
 .historial-card {
   background: #e7ddff;
   border-radius: 12px;
   padding: 15px;
   margin-bottom: 15px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.card-fecha { font-weight: bold; color: #4c3ecb; margin-bottom: 10px; font-size: 1.1em; }
-.card-row { display: flex; justify-content: space-between; margin: 6px 0; border-bottom: 1px dashed rgba(0,0,0,0.1); padding-bottom: 4px; }
-.card-total { margin-top: 10px; font-weight: bold; text-align: right; color: #1c2d8f; font-size: 1.2em; }
+.card-fecha {
+  font-weight: bold;
+  color: #4c3ecb;
+  margin-bottom: 10px;
+}
 
-/* PAGINACIÓN */
+.card-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 6px 0;
+  border-bottom: 1px dashed rgba(0,0,0,0.1);
+  padding-bottom: 4px;
+}
+
+.card-total {
+  margin-top: 10px;
+  font-weight: bold;
+  text-align: right;
+  color: #1c2d8f;
+}
+
+/*  PAGINACIÓN*/
 .paginacion {
   display: flex;
   justify-content: center;
   gap: 8px;
-  margin-top: auto; /* Empuja hacia abajo si sobra espacio */
+  margin-top: auto;
   padding-bottom: 20px;
 }
 
@@ -224,9 +271,11 @@ tbody tr:hover { background: #f0e8ff; }
   cursor: pointer;
 }
 
-.pagina-activa { background: #6c5ce7; }
+.pagina-activa {
+  background: #6c5ce7;
+}
 
-/* BOTÓN HAMBURGUESA & OVERLAY */
+/* HAMBURGUESA */
 .btn-hamburguesa {
   display: none;
   position: absolute;
@@ -238,67 +287,58 @@ tbody tr:hover { background: #f0e8ff; }
   cursor: pointer;
   color: #4f46e5;
   z-index: 1100;
-  padding: 0;
 }
 
-.overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 900;
-}
-.overlay.active { display: block; }
-
-/* RESPONSIVE */
-@media (max-width: 900px) {
-  
-  /* 1. Hamburguesa visible */
-  .btn-hamburguesa { display: block; }
-
-  /* 2. Sidebar Oculto a la izquierda */
-  .sidebar {
-    position: fixed;
-    top: 0; left: 0;
-    height: 100vh;
-    width: 280px;
-    transform: translateX(-100%);
-    box-shadow: 4px 0 15px rgba(0,0,0,0.2);
-  }
-  .sidebar.active { transform: translateX(0); }
-
-  /* 3. Ajuste Contenido */
-  .historial-contenido {
-    padding: 80px 20px 20px; /* Más padding arriba para no chocar con botón */
-  }
-
-  /* 4. Swtich de Tabla a Tarjetas */
-  .desktop-only { display: none; }
-  .mobile-only { display: block; }
-
-  /* 5. LOGO AL FINAL (ABAJO) */
-  .logo-img {
-    position: static; /* Deja de flotar */
-    display: block;
-    margin: 40px auto 0; /* Centrado abajo con margen superior */
-    height: auto;
-    width: 150px; /* Más pequeño para móvil */
-    order: 100; /* Se va al final del flex container */
-  }
-  /* MENÚ AVATAR USADO POR HAMBURGUESA (MOBILE) */
+/*  RESPONSIVo*/
 @media (max-width: 900px) {
 
   .btn-hamburguesa {
     display: block;
   }
 
-  .avatar-menu {
+  .sidebar {
     position: fixed;
-    top: 70px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 220px;
-    z-index: 1200;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 280px;
+    transform: translateX(-100%);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
   }
-}
+
+  .sidebar.active {
+    transform: translateX(0);
+  }
+
+  .historial-contenido {
+    padding: 80px 20px 20px;
+  }
+
+  .desktop-only {
+    display: none;
+  }
+
+  .mobile-only {
+    display: block;
+  }
+
+  .logo-img {
+    position: static;
+    display: block;
+    margin: 40px auto 0;
+    width: 150px;
+    height: auto;
+  }
+
+  .avatar-menu {
+    position: static;
+    width: 100%;
+    margin-top: 15px;
+    box-shadow: none;
+    background: rgba(255,255,255,0.9);
+  }
+
+  .avatar-menu button {
+    width: 100%;
+  }
 }

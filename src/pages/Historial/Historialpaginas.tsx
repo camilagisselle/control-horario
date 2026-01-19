@@ -22,7 +22,7 @@ export default function HistorialPage() {
   const [filtro, setFiltro] = useState<"dia" | "mes" | "anio">("dia");
   const [mostrarFiltros, setMostrarFiltros] = useState(false);
 
-  // MENÚ ÚNICO (avatar + hamburguesa)
+  // 👉 ESTADO ÚNICO PARA HAMBURGUESA + AVATAR (CORRECTO)
   const [menuAvatar, setMenuAvatar] = useState(false);
 
   const registrosFiltrados = registros.filter((r) => {
@@ -36,7 +36,7 @@ export default function HistorialPage() {
   return (
     <div className="dashboard-historial">
 
-      {/* BOTÓN HAMBURGUESA (SOLO MOBILE) */}
+      {/* BOTÓN HAMBURGUESA (MOBILE) */}
       <button
         className="btn-hamburguesa"
         onClick={() => setMenuAvatar(!menuAvatar)}
@@ -44,8 +44,8 @@ export default function HistorialPage() {
         ☰
       </button>
 
-      {/* SIDEBAR (SE MANTIENE IGUAL) */}
-      <aside className="sidebar">
+      {/* SIDEBAR */}
+      <aside className={`sidebar ${menuAvatar ? "active" : ""}`}>
         <div className="usuario-info-sidebar">
           <div
             className="avatar"
@@ -63,7 +63,10 @@ export default function HistorialPage() {
             <div className="avatar-menu">
               <button onClick={() => navigate("/registro")}>Registro</button>
               <button onClick={() => navigate("/historial")}>Historial</button>
-              <button className="cerrar" onClick={() => navigate("/")}>
+              <button
+                className="cerrar"
+                onClick={() => navigate("/")}
+              >
                 Cerrar sesión
               </button>
             </div>
