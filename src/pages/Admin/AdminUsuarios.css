@@ -1,237 +1,145 @@
-:root{
+:root {
   --primary: #6b4eff;
-  --bg-gradient: linear-gradient(135deg, #dff7f2, #9bbcff);
-  --text: #333333;
-  --muted: #6b6b6b;
-  --card-bg: #ffffff;
-  --radius: 12px;
-  --shadow: 0 12px 25px rgba(0,0,0,0.08);
-  --font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --secondary-bg: #f5f1ff;
+  --text-primary: #333;
+  --text-active: white;
+  --text-muted: #666;
+  --border-color: #ddd;
 }
 
-* { box-sizing: border-box; }
-body, .layout, .content {
-  font-family: var(--font-family);
-  color: var(--text);
-  font-size: 16px;
-  line-height: 1.4;
-}
-
-/* LAYOUT */
-.layout {
+.usuarios-page {
   display: flex;
   min-height: 100vh;
-  background: var(--bg-gradient);
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to bottom right, #dff7f2, #9bbcff);
 }
 
-/* SIDEBAR */
+/* Sidebar */
 .sidebar {
-  width: 240px;
-  padding: 20px;
+  width: 200px;
+  background: var(--secondary-bg);
+  padding: 40px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 10px;
 }
 
-.sidebar-avatar {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid rgba(0,0,0,0.05);
-}
-
-.admin-avatar {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  border: 4px solid white;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-  object-fit: cover;
-}
-
-.sidebar-avatar .admin-info {
-  display: flex;
-  flex-direction: column;
-  font-size: 14px;
-}
-.sidebar-avatar .admin-info .role {
-  font-size: 13px;
-  color: var(--muted);
-}
-
-/* MENU */
-.menu {
-  text-decoration: none;
-  color: var(--text);
-  padding: 10px 12px;
-  border-radius: 10px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 15px;
-}
-
-.menu.active {
-  background: var(--primary);
-  color: white;
-  box-shadow: 0 6px 18px rgba(107,78,255,0.12);
-}
-
-.logout {
-  margin-top: auto;
-  cursor: pointer;
-  padding: 10px 12px;
-  border-radius: 10px;
-  font-size: 15px;
-  color: var(--text);
-}
-
-/* CONTENT */
-.content {
-  flex: 1;
-  padding: 28px;
-}
-
-/* HEADER */
-.header {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 22px;
-}
-.header h1 {
-  font-size: 20px;
-  color: var(--text);
-}
-
-/* CARD */
-.card {
-  background: var(--card-bg);
-  border-radius: 14px;
-  padding: 18px;
-  box-shadow: var(--shadow);
-}
-
-/* Search / actions */
-.actions {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  margin-bottom: 12px;
-}
-.search-box input, .filter select, .filter input {
-  padding: 8px 10px;
-  border-radius: 10px;
-  border: 1px solid rgba(0,0,0,0.08);
-  font-size: 14px;
-}
-
-/* Buttons */
-.btn-nuevo {
-  background: var(--primary);
-  color: white;
+.sidebar-btn {
+  padding: 10px 15px;
+  background: var(--primary-light);
   border: none;
-  padding: 8px 12px;
-  border-radius: 10px;
+  border-radius: 6px;
+  color: var(--text-primary);
   cursor: pointer;
-  font-size: 14px;
 }
 
-/* Tabla */
-table {
+.sidebar-btn.logout-btn {
+  margin-top: auto;
+  background: #ff6b6b;
+  color: var(--text-active);
+}
+
+/* Main Content */
+.usuarios-main {
+  flex: 1;
+  padding: 35px;
+}
+
+.usuarios-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.usuarios-header h1 {
+  font-size: 16px;
+  font-weight: normal;
+  color: var(--text-muted);
+}
+
+.usuarios-header h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.usuarios-header .usuarios-logo {
+  width: 150px; /* Ajuste del tamaño */
+  height: auto; /* Conserva la proporcionalidad */
+}
+
+
+/* Card */
+.usuarios-card {
+  background-color: var(--card-bg);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.usuarios-header-input {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.usuarios-busqueda {
+  flex: 1;
+  padding: 10px;
+  margin-right: 10px;
+  font-size: 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+
+.usuarios-tabla {
   width: 100%;
   border-collapse: collapse;
-  font-size: 14px;
+  margin-top: 10px;
 }
-th, td {
-  padding: 10px 12px;
+
+.usuarios-tabla th,
+.usuarios-tabla td {
   text-align: left;
-  border-bottom: 1px solid rgba(0,0,0,0.06);
-}
-th {
-  color: var(--muted);
-  font-weight: 600;
+  padding: 10px;
+  border-bottom: 1px solid var(--border-color);
 }
 
-/* Modal */
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.modal {
-  background: var(--card-bg);
-  border-radius: 12px;
-  padding: 16px;
-  width: 520px;
-  max-width: calc(100% - 32px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.12);
-}
-/* --- Correcciones visuales para evitar que el logo y el botón grande se superpongan --- */
-
-/* Asegura que el header esté alineado y el logo tenga tamaño máximo */
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  position: relative; /* mantiene el flujo normal */
+.usuarios-tabla th {
+  background: var(--primary-light);
+  color: var(--text-primary);
 }
 
-/* Tamaño seguro para el logo (evita que crezca demasiado) */
-.header .logo,
-.logo {
-  width: 120px;        /* tamaño deseado del logo */
-  max-width: 20%;      /* no más de 20% del ancho del header */
-  height: auto;
-  object-fit: contain;
-  display: block;
+.accion {
+  margin: 0 5px;
+  cursor: pointer;
 }
 
-/* Si el logo sigue apareciendo grande en pantallas pequeñas, lo reducimos */
-@media (max-width: 900px) {
-  .header .logo,
-  .logo {
-    width: 90px;
-    max-width: 120px;
-  }
+.estado {
+  cursor: pointer;
+  font-size: 16px;
 }
 
-/* Asegura que la tarjeta (card) quede por encima del fondo pero sin que el logo la tape */
-.card {
-  position: relative;
-  z-index: 1;
-  margin-top: 12px;
+.estado.activo {
+  color: green;
 }
 
-/* Si por alguna razón el logo tiene z-index alto, forzamos que el header no lo haga sobresalir
-   y permitimos que el contenido (tabla) quede claramente visible */
-.header .logo {
-  z-index: 0;
-  pointer-events: none;
+.estado.inactivo {
+  color: red;
 }
 
-/* Ajuste del botón 'hamburger' — tamaño y estilo coherente */
-.hamburger {
-  width: 56px;
-  height: 56px;
-  border-radius: 18px;
-  background: rgba(107,78,255,0.25);
+.usuarios-nuevo {
+  background-color: var(--primary);
+  color: white;
   border: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
 }
 
-/* Asegurar que la tabla esté por encima si aún hay solapamiento */
-.table-wrap,
-.table-wrap table {
-  position: relative;
-  z-index: 2;
+.usuarios-nuevo:hover {
+  background-color: rgba(107, 78, 255, 0.7);
 }

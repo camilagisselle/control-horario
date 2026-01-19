@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import "./AdminHistorial.css";
 
 interface HistorialItem {
@@ -136,10 +136,18 @@ const AdminHistorial: React.FC = () => {
         <div className="sidebar-avatar">
           <img src={adminAvatarSrc} alt="avatar admin" className="admin-avatar" />
           <div className="admin-info">
-            <div>👩 {adminNombre}</div>
+            <div>{adminNombre}</div>
             <div className="role">Administrador</div>
           </div>
         </div>
+
+        <NavLink
+          to="/admin/perfil"
+          className={({ isActive }) => `menu has-tooltip ${isActive ? "active" : ""}`}
+          data-tooltip="Ver perfil admin"
+        >
+          👤 Perfil
+        </NavLink>
 
         <Link to="/admin/usuarios" className="menu has-tooltip" data-tooltip="Ir a usuarios">👥 Usuarios</Link>
         <Link to="/admin/historial" className="menu active has-tooltip" data-tooltip="Ir al historial">📄 Historial</Link>

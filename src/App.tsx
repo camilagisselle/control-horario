@@ -10,12 +10,13 @@ import Perfil from "./pages/Perfil/Perfil";
 // Admin pages
 import AdminHistorial from "./pages/Admin/AdminHistorial";
 import AdminUsuarios from "./pages/Admin/AdminUsuarios";
+import AdminPerfil from "./pages/Admin/AdminPerfil";
 
 /**
  * RequireAuth:
- * - Lee la sesión desde localStorage ("user")
- * - Si no hay sesión redirige al login ("/")
- * - Si se pasa `role` y el rol no coincide, redirige al login
+ * - Checks session from localStorage ("user")
+ * - If there's no session, redirects to login ("/")
+ * - If a `role` is passed, and the role doesn't match, redirect to login
  */
 const RequireAuth: React.FC<{ role?: "admin" | "user"; children: React.ReactElement }> = ({ role, children }) => {
   const stored = typeof window !== "undefined" ? localStorage.getItem("user") : null;
@@ -36,11 +37,11 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Public */}
+        {/* Public Routes */}
         <Route path="/" element={<Login />} />
         <Route path="/recuperarpassword" element={<RecuperarPassword />} />
 
-        {/* Registro (acceso sólo para usuarios normales) */}
+        {/* Routes for Normal Users */}
         <Route
           path="/registro"
           element={
@@ -49,8 +50,6 @@ function App() {
             </RequireAuth>
           }
         />
-
-        {/* Rutas accesibles para cualquier usuario autenticado */}
         <Route
           path="/historial"
           element={
@@ -68,7 +67,7 @@ function App() {
           }
         />
 
-        {/* Rutas exclusivas de admin */}
+        {/* Admin Only Routes */}
         <Route
           path="/admin/usuarios"
           element={
@@ -85,8 +84,16 @@ function App() {
             </RequireAuth>
           }
         />
+        <Route
+          path="/admin/perfil"
+          element={
+            <RequireAuth role="admin">
+              <AdminPerfil />
+            </RequireAuth>
+          }
+        />
 
-        {/* Catch-all: redirigir a login */}
+        {/* Catch-All: Redirect to Login */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
