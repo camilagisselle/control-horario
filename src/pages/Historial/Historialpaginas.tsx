@@ -21,10 +21,9 @@ export default function HistorialPage() {
   const navigate = useNavigate();
   const [filtro, setFiltro] = useState<"dia" | "mes" | "anio">("dia");
   const [mostrarFiltros, setMostrarFiltros] = useState(false);
-  
-  // Estados para menús
+
+  // MENÚ ÚNICO (avatar + hamburguesa)
   const [menuAvatar, setMenuAvatar] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const registrosFiltrados = registros.filter((r) => {
     const [, mes, anio] = r.fecha.split("/");
@@ -36,26 +35,20 @@ export default function HistorialPage() {
 
   return (
     <div className="dashboard-historial">
-      
-      {/* Botón Hamburguesa (Móvil) */}
-      <button 
-        className="btn-hamburguesa" 
-        onClick={() => setSidebarOpen(true)}
+
+      {/* BOTÓN HAMBURGUESA (SOLO MOBILE) */}
+      <button
+        className="btn-hamburguesa"
+        onClick={() => setMenuAvatar(!menuAvatar)}
       >
         ☰
       </button>
 
-      {/* Overlay fondo oscuro */}
-      <div 
-        className={`overlay ${sidebarOpen ? 'active' : ''}`} 
-        onClick={() => setSidebarOpen(false)}
-      ></div>
-
-      {/* SIDEBAR: Menú lateral con usuario */}
-      <aside className={`sidebar ${sidebarOpen ? 'active' : ''}`}>
+      {/* SIDEBAR (SE MANTIENE IGUAL) */}
+      <aside className="sidebar">
         <div className="usuario-info-sidebar">
-          <div 
-            className="avatar" 
+          <div
+            className="avatar"
             onClick={() => setMenuAvatar(!menuAvatar)}
           >
             <img src="/avatar.jpeg" alt="Avatar" />
@@ -78,9 +71,8 @@ export default function HistorialPage() {
         </div>
       </aside>
 
-      {/* CONTENIDO PRINCIPAL */}
+      {/* CONTENIDO */}
       <main className="historial-contenido">
-        
         <h1 className="historial-titulo">Historial</h1>
 
         {/* FILTROS */}
@@ -101,7 +93,7 @@ export default function HistorialPage() {
           )}
         </div>
 
-        {/* TABLA - DESKTOP */}
+        {/* TABLA DESKTOP */}
         <div className="tabla-container desktop-only">
           <table>
             <thead>
@@ -129,23 +121,15 @@ export default function HistorialPage() {
           </table>
         </div>
 
-        {/* TARJETAS - MOBILE */}
+        {/* TARJETAS MOBILE */}
         <div className="mobile-only">
           {registrosFiltrados.map((r, index) => (
             <div key={index} className="historial-card">
               <div className="card-fecha">{r.fecha}</div>
-              <div className="card-row">
-                <span>Entrada</span><strong>{r.entrada}</strong>
-              </div>
-              <div className="card-row">
-                <span>Inicio colación</span><strong>{r.inicioColacion}</strong>
-              </div>
-              <div className="card-row">
-                <span>Fin colación</span><strong>{r.finColacion}</strong>
-              </div>
-              <div className="card-row">
-                <span>Salida</span><strong>{r.salida}</strong>
-              </div>
+              <div className="card-row"><span>Entrada</span><strong>{r.entrada}</strong></div>
+              <div className="card-row"><span>Inicio colación</span><strong>{r.inicioColacion}</strong></div>
+              <div className="card-row"><span>Fin colación</span><strong>{r.finColacion}</strong></div>
+              <div className="card-row"><span>Salida</span><strong>{r.salida}</strong></div>
               <div className="card-total">{r.total}</div>
             </div>
           ))}
@@ -158,9 +142,7 @@ export default function HistorialPage() {
           <button>Siguiente &gt;</button>
         </div>
 
-        {/* LOGO: Aquí está el truco. Absolute en PC, Flex Order en móvil */}
         <img src="/krono2.1.png" alt="Krono Logo" className="logo-img" />
-
       </main>
     </div>
   );

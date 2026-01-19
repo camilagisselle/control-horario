@@ -285,4 +285,20 @@ tbody tr:hover { background: #f0e8ff; }
     width: 150px; /* Más pequeño para móvil */
     order: 100; /* Se va al final del flex container */
   }
+  /* MENÚ AVATAR USADO POR HAMBURGUESA (MOBILE) */
+@media (max-width: 900px) {
+
+  .btn-hamburguesa {
+    display: block;
+  }
+
+  .avatar-menu {
+    position: fixed;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 220px;
+    z-index: 1200;
+  }
+}
 }
