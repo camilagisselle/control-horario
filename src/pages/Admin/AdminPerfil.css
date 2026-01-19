@@ -1,0 +1,139 @@
+/* Reset local mínimo */
+.ap-root, .ap-root * { box-sizing: border-box; font-family: "Segoe UI", sans-serif; }
+
+.ap-root {
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  background: linear-gradient(135deg, #f3f7ff, #f7f3f9);
+}
+
+/* HAMBURGUESA / OVERLAY (móvil) */
+.ap-btn-hamburguesa {
+  display: none;
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  font-size: 30px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6c5ce7;
+  z-index: 1100;
+  padding: 0;
+}
+
+.ap-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 900;
+}
+.ap-overlay.active { display: block; }
+
+/* SIDEBAR */
+.ap-sidebar {
+  width: 280px;
+  padding: 26px;
+  background: linear-gradient(180deg, #eef8f4, #eef0fb);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform 0.28s ease;
+}
+
+.ap-sidebar .ap-sidebar-avatar { display: flex; gap: 12px; align-items: center; cursor: pointer; }
+
+.ap-admin-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #00bcd4;
+}
+
+.ap-admin-info { font-size: 14px; color: #4a6ee0; }
+
+.ap-role { font-size: 12px; color: #1f3bb3; }
+
+/* menu desplegable pequeño */
+.ap-perfil-menu {
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+.ap-perfil-menu button { background: none; border: none; text-align: left; padding: 6px 8px; color: #6a3df0; cursor: pointer; }
+
+/* nav lateral */
+.ap-nav { margin-top: 12px; display:flex; flex-direction: column; gap: 8px; }
+.ap-nav-item { background: none; border: none; padding: 10px; text-align: left; cursor: pointer; border-radius: 8px; color: #1f3bb3; }
+.ap-nav-item:hover { background: rgba(107,78,255,0.06); }
+
+/* CONTENIDO */
+.ap-contenido { flex: 1; padding: 36px; }
+
+.ap-header { display:flex; align-items:center; justify-content:space-between; margin-bottom: 24px; }
+.ap-header h1 { font-size: 28px; color: #1f3bb3; margin:0; }
+.ap-logo { height: 48px; }
+
+/* CARD */
+.ap-card {
+  background: white;
+  border-radius: 14px;
+  padding: 28px;
+  display: flex;
+  gap: 28px;
+  max-width: 920px;
+  box-shadow: 0 12px 36px rgba(0,0,0,0.06);
+}
+
+/* Avatar grande */
+.ap-avatar-grande { position: relative; }
+.ap-avatar-grande img {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #00bcd4;
+  padding: 6px;
+}
+.ap-avatar-label { display:inline-block; position: relative; }
+.ap-edit-icon {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  background: #6a3df0;
+  color: white;
+  border-radius: 50%;
+  padding: 6px;
+  font-size: 12px;
+}
+
+/* Form fields */
+.ap-info { display:flex; flex-direction:column; gap: 16px; }
+.ap-field label { display:block; color:#4a6ee0; font-size:14px; margin-bottom:6px; }
+.ap-field input {
+  width: 320px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,0.06);
+  background: #f2f6ff;
+  font-size: 16px;
+  color: #1f3bb3;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .ap-btn-hamburguesa { display: block; }
+  .ap-sidebar { position: fixed; top:0; left:0; height:100vh; transform: translateX(-100%); z-index: 1000; box-shadow: 4px 0 18px rgba(0,0,0,0.12); }
+  .ap-sidebar.active { transform: translateX(0); }
+  .ap-contenido { padding-top: 88px; padding-left: 18px; padding-right: 18px; }
+  .ap-card { flex-direction: column; padding: 18px; }
+  .ap-field input { width: 100%; max-width: 320px; }
+}
