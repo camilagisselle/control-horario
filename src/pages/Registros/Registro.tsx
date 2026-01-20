@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import "./Registro.css";
 
 export default function Registro() {
@@ -7,12 +6,6 @@ export default function Registro() {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [mostrarConfirmado, setMostrarConfirmado] = useState(false);
   const [accion, setAccion] = useState("");
-  const [menuAvatar, setMenuAvatar] = useState(false);
-
-  // NUEVO ESTADO: Para controlar si el sidebar lateral está visible en móvil
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     const actualizarHora = () => {
@@ -36,53 +29,6 @@ export default function Registro() {
 
   return (
     <div className="dashboard">
-      
-      {/* NUEVO: Botón Hamburguesa (Solo visible en móvil por CSS) */}
-      <button 
-        className="btn-hamburguesa" 
-        onClick={() => setSidebarOpen(true)}
-      >
-        ☰
-      </button>
-
-      {/* NUEVO: Overlay oscuro para cerrar menú al hacer click afuera */}
-      <div 
-        className={`overlay ${sidebarOpen ? 'active' : ''}`} 
-        onClick={() => setSidebarOpen(false)}
-      ></div>
-
-      {/* SIDEBAR: Agregamos lógica para la clase 'active' */}
-      <aside className={`sidebar ${sidebarOpen ? 'active' : ''}`}>
-        <div className="usuario">
-          <div
-            className="avatar"
-            onClick={() => setMenuAvatar(!menuAvatar)}
-          >
-            <img
-              src="/avatar.jpeg"
-              alt="Avatar usuario"
-              className="avatar-img"
-            />
-          </div>
-
-          <div>
-            <p>Usuario:</p>
-            <strong>Camila Pinilla Cabrera</strong>
-          </div>
-
-          {menuAvatar && (
-            <div className="avatar-menu">
-              <button onClick={() => navigate("/perfil")}>Perfil</button>
-              <button onClick={() => navigate("/registro")}>Registro</button>
-              <button onClick={() => navigate("/historial")}>Historial</button>
-              <button className="cerrar" onClick={() => navigate("/")}>
-                Cerrar sesión
-              </button>
-            </div>
-          )}
-        </div>
-      </aside>
-
       <main className="contenido">
         <h1 className="registro-titulo">Registro de asistencia</h1>
 
@@ -93,9 +39,7 @@ export default function Registro() {
             <button onClick={() => abrirConfirmacion("Entrada")}>
               Entrada
             </button>
-            <button onClick={() => abrirConfirmacion("Salida")}>
-              Salida
-            </button>
+            <button onClick={() => abrirConfirmacion("Salida")}>Salida</button>
             <button onClick={() => abrirConfirmacion("Inicio colación")}>
               Inicio colación
             </button>
@@ -105,7 +49,6 @@ export default function Registro() {
           </div>
         </div>
 
-        {/* LOGO */}
         <img src="/krono2.1.png" className="registro-logo" alt="Logo" />
       </main>
 

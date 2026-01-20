@@ -4,82 +4,32 @@
   font-family: "Segoe UI", sans-serif;
 }
 
-.perfil-root {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  background: linear-gradient(135deg, #c9f7dd, #a7c7ff);
-}
-
-/* ================= DESKTOP ================= */
-
-.perfil-sidebar {
-  width: 280px;
-  padding: 30px;
-  background: linear-gradient(180deg, #c7f3e6, #b6daf7);
-}
-
-.perfil-user {
-  display: flex;
-  gap: 15px;
-  cursor: pointer;
-  align-items: center;
-}
-
-.perfil-user img {
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
-}
-
-.perfil-user p {
-  font-size: 14px;
-  color: #4a6ee0;
-}
-
-.perfil-user strong {
-  color: #1f3bb3;
-}
-
-.perfil-menu {
-  margin-top: 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.perfil-menu button {
-  background: none;
-  border: none;
-  font-size: 16px;
-  color: #6a3df0;
-  cursor: pointer;
-  text-align: left;
-}
-
 .perfil-contenido {
   flex: 1;
-  padding: 40px;
+  display: flex;
+  flex-direction: column; /* apila título y tarjeta */
+  align-items: center; /* centra ambos */
+  padding: 90px 40px 40px; /* espacio para el título */
   position: relative;
 }
 
 /* Barra superior */
 .perfil-top {
-  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100px;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
 }
 
 .perfil-top h1 {
   font-size: 40px;
   font-weight: 800;
   color: #1f3bb3;
+  text-align: center;
+  width: 100%;
 }
 
-/* Logo desktop (arriba derecha) */
+/* Logo desktop */
 .perfil-logo {
   position: absolute;
   top: -70px;
@@ -95,10 +45,12 @@
   display: flex;
   gap: 40px;
   max-width: 900px;
+  margin: 0 auto; /* centra la tarjeta */
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+  align-items: flex-start; /* alinea avatar e info desde arriba */
 }
 
-/* Avatar */
+/* Avatar grande */
 .perfil-avatar-grande {
   position: relative;
 }
@@ -122,15 +74,15 @@
   font-size: 14px;
 }
 
+/* Inputs */
 .perfil-info label {
-  color: #4a6ee0;
   font-size: 14px;
+  color: #4a6ee0;
 }
 
 .perfil-info input {
   width: 280px;
   padding: 10px;
-  margin-top: 5px;
   border-radius: 8px;
   border: none;
   background: #f2f6ff;
@@ -140,42 +92,7 @@
 
 /* ================= MOBILE ================= */
 
-.hamburguesa {
-  display: none;
-}
-
 @media (max-width: 768px) {
-  /* Sidebar fuera */
-  .perfil-sidebar {
-    display: none;
-  }
-
-  /* Hamburguesa izquierda */
-  .hamburguesa {
-    display: block;
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    font-size: 32px;
-    background: none;
-    border: none;
-    color: #1f3bb3;
-    cursor: pointer;
-    z-index: 20;
-  }
-
-  /* Menú desplegable */
-  .perfil-menu {
-    position: absolute;
-    top: 70px;
-    left: 20px;
-    background: white;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    z-index: 30;
-  }
-
   .perfil-contenido {
     padding: 20px;
     display: flex;
@@ -183,20 +100,15 @@
     align-items: center;
   }
 
-  /* Header centrado real */
   .perfil-top {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
     margin-bottom: 20px;
   }
 
   .perfil-top h1 {
-    grid-column: 2;
     font-size: 32px;
     text-align: center;
   }
 
-  /* Tarjeta mobile */
   .perfil-card {
     flex-direction: column;
     align-items: center;
@@ -210,7 +122,6 @@
     width: 100%;
   }
 
-  /* Logo abajo */
   .perfil-logo {
     position: static;
     margin: 30px auto 10px;

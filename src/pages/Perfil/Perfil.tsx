@@ -1,11 +1,7 @@
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "./Perfil.css";
 
-export default function PerfilTest() {
-  const navigate = useNavigate();
-  const [menu, setMenu] = useState(false);
-
+export default function Perfil() {
   const [nombre, setNombre] = useState("Camila Pinilla Cabrera");
   const [correo] = useState("camila@email.com");
   const [password, setPassword] = useState("123456");
@@ -21,81 +17,50 @@ export default function PerfilTest() {
   };
 
   return (
-    <div className="perfil-root">
-      {/* SIDEBAR */}
-      <aside className={`perfil-sidebar ${menu ? "open" : ""}`}>
-        <div className="perfil-user" onClick={() => setMenu(!menu)}>
-          <img src={avatar} />
+    <main className="perfil-contenido">
+      <div className="perfil-top">
+        <h1>Perfil</h1>
+      </div>
+
+      {/* TARJETA PERFIL */}
+      <div className="perfil-card">
+        <div className="perfil-avatar-grande">
+          <label htmlFor="avatarInput">
+            <img src={avatar} />
+            <span>✏</span>
+          </label>
+          <input
+            id="avatarInput"
+            type="file"
+            accept="image/*"
+            hidden
+            onChange={cambiarAvatar}
+          />
+        </div>
+
+        <div className="perfil-info">
           <div>
-            <p>Usuario</p>
-            <strong>{nombre}</strong>
+            <label>Nombre</label>
+            <input value={nombre} onChange={(e) => setNombre(e.target.value)} />
           </div>
-        </div>
 
-        {/* ✅ MENÚ: UN SOLO RENDER */}
-        {menu && (
-          <div className="perfil-menu">
-            <button onClick={() => navigate("/registro")}>Registrar</button>
-            <button onClick={() => navigate("/historial")}>Historial</button>
-            <button onClick={() => navigate("/")}>Cerrar sesión</button>
+          <div>
+            <label>Correo</label>
+            <input value={correo} disabled />
           </div>
-        )}
-      </aside>
 
-      {/* CONTENIDO */}
-      <main className="perfil-contenido">
-        {/* BOTÓN MOBILE */}
-        <button className="hamburguesa" onClick={() => setMenu(!menu)}>
-          ☰
-        </button>
-
-        <div className="perfil-top">
-          <h1>Perfil</h1>
-        </div>
-
-        {/* TARJETA PERFIL */}
-        <div className="perfil-card">
-          <div className="perfil-avatar-grande">
-            <label htmlFor="avatarInput">
-              <img src={avatar} />
-              <span>✏</span>
-            </label>
+          <div>
+            <label>Contraseña</label>
             <input
-              id="avatarInput"
-              type="file"
-              accept="image/*"
-              hidden
-              onChange={cambiarAvatar}
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-
-          <div className="perfil-info">
-            <div>
-              <label>Nombre</label>
-              <input
-                value={nombre}
-                onChange={(e) => setNombre(e.target.value)}
-              />
-            </div>
-
-            <div>
-              <label>Correo</label>
-              <input value={correo} disabled />
-            </div>
-
-            <div>
-              <label>Contraseña</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-          </div>
         </div>
+      </div>
 
-        <img src="/krono2.1.png" className="perfil-logo" />
-      </main>
-    </div>
+      <img src="/krono2.1.png" className="perfil-logo" />
+    </main>
   );
 }

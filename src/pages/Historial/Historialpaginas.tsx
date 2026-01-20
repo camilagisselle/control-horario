@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "./Historialpaginas.css";
 
 type Registro = {
@@ -12,18 +11,35 @@ type Registro = {
 };
 
 const registros: Registro[] = [
-  { fecha: "23/10/2023", entrada: "08:00", inicioColacion: "13:14", finColacion: "14:14", salida: "17:00", total: "9.0 hrs" },
-  { fecha: "24/10/2023", entrada: "08:15", inicioColacion: "13:00", finColacion: "14:00", salida: "17:15", total: "9.0 hrs" },
-  { fecha: "25/11/2023", entrada: "07:55", inicioColacion: "13:05", finColacion: "14:05", salida: "16:55", total: "9.0 hrs" },
+  {
+    fecha: "23/10/2023",
+    entrada: "08:00",
+    inicioColacion: "13:14",
+    finColacion: "14:14",
+    salida: "17:00",
+    total: "9.0 hrs",
+  },
+  {
+    fecha: "24/10/2023",
+    entrada: "08:15",
+    inicioColacion: "13:00",
+    finColacion: "14:00",
+    salida: "17:15",
+    total: "9.0 hrs",
+  },
+  {
+    fecha: "25/11/2023",
+    entrada: "07:55",
+    inicioColacion: "13:05",
+    finColacion: "14:05",
+    salida: "16:55",
+    total: "9.0 hrs",
+  },
 ];
 
 export default function HistorialPage() {
-  const navigate = useNavigate();
   const [filtro, setFiltro] = useState<"dia" | "mes" | "anio">("dia");
   const [mostrarFiltros, setMostrarFiltros] = useState(false);
-
-  // 👉 ESTADO ÚNICO PARA HAMBURGUESA + AVATAR (CORRECTO)
-  const [menuAvatar, setMenuAvatar] = useState(false);
 
   const registrosFiltrados = registros.filter((r) => {
     const [, mes, anio] = r.fecha.split("/");
@@ -35,50 +51,9 @@ export default function HistorialPage() {
 
   return (
     <div className="dashboard-historial">
-
-      {/* BOTÓN HAMBURGUESA (MOBILE) */}
-      <button
-        className="btn-hamburguesa"
-        onClick={() => setMenuAvatar(!menuAvatar)}
-      >
-        ☰
-      </button>
-
-      {/* SIDEBAR */}
-      <aside className={`sidebar ${menuAvatar ? "active" : ""}`}>
-        <div className="usuario-info-sidebar">
-          <div
-            className="avatar"
-            onClick={() => setMenuAvatar(!menuAvatar)}
-          >
-            <img src="/avatar.jpeg" alt="Avatar" />
-          </div>
-
-          <div>
-            <p className="usuario-label">Usuario:</p>
-            <h2 className="usuario-nombre">Camila Pinilla</h2>
-          </div>
-
-          {menuAvatar && (
-            <div className="avatar-menu">
-              <button onClick={() => navigate("/registro")}>Registro</button>
-              <button onClick={() => navigate("/historial")}>Historial</button>
-              <button
-                className="cerrar"
-                onClick={() => navigate("/")}
-              >
-                Cerrar sesión
-              </button>
-            </div>
-          )}
-        </div>
-      </aside>
-
-      {/* CONTENIDO */}
       <main className="historial-contenido">
         <h1 className="historial-titulo">Historial</h1>
 
-        {/* FILTROS */}
         <div className="filtros-container">
           <button
             className="btn-filtros"
@@ -112,7 +87,9 @@ export default function HistorialPage() {
             <tbody>
               {registrosFiltrados.map((r, index) => (
                 <tr key={index}>
-                  <td><span className="fecha-pill">{r.fecha}</span></td>
+                  <td>
+                    <span className="fecha-pill">{r.fecha}</span>
+                  </td>
                   <td>{r.entrada}</td>
                   <td>{r.inicioColacion}</td>
                   <td>{r.finColacion}</td>
@@ -124,21 +101,32 @@ export default function HistorialPage() {
           </table>
         </div>
 
-        {/* TARJETAS MOBILE */}
+        {/* MOBILE */}
         <div className="mobile-only">
           {registrosFiltrados.map((r, index) => (
             <div key={index} className="historial-card">
               <div className="card-fecha">{r.fecha}</div>
-              <div className="card-row"><span>Entrada</span><strong>{r.entrada}</strong></div>
-              <div className="card-row"><span>Inicio colación</span><strong>{r.inicioColacion}</strong></div>
-              <div className="card-row"><span>Fin colación</span><strong>{r.finColacion}</strong></div>
-              <div className="card-row"><span>Salida</span><strong>{r.salida}</strong></div>
+              <div className="card-row">
+                <span>Entrada</span>
+                <strong>{r.entrada}</strong>
+              </div>
+              <div className="card-row">
+                <span>Inicio colación</span>
+                <strong>{r.inicioColacion}</strong>
+              </div>
+              <div className="card-row">
+                <span>Fin colación</span>
+                <strong>{r.finColacion}</strong>
+              </div>
+              <div className="card-row">
+                <span>Salida</span>
+                <strong>{r.salida}</strong>
+              </div>
               <div className="card-total">{r.total}</div>
             </div>
           ))}
         </div>
 
-        {/* PAGINACIÓN */}
         <div className="paginacion">
           <button>&lt; Anterior</button>
           <button className="pagina-activa">1</button>

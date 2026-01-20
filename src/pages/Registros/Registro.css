@@ -95,14 +95,14 @@
   /* Transparencia (0.35) */
   background: rgba(255, 255, 255, 0.35);
   /* Efecto Blur */
-  backdrop-filter: blur(12px); 
+  backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  
+
   padding: 60px;
   border-radius: 24px;
   width: 500px;
   text-align: center;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); 
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
@@ -151,15 +151,15 @@
 
 .acciones button {
   /* Estas 3 líneas aseguran el tamaño uniforme */
-  width: 100%; 
+  width: 100%;
   min-height: 60px; /* Altura mínima fija para todos */
-  height: 100%;     /* Se estiran para llenar la celda */
-  
+  height: 100%; /* Se estiran para llenar la celda */
+
   /* Centrado perfecto del texto */
   display: flex;
   justify-content: center;
   align-items: center;
-  
+
   /* Estilos visuales */
   padding: 10px;
   border-radius: 12px;
@@ -221,6 +221,8 @@
   border-radius: 20px;
   width: 400px;
   text-align: center;
+  animation: modalFade 0.25s ease-out;
+  transform: translateY(-10px);
 }
 
 .modal-botones {
@@ -229,10 +231,26 @@
   gap: 20px;
   margin-top: 20px;
 }
+.modal-botones button {
+  min-width: 120px;
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+.modal-botones .aceptar {
+  background: #7dd3fc;
+  color: #1e40af;
+}
+
+.modal-botones .cancelar {
+  background: #e5e7eb;
+  color: #374151;
+}
 
 /* ================= RESPONSIVE ================= */
 @media (max-width: 900px) {
-  
   .btn-hamburguesa {
     display: block;
   }
@@ -242,9 +260,9 @@
     top: 0;
     left: 0;
     height: 100vh;
-    width: 280px; 
+    width: 280px;
     transform: translateX(-100%);
-    box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
   }
 
   .sidebar.active {
@@ -284,5 +302,15 @@
 
   .acciones {
     grid-template-columns: 1fr;
+  }
+}
+@keyframes modalFade {
+  from {
+    opacity: 0;
+    transform: translateY(-25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-10px);
   }
 }

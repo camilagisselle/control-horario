@@ -1,0 +1,38 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./AvatarMenu.css";
+
+const AvatarMenu = () => {
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const cerrarSesion = () => {
+    localStorage.removeItem("user");
+    navigate("/");
+  };
+
+  return (
+    <div className="avatar-wrapper">
+      <div className="avatar-header" onClick={() => setOpen(!open)}>
+        <img src="/avatar.jpeg" alt="Avatar" />
+        <div className="user-info">
+          <span className="label">Usuario:</span>
+          <strong>Camila Pinilla Cabrera</strong>
+        </div>
+      </div>
+
+      {open && (
+        <div className="avatar-menu">
+          <button onClick={() => navigate("/perfil")}>Perfil</button>
+          <button onClick={() => navigate("/registro")}>Registro</button>
+          <button onClick={() => navigate("/historial")}>Historial</button>
+          <button className="logout" onClick={cerrarSesion}>
+            Cerrar sesión
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default AvatarMenu;
