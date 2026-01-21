@@ -15,15 +15,16 @@ import Perfil from "./pages/Perfil/Perfil";
 // Admin pages
 import AdminHistorial from "./pages/Admin/AdminHistorial";
 import AdminUsuarios from "./pages/Admin/AdminUsuarios";
+import AdminPerfil from "./pages/Admin/AdminPerfil";
 
 // Layout
 import Layout from "./Layout/Layout";
 
 /**
  * RequireAuth:
- * - Lee la sesión desde localStorage ("user")
- * - Si no hay sesión redirige al login ("/")
- * - Si se pasa `role` y el rol no coincide, redirige al login
+ * - Checks session from localStorage ("user")
+ * - If there's no session, redirects to login ("/")
+ * - If a `role` is passed, and the role doesn't match, redirect to login
  */
 const RequireAuth: React.FC<{
   role?: "admin" | "user";
@@ -49,11 +50,11 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* ================= PUBLIC ================= */}
+        {/* Public Routes */}
         <Route path="/" element={<Login />} />
         <Route path="/recuperarpassword" element={<RecuperarPassword />} />
 
-        {/* ================= PRIVATE CON LAYOUT ================= */}
+        {/* Routes with Layout for Authenticated Users */}
         <Route
           element={
             <RequireAuth>
@@ -65,7 +66,7 @@ function App() {
           <Route path="/historial" element={<Historial />} />
           <Route path="/perfil" element={<Perfil />} />
 
-          {/* ===== ADMIN ===== */}
+          {/* Admin Only Routes */}
           <Route
             path="/admin/usuarios"
             element={
@@ -82,9 +83,17 @@ function App() {
               </RequireAuth>
             }
           />
+          <Route
+            path="/admin/perfil"
+            element={
+              <RequireAuth role="admin">
+                <AdminPerfil />
+              </RequireAuth>
+            }
+          />
         </Route>
 
-        {/* ================= FALLBACK ================= */}
+        {/* Catch-All: Redirect to Login */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
