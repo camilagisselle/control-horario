@@ -142,7 +142,6 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* ================= BOTONES (IGUALADOS) ================= */
 .acciones {
   display: grid;
   grid-template-columns: 1fr 1fr; /* Dos columnas de igual ancho */
@@ -313,4 +312,9 @@
     opacity: 1;
     transform: translateY(-10px);
   }
+}
+.acciones {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 20px !important;
 }
