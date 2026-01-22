@@ -1,53 +1,325 @@
-/* Reset local mínimo */
-.ap-root, .ap-root * { box-sizing: border-box; font-family: "Segoe UI", sans-serif; }
-
-.ap-root {
-  width: 100vw;
-  min-height: 100vh;
-  display: flex;
-  background: linear-gradient(135deg, #f3f7ff, #f7f3f9);
-}
-
-/* HAMBURGUESA / OVERLAY (móvil) */
-.ap-btn-hamburguesa {
-  display: none;
-  position: absolute;
-  top: 18px;
-  left: 18px;
-  font-size: 30px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #6c5ce7;
-  z-index: 1100;
-  padding: 0;
-}
-
-.ap-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.45);
-  z-index: 900;
-}
-.ap-overlay.active { display: block; }
-
-/* SIDEBAR */
-.ap-sidebar {
-  width: 280px;
-  padding: 26px;
-  background: linear-gradient(180deg, #eef8f4, #eef0fb);
+/* ==================== PÁGINA PERFIL ==================== */
+.perfil-page {
+  min-height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  transition: transform 0.28s ease;
+  gap: 2rem;
 }
 
-.ap-sidebar .ap-sidebar-avatar { display: flex; gap: 12px; align-items: center; cursor: pointer; }
+.perfil-container {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+}
 
-.ap-admin-avatar {
-  width: 56px;
-  height: 56px;
+.page-title {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #4a5568;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ==================== CARD PERFIL ==================== */
+.perfil-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+}
+
+.perfil-header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 2px solid rgba(102, 126, 234, 0.2);
+}
+
+.avatar-section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 3rem;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.avatar-wrapper {
+  position: relative;
+  cursor: pointer;
+  display: block;
+}
+
+.perfil-avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 5px solid #667eea;
+  object-fit: cover;
+  transition: all 0.3s;
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+}
+
+.avatar-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.avatar-wrapper:hover .avatar-overlay {
+  opacity: 1;
+}
+
+.avatar-wrapper:hover .perfil-avatar {
+  transform: scale(1.05);
+}
+
+.edit-icon {
+  font-size: 2rem;
+}
+
+.perfil-info-header {
+  text-align: center;
+}
+
+.perfil-info-header h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #4a5568;
+  margin: 0 0 0.5rem 0;
+}
+
+.cargo {
+  font-size: 1.125rem;
+  color: #718096;
+  margin: 0 0 1rem 0;
+}
+
+.badge-admin {
+  display: inline-block;
+  padding: 0.5rem 1.25rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ==================== FORMULARIO ==================== */
+.perfil-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #4a5568;
+  font-size: 0.95rem;
+}
+
+.form-group input {
+  padding: 0.875rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all 0.3s;
+  background: white;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-group input:disabled {
+  background: #f7fafc;
+  color: #a0aec0;
+  cursor: not-allowed;
+}
+
+/* ==================== BOTONES ==================== */
+.form-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.btn-guardar {
+  padding: 1rem 3rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.btn-guardar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+}
+
+/* ==================== MODAL ÉXITO ==================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-exito {
+  background: white;
+  border-radius: 20px;
+  padding: 3rem;
+  text-align: center;
+  animation: slideUp 0.3s;
+  max-width: 400px;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.exito-icon {
+  font-size: 4rem;
+  color: #48bb78;
+  margin-bottom: 1rem;
+  animation: scaleIn 0.5s;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.modal-exito h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #4a5568;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 2rem;
+  }
+
+  .perfil-card {
+    padding: 1.5rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .perfil-avatar {
+    width: 120px;
+    height: 120px;
+  }
+
+  .perfil-info-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .cargo {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: 1.5rem;
+  }
+
+  .perfil-card {
+    padding: 1rem;
+    border-radius: 15px;
+  }
+
+  .perfil-avatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  .perfil-info-header h2 {
+    font-size: 1.25rem;
+  }
+
+  .btn-guardar {
+    width: 100%;
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
+  }
+
+  .form-group input {
+    font-size: 0.9rem;
+  }
+}
   border-radius: 50%;
   object-fit: cover;
   background: #00bcd4;

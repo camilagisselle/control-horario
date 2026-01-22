@@ -47,24 +47,41 @@ const Login: React.FC = () => {
   };
 
   const handleIngresar = () => {
+    console.log("Intento de login con:", { email, password });
+    
+    // Limpiar espacios en blanco
+    const emailTrimmed = email.trim();
+    const passwordTrimmed = password.trim();
+    
+    console.log("Credenciales limpias:", { emailTrimmed, passwordTrimmed });
+    
     // validación simple con credenciales fijas
-    if (email === ADMIN.email && password === ADMIN.password) {
+    if (emailTrimmed.toLowerCase() === ADMIN.email.toLowerCase() && passwordTrimmed === ADMIN.password) {
+      console.log("Login exitoso como ADMIN");
       const user = { email: ADMIN.email, role: ADMIN.role, name: ADMIN.name };
-      localStorage.setItem("user", JSON.stringify(user)); // guardamos sesión localmente
-      navigate("/admin/historial"); // admin -> página de historial admin
+      localStorage.setItem("user", JSON.stringify(user));
+      navigate("/admin/usuarios");
       return;
     }
 
-    if (email === USER.email && password === USER.password) {
+    if (emailTrimmed.toLowerCase() === USER.email.toLowerCase() && passwordTrimmed === USER.password) {
+      console.log("Login exitoso como USER");
       const user = { email: USER.email, role: USER.role, name: USER.name };
       localStorage.setItem("user", JSON.stringify(user));
-      navigate("/registro"); // usuario normal -> página de registro
+      navigate("/registro");
       return;
     }
 
+    console.log("Credenciales incorrectas");
     alert(
       "Usuario o contraseña incorrectos. Usa admin@correo.cl / 12345 o usuario@correo.cl / 12345",
     );
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleIngresar();
+    }
   };
 
   return (
@@ -98,12 +115,14 @@ const Login: React.FC = () => {
             placeholder="Usuario (email)"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            onKeyPress={handleKeyPress}
           />
           <input
             type="password"
             placeholder="Contraseña"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            onKeyPress={handleKeyPress}
           />
 
           <button onClick={handleIngresar}>Ingresar</button>
