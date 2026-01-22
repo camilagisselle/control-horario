@@ -19,6 +19,7 @@ import AdminPerfil from "./pages/Admin/AdminPerfil";
 
 // Layout
 import Layout from "./Layout/Layout";
+import AdminLayout from "./Layout/AdminLayout";
 
 /**
  * RequireAuth:
@@ -54,7 +55,7 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/recuperarpassword" element={<RecuperarPassword />} />
 
-        {/* Routes with Layout for Authenticated Users */}
+        {/* Routes with Layout for Regular Users */}
         <Route
           element={
             <RequireAuth>
@@ -65,32 +66,19 @@ function App() {
           <Route path="/registro" element={<Registro />} />
           <Route path="/historial" element={<Historial />} />
           <Route path="/perfil" element={<Perfil />} />
+        </Route>
 
-          {/* Admin Only Routes */}
-          <Route
-            path="/admin/usuarios"
-            element={
-              <RequireAuth role="admin">
-                <AdminUsuarios />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/admin/historial"
-            element={
-              <RequireAuth role="admin">
-                <AdminHistorial />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/admin/perfil"
-            element={
-              <RequireAuth role="admin">
-                <AdminPerfil />
-              </RequireAuth>
-            }
-          />
+        {/* Admin Routes with AdminLayout */}
+        <Route
+          element={
+            <RequireAuth role="admin">
+              <AdminLayout />
+            </RequireAuth>
+          }
+        >
+          <Route path="/admin/usuarios" element={<AdminUsuarios />} />
+          <Route path="/admin/historial" element={<AdminHistorial />} />
+          <Route path="/admin/perfil" element={<AdminPerfil />} />
         </Route>
 
         {/* Catch-All: Redirect to Login */}

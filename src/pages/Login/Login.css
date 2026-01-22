@@ -78,6 +78,18 @@
   border-radius: 10px;
   border: 1px solid #ccc;
   font-size: 16px;
+  color: #333;
+  background: white;
+}
+
+.login-card input::placeholder {
+  color: #999;
+}
+
+.login-card input:focus {
+  outline: none;
+  border-color: #6b4eff;
+  box-shadow: 0 0 0 3px rgba(107, 78, 255, 0.1);
 }
 
 /*  BOTÓN */
