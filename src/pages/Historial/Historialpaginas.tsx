@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useState, type SetStateAction } from "react";
+import DatePicker from "react-datepicker";
+import { es } from "date-fns/locale";
+import "react-datepicker/dist/react-datepicker.css";
 import "./Historialpaginas.css";
 
 type Registro = {
@@ -38,38 +41,77 @@ const registros: Registro[] = [
 ];
 
 export default function HistorialPage() {
-  const [filtro, setFiltro] = useState<"dia" | "mes" | "anio">("dia");
-  const [mostrarFiltros, setMostrarFiltros] = useState(false);
+  const [fechaSeleccionada, setFechaSeleccionada] = useState<Date | null>(null);
+  const [mostrarCalendario, setMostrarCalendario] = useState(false);
 
-  const registrosFiltrados = registros.filter((r) => {
-    const [, mes, anio] = r.fecha.split("/");
-    if (filtro === "dia") return true;
-    if (filtro === "mes") return mes === "10";
-    if (filtro === "anio") return anio === "2023";
-    return true;
+  // 🔹 Date → dd/MM/yyyy
+  const formatearFecha = (date: Date) => {
+    const d = String(date.getDate()).padStart(2, "0");
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const y = date.getFullYear();
+    return `${d}/${m}/${y}`;
+  };
+
+  // 🔹 Fechas con registros (para marcar calendario)
+  const fechasConRegistros = registros.map((r) => {
+    const [d, m, y] = r.fecha.split("/").map(Number);
+    return new Date(y, m - 1, d);
   });
+
+  // 🔹 Filtrar historial
+  const registrosFiltrados = fechaSeleccionada
+    ? registros.filter(
+        (r) => r.fecha === formatearFecha(fechaSeleccionada)
+      )
+    : registros;
 
   return (
     <div className="dashboard-historial">
       <main className="historial-contenido">
         <h1 className="historial-titulo">Historial</h1>
 
+        {/* FILTRO CALENDARIO */}
         <div className="filtros-container">
           <button
             className="btn-filtros"
-            onClick={() => setMostrarFiltros(!mostrarFiltros)}
+            onClick={() => setMostrarCalendario(!mostrarCalendario)}
           >
-            Filtros ▾
+            📅 Filtrar por fecha
           </button>
 
-          {mostrarFiltros && (
-            <div className="menu-filtros">
-              <button onClick={() => setFiltro("dia")}>Por día</button>
-              <button onClick={() => setFiltro("mes")}>Por mes</button>
-              <button onClick={() => setFiltro("anio")}>Por año</button>
+          {mostrarCalendario && (
+            <div className="calendario-popup">
+              <DatePicker
+                selected={fechaSeleccionada}
+                onChange={(date: SetStateAction<Date | null>) => {
+                  setFechaSeleccionada(date);
+                  setMostrarCalendario(false);
+                }}
+                inline
+                locale={es}
+                dateFormat="dd/MM/yyyy"
+                showMonthDropdown
+                showYearDropdown
+                dropdownMode="select"
+                maxDate={new Date()}
+                highlightDates={fechasConRegistros}
+                dayClassName={(date) => {
+                  const hoy = new Date();
+                  hoy.setHours(0, 0, 0, 0);
+                  if (date > hoy) return "dia-futuro";
+                  return "";
+                }}
+              />
             </div>
           )}
         </div>
+
+        {/* MENSAJE SIN REGISTROS */}
+        {registrosFiltrados.length === 0 && (
+          <p style={{ textAlign: "center", marginTop: 20 }}>
+            No hay registros para esta fecha
+          </p>
+        )}
 
         {/* TABLA DESKTOP */}
         <div className="tabla-container desktop-only">
@@ -85,8 +127,8 @@ export default function HistorialPage() {
               </tr>
             </thead>
             <tbody>
-              {registrosFiltrados.map((r, index) => (
-                <tr key={index}>
+              {registrosFiltrados.map((r, i) => (
+                <tr key={i}>
                   <td>
                     <span className="fecha-pill">{r.fecha}</span>
                   </td>
@@ -103,8 +145,8 @@ export default function HistorialPage() {
 
         {/* MOBILE */}
         <div className="mobile-only">
-          {registrosFiltrados.map((r, index) => (
-            <div key={index} className="historial-card">
+          {registrosFiltrados.map((r, i) => (
+            <div key={i} className="historial-card">
               <div className="card-fecha">{r.fecha}</div>
               <div className="card-row">
                 <span>Entrada</span>
@@ -125,12 +167,6 @@ export default function HistorialPage() {
               <div className="card-total">{r.total}</div>
             </div>
           ))}
-        </div>
-
-        <div className="paginacion">
-          <button>&lt; Anterior</button>
-          <button className="pagina-activa">1</button>
-          <button>Siguiente &gt;</button>
         </div>
 
         <img src="/krono2.1.png" alt="Krono Logo" className="logo-img" />
