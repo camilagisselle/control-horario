@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import "./AdminLayout.css";
 
 const AdminLayout = () => {
@@ -31,43 +31,14 @@ const AdminLayout = () => {
       {/* Header Superior */}
       <header className="admin-header">
         <div className="admin-header-left">
-          {/* Avatar con menú desplegable */}
-          <div className="admin-avatar-menu">
-            <img 
-              src={adminAvatar} 
-              alt="Avatar" 
-              className="admin-avatar-img"
-              onClick={() => setMenuOpen(!menuOpen)}
-              title="Abrir menú"
-            />
-            
-            {menuOpen && (
-              <div className="admin-dropdown">
-                <button 
-                  className="dropdown-item" 
-                  onClick={() => { navigate("/admin/usuarios"); setMenuOpen(false); }}
-                >
-                  👥 Usuarios
-                </button>
-                <button 
-                  className="dropdown-item" 
-                  onClick={() => { navigate("/admin/historial"); setMenuOpen(false); }}
-                >
-                  📄 Historial
-                </button>
-                <button 
-                  className="dropdown-item" 
-                  onClick={() => { navigate("/admin/perfil"); setMenuOpen(false); }}
-                >
-                  👤 Perfil
-                </button>
-                <div className="dropdown-divider"></div>
-                <button className="dropdown-item logout-item" onClick={cerrarSesion}>
-                  🚪 Cerrar sesión
-                </button>
-              </div>
-            )}
-          </div>
+          {/* Avatar que abre el sidebar */}
+          <img 
+            src={adminAvatar} 
+            alt="Avatar" 
+            className="admin-avatar-img"
+            onClick={() => setMenuOpen(!menuOpen)}
+            title="Abrir menú lateral"
+          />
           
           <div className="admin-title-section">
             <span className="admin-label">Administrador:</span>
@@ -80,7 +51,38 @@ const AdminLayout = () => {
       </header>
 
       {/* Overlay para cerrar el menú al hacer clic fuera */}
-      {menuOpen && <div className="dropdown-overlay" onClick={() => setMenuOpen(false)}></div>}
+      {menuOpen && <div className="sidebar-overlay" onClick={() => setMenuOpen(false)}></div>}
+
+      {/* Sidebar */}
+      <aside className={`admin-sidebar ${menuOpen ? "open" : ""}`}>
+        <nav className="sidebar-nav">
+          <NavLink 
+            to="/admin/usuarios" 
+            className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
+            title="Administrar usuarios"
+          >
+            👥 Usuarios
+          </NavLink>
+          <NavLink 
+            to="/admin/historial" 
+            className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
+            title="Ver historial"
+          >
+            📄 Historial
+          </NavLink>
+          <NavLink 
+            to="/admin/perfil" 
+            className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
+            title="Ver perfil"
+          >
+            👤 Perfil
+          </NavLink>
+        </nav>
+
+        <button className="sidebar-logout" onClick={cerrarSesion} title="Cerrar sesión">
+          🚪 Cerrar sesión
+        </button>
+      </aside>
 
       {/* Contenido Principal */}
       <main className="admin-content">
