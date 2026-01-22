@@ -1,248 +1,148 @@
-/* ==================== PÁGINA HISTORIAL ==================== */
-.historial-page {
-  min-height: 100%;
+* {
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* FONDO GENERAL */
+.dashboard-historial {
+  min-height: 100vh;
+  background: linear-gradient(
+    135deg,
+    #d9f7d6 0%,
+    #c9f2f5 30%,
+    #cfe3ff 65%,
+    #b7d4ff 100%
+  );
+}
+
+/* CONTENIDO */
+.historial-contenido {
+  padding: 30px;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
 }
 
-.historial-container {
-  max-width: 1400px;
-  width: 100%;
-  margin: 0 auto;
-}
-
-.page-title {
-  text-align: center;
-  font-size: 2.5rem;
+/* TÍTULO (EXACTO COMO PEDISTE) */
+.historial-titulo {
+  font-size: 28px;
   font-weight: 700;
-  color: #4a5568;
-  margin-bottom: 2rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  color: #1c2d8f;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
-/* ==================== CARD PRINCIPAL ==================== */
-.historial-card {
-  background: rgba(230, 215, 255, 0.7);
-  border-radius: 20px;
-  padding: 2rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(10px);
-}
-
-.card-header {
+/* FILTROS */
+.admin-filtros {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 2rem;
+  gap: 12px;
   flex-wrap: wrap;
+  margin-bottom: 20px;
 }
 
-.user-select {
+.admin-select,
+.admin-search {
+  padding: 10px 16px;
+  border-radius: 20px;
+  border: none;
+  font-weight: 600;
+}
+
+.admin-select {
   min-width: 200px;
-  padding: 0.875rem;
-  border: 2px solid rgba(102, 126, 234, 0.3);
-  border-radius: 12px;
-  font-size: 1rem;
-  background: white;
-  cursor: pointer;
-  transition: all 0.3s;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%234a5568' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 1rem center;
-  padding-right: 2.5rem;
 }
 
-.user-select:focus {
-  outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-.search-input {
+.admin-search {
   flex: 1;
-  min-width: 250px;
-  padding: 0.875rem 1.25rem;
-  border: 2px solid rgba(102, 126, 234, 0.3);
-  border-radius: 12px;
-  font-size: 1rem;
-  background: white;
-  transition: all 0.3s;
+  min-width: 220px;
 }
 
-.search-input:focus {
-  outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-.btn-limpiar {
-  padding: 0.875rem 1.5rem;
-  background: linear-gradient(135deg, #48d1cc 0%, #40e0d0 100%);
+.btn-filtros {
+  background: #9b7bff;
   color: white;
   border: none;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: 600;
+  padding: 10px 22px;
+  border-radius: 20px;
+  font-weight: bold;
   cursor: pointer;
-  transition: all 0.3s;
-  box-shadow: 0 4px 12px rgba(72, 209, 204, 0.3);
 }
 
-.btn-limpiar:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(72, 209, 204, 0.4);
+.btn-filtros:hover {
+  background: #6c5ce7;
 }
 
-/* ==================== TABLA ==================== */
-.table-wrapper {
-  overflow-x: auto;
+/* TABLA */
+.tabla-container {
+  background: #e7ddff;
+  padding: 15px;
   border-radius: 12px;
-  margin-bottom: 1.5rem;
 }
 
-.historial-tabla {
+table {
   width: 100%;
   border-collapse: collapse;
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.historial-tabla thead {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-}
-
-.historial-tabla th {
-  padding: 1rem;
-  text-align: left;
-  font-weight: 600;
-  font-size: 0.95rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.historial-tabla tbody tr {
-  border-bottom: 1px solid #e2e8f0;
-  transition: background 0.2s;
-}
-
-.historial-tabla tbody tr:nth-child(even) {
-  background: rgba(230, 215, 255, 0.2);
-}
-
-.historial-tabla tbody tr:hover {
-  background: rgba(102, 126, 234, 0.1);
-}
-
-.historial-tabla td {
-  padding: 1rem;
-  font-size: 0.95rem;
-  color: #4a5568;
-}
-
-.no-results {
-  text-align: center !important;
-  color: #a0aec0;
-  font-style: italic;
-}
-
-/* ==================== PAGINACIÓN ==================== */
-.paginacion {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 1.5rem;
-}
-
-.btn-paginacion {
-  padding: 0.5rem 1.25rem;
-  background: white;
-  border: 2px solid #667eea;
-  border-radius: 8px;
-  color: #667eea;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.btn-paginacion:hover {
-  background: #667eea;
-  color: white;
-}
-
-.pagina-actual {
-  font-weight: 700;
-  font-size: 1.125rem;
-  color: #4a5568;
-  padding: 0.5rem 1rem;
-  background: white;
-  border-radius: 8px;
-  min-width: 40px;
   text-align: center;
 }
 
-/* ==================== RESPONSIVE ==================== */
-@media (max-width: 1024px) {
-  .page-title {
-    font-size: 2rem;
-  }
-
-  .historial-card {
-    padding: 1.5rem;
-  }
+th,
+td {
+  padding: 10px;
+  border-bottom: 1px solid #cfc7ff;
 }
 
-@media (max-width: 768px) {
-  .page-title {
-    font-size: 1.75rem;
-  }
-
-  .card-header {
-    flex-direction: column;
-  }
-
-  .user-select,
-  .search-input {
-    width: 100%;
-  }
-
-  .btn-limpiar {
-    width: 100%;
-  }
-
-  .historial-tabla {
-    font-size: 0.875rem;
-  }
-
-  .historial-tabla th,
-  .historial-tabla td {
-    padding: 0.75rem 0.5rem;
-  }
+thead {
+  color: #1c2d8f;
 }
 
-@media (max-width: 480px) {
-  .page-title {
-    font-size: 1.5rem;
-  }
+tbody tr:hover {
+  background: #f0e8ff;
+}
 
-  .historial-card {
-    padding: 1rem;
-    border-radius: 15px;
-  }
+/* FECHA */
+.fecha-pill {
+  background: #9b7bff;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 10px;
+  font-weight: 600;
+}
 
-  .historial-tabla {
-    font-size: 0.75rem;
-  }
+/* QUITAR MORADO DEL ADMIN / LOGO */
+.sidebar {
+  background: #ffffff;
+  border-right: 1px solid #e5e7eb;
+}
 
-  .historial-tabla th,
-  .historial-tabla td {
-    padding: 0.5rem 0.25rem;
-  }
+.usuario-info-sidebar {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.usuario-nombre {
+  color: #1c2d8f;
+}
+
+.usuario-label {
+  color: #4a5568;
+}
+/* nombres comunes de headers / topbars */
+.header,
+.topbar,
+.navbar,
+.app-header,
+.main-header {
+  display: none !important;
+}
+
+/* por si es un header dentro de dashboard */
+.dashboard-historial > header {
+  display: none !important;
+}
+
+/* eliminar espacio que deja la barra arriba */
+.dashboard-historial {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
 }
