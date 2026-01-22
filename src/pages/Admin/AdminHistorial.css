@@ -5,7 +5,7 @@
   padding: 0;
 }
 
-/* FONDO GENERAL */
+/*  FONDO GENERAL  */
 .dashboard-historial {
   min-height: 100vh;
   background: linear-gradient(
@@ -15,20 +15,23 @@
     #cfe3ff 65%,
     #b7d4ff 100%
   );
-}
-
-/* CONTENIDO */
-.historial-contenido {
-  padding: 30px;
   display: flex;
   flex-direction: column;
 }
 
-/* TÍTULO (EXACTO COMO PEDISTE) */
+/*  CONTENIDO  */
+.historial-contenido {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* TÍTULO*/
 .historial-titulo {
   font-size: 28px;
   font-weight: 700;
-  color: #1c2d8f;
+  color: #1c2d8f; /* color original intacto */
   margin-bottom: 20px;
   text-align: center;
 }
@@ -72,11 +75,12 @@
   background: #6c5ce7;
 }
 
-/* TABLA */
+/* TABLA  */
 .tabla-container {
   background: #e7ddff;
   padding: 15px;
   border-radius: 12px;
+  overflow-x: auto;
 }
 
 table {
@@ -107,8 +111,7 @@ tbody tr:hover {
   border-radius: 10px;
   font-weight: 600;
 }
-
-/* QUITAR MORADO DEL ADMIN / LOGO */
+*/
 .sidebar {
   background: #ffffff;
   border-right: 1px solid #e5e7eb;
@@ -127,22 +130,51 @@ tbody tr:hover {
 .usuario-label {
   color: #4a5568;
 }
-/* nombres comunes de headers / topbars */
-.header,
-.topbar,
-.navbar,
-.app-header,
-.main-header {
-  display: none !important;
+
+/* LOGO */
+/* Desktop: oculto */
+.logo-img {
+  display: none;
 }
 
-/* por si es un header dentro de dashboard */
-.dashboard-historial > header {
-  display: none !important;
+/* RESPONSIVE  */
+@media (max-width: 768px) {
+
+  .historial-contenido {
+    padding: 20px 16px;
+  }
+
+  .admin-filtros {
+    flex-direction: column;
+  }
+
+  .admin-select,
+  .admin-search,
+  .btn-filtros {
+    width: 100%;
+  }
+
+  th,
+  td {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  /* 🔥 LOGO ABAJO REAL */
+  .logo-img {
+    display: block;
+    width: 180px;
+    height: auto;
+    margin-top: auto;      /* ← ESTO lo empuja al fondo */
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+    opacity: 0.95;
+  }
 }
 
-/* eliminar espacio que deja la barra arriba */
-.dashboard-historial {
-  padding-top: 0 !important;
-  margin-top: 0 !important;
+@media (max-width: 480px) {
+  .logo-img {
+    width: 150px;
+  }
 }
