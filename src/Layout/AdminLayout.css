@@ -1,0 +1,340 @@
+/* ==================== LAYOUT PRINCIPAL ==================== */
+.admin-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 80px 1fr;
+  grid-template-areas:
+    "header"
+    "content";
+  height: 100vh;
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  overflow: hidden;
+  position: relative;
+}
+
+/* ==================== HEADER SUPERIOR ==================== */
+.admin-header {
+  grid-area: header;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
+.admin-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.hamburger-btn {
+  display: none;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.hamburger-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.admin-title-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.admin-label {
+  font-size: 0.85rem;
+  opacity: 0.9;
+  font-weight: 400;
+}
+
+.admin-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.admin-header-right {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  position: relative;
+}
+
+.admin-logo {
+  height: 150px;
+  object-fit: contain;
+}
+
+/* ==================== AVATAR CON MENÚ DESPLEGABLE ==================== */
+.admin-avatar-menu {
+  position: relative;
+}
+
+.admin-avatar-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 3px solid white;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+  object-fit: cover;
+}
+
+.admin-avatar-img:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+.admin-dropdown {
+  position: absolute;
+  top: 65px;
+  right: 0;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  min-width: 200px;
+  z-index: 1000;
+  overflow: hidden;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-item {
+  display: block;
+  padding: 0.875rem 1.25rem;
+  color: #4a5568;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: background 0.2s, color 0.2s;
+  border: none;
+  width: 100%;
+  text-align: left;
+  background: none;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: #e2e8f0;
+  margin: 0.5rem 0;
+}
+
+.logout-item {
+  color: #e53e3e;
+  font-weight: 600;
+}
+
+.logout-item:hover {
+  background: #fed7d7;
+  color: #c53030;
+}
+
+/* ==================== SIDEBAR ==================== */
+.sidebar-overlay {
+  position: fixed;
+  top: 80px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.admin-sidebar {
+  position: fixed;
+  left: 0;
+  top: 80px;
+  bottom: 0;
+  width: 250px;
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+  transform: translateX(-100%);
+  z-index: 999;
+}
+
+.admin-sidebar.open {
+  transform: translateX(0);
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateX(5px);
+}
+
+.sidebar-link.active {
+  background: rgba(255, 255, 255, 0.3);
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.sidebar-logout {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  background: rgba(229, 62, 62, 0.9);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: auto;
+}
+
+.sidebar-logout:hover {
+  background: #c53030;
+  transform: scale(1.05);
+}
+
+/* ==================== CONTENIDO PRINCIPAL ==================== */
+.admin-content {
+  grid-area: content;
+  padding: 2rem;
+  overflow-y: auto;
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 50%, #a8c0ff 100%);
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+@media (max-width: 768px) {
+  .admin-header {
+    padding: 0 1rem;
+  }
+
+  .admin-title-section {
+    display: none;
+  }
+
+  .admin-logo {
+    height: 40px;
+  }
+
+  .admin-avatar-img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .admin-content {
+    padding: 1rem;
+  }
+
+  .admin-dropdown {
+    right: -10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-header-right {
+    gap: 1rem;
+  }
+
+  .admin-logo {
+    height: 35px;
+  }
+
+  .admin-avatar-img {
+    width: 35px;
+    height: 35px;
+  }
+
+  .admin-content {
+    padding: 0.75rem;
+  }
+}
+
+/* ==================== TOOLTIPS ==================== */
+[title] {
+  position: relative;
+  cursor: pointer;
+}
+
+[title]:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  z-index: 1000;
+  margin-bottom: 5px;
+  pointer-events: none;
+  opacity: 0;
+  animation: fadeInTooltip 0.3s forwards;
+}
+
+@keyframes fadeInTooltip {
+  to {
+    opacity: 1;
+  }
+}
