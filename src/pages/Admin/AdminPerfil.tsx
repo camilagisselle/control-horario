@@ -1,31 +1,30 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "./AdminPerfil.css";
 
 const AdminPerfil = () => {
-  const navigate = useNavigate();
-  const [menuAbierto, setMenuAbierto] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
   const stored = typeof window !== "undefined" ? localStorage.getItem("user") : null;
-  const adminNombre = stored
+  const adminData = stored
     ? (() => {
         try {
-          const u = JSON.parse(stored) as { name?: string };
-          return u?.name ?? "Administrador";
+          const u = JSON.parse(stored) as { name?: string; email?: string };
+          return { name: u?.name ?? "Francisca Andrade", email: u?.email ?? "admin@correo.cl" };
         } catch {
-          return "Administrador";
+          return { name: "Francisca Andrade", email: "admin@correo.cl" };
         }
       })()
-    : "Administrador";
+    : { name: "Francisca Andrade", email: "admin@correo.cl" };
 
   const adminAvatarSrc =
     typeof window !== "undefined" ? localStorage.getItem("avatar") || "/avatar.jpeg" : "/avatar.jpeg";
 
-  const [nombre, setNombre] = useState(adminNombre);
-  const [correo] = useState("admin@correo.cl");
+  const [nombre, setNombre] = useState(adminData.name);
+  const [apellido, setApellido] = useState("Andrade");
+  const [correo] = useState(adminData.email);
+  const [telefono, setTelefono] = useState("+56 9 1234 5678");
+  const [cargo, setCargo] = useState("Administrador General");
   const [password, setPassword] = useState("12345");
   const [avatar, setAvatar] = useState<string>(adminAvatarSrc);
+  const [mensajeExito, setMensajeExito] = useState(false);
 
   const cambiarAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -43,84 +42,121 @@ const AdminPerfil = () => {
     reader.readAsDataURL(file);
   };
 
-  const logout = () => {
-    localStorage.removeItem("user");
-    navigate("/");
+  const guardarCambios = () => {
+    // Aquí guardarías los cambios en el servidor o localStorage
+    setMensajeExito(true);
+    setTimeout(() => setMensajeExito(false), 3000);
   };
 
   return (
-    <div className="ap-root">
-      <button
-        className="ap-btn-hamburguesa"
-        aria-label="Abrir menú"
-        onClick={() => setSidebarOpen(true)}
-      >
-        ☰
-      </button>
+    <div className="perfil-page">
+      <div className="perfil-container">
+        <h1 className="page-title">MI PERFIL</h1>
 
-      <div
-        className={`ap-overlay ${sidebarOpen ? "active" : ""}`}
-        onClick={() => setSidebarOpen(false)}
-      />
+        <div className="perfil-card">
+          <div className="perfil-header">
+            <div className="avatar-section">
+              <div className="perfil-info-header">
+                <h2>{nombre} {apellido}</h2>
+                <p className="cargo">{cargo}</p>
+                <span className="badge-admin">Administrador</span>
+              </div>
+              
+              <label htmlFor="avatarInput" className="avatar-wrapper" title="Cambiar foto de perfil">
+                <img src={avatar} alt="Avatar" className="perfil-avatar" />
+                <div className="avatar-overlay">
+                  <span className="edit-icon">📷</span>
+                </div>
+              </label>
+              <input id="avatarInput" type="file" accept="image/*" hidden onChange={cambiarAvatar} />
+            </div>
+          </div>
 
-      <aside className={`ap-sidebar ${sidebarOpen ? "active" : ""}`}>
-        <div className="ap-sidebar-avatar" onClick={() => setMenuAbierto(!menuAbierto)}>
-          <img src={avatar} alt="avatar admin" className="ap-admin-avatar" />
-          <div className="ap-admin-info">
-            <div>{nombre}</div>
-            <div className="ap-role">Administrador</div>
+          <div className="perfil-form">
+            <div className="form-row">
+              <div className="form-group">
+                <label>Nombre</label>
+                <input
+                  type="text"
+                  value={nombre}
+                  onChange={(e) => setNombre(e.target.value)}
+                  placeholder="Ingresa tu nombre"
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Apellido</label>
+                <input
+                  type="text"
+                  value={apellido}
+                  onChange={(e) => setApellido(e.target.value)}
+                  placeholder="Ingresa tu apellido"
+                />
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>Correo electrónico</label>
+                <input
+                  type="email"
+                  value={correo}
+                  disabled
+                  title="El correo no puede ser modificado"
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Teléfono</label>
+                <input
+                  type="tel"
+                  value={telefono}
+                  onChange={(e) => setTelefono(e.target.value)}
+                  placeholder="+56 9 XXXX XXXX"
+                />
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>Cargo</label>
+                <input
+                  type="text"
+                  value={cargo}
+                  onChange={(e) => setCargo(e.target.value)}
+                  placeholder="Tu cargo en la empresa"
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Contraseña</label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                />
+              </div>
+            </div>
+
+            <div className="form-actions">
+              <button className="btn-guardar" onClick={guardarCambios} title="Guardar cambios">
+                Guardar Cambios
+              </button>
+            </div>
           </div>
         </div>
+      </div>
 
-        {menuAbierto && (
-          <div className="ap-perfil-menu">
-            <button onClick={() => navigate("/admin/usuarios")}>Usuarios</button>
-            <button onClick={() => navigate("/admin/historial")}>Historial</button>
-            <button onClick={() => navigate("/admin/perfil")}>Ver mi Perfil</button>
-            <button onClick={logout}>Cerrar sesión</button>
+      {/* Modal de Éxito */}
+      {mensajeExito && (
+        <div className="modal-overlay">
+          <div className="modal-exito">
+            <div className="exito-icon">✓</div>
+            <h2>PERFIL ACTUALIZADO EXITOSAMENTE</h2>
           </div>
-        )}
-
-        <nav className="ap-nav">
-          <button className="ap-nav-item" onClick={() => navigate("/admin/perfil")}>👤 Perfil</button>
-          <button className="ap-nav-item" onClick={() => navigate("/admin/usuarios")}>👥 Usuarios</button>
-          <button className="ap-nav-item" onClick={() => navigate("/admin/historial")}>📄 Historial</button>
-        </nav>
-      </aside>
-
-      <main className="ap-contenido">
-        <header className="ap-header">
-          <h1>Perfil - Administrador</h1>
-          <img src="/krono2.1.png" className="ap-logo" alt="logo" />
-        </header>
-
-        <section className="ap-card">
-          <div className="ap-avatar-grande">
-            <label htmlFor="avatarInput" className="ap-avatar-label">
-              <img src={avatar} alt="avatar grande" />
-              <span className="ap-edit-icon">✏</span>
-            </label>
-            <input id="avatarInput" type="file" accept="image/*" hidden onChange={cambiarAvatar} />
-          </div>
-
-          <div className="ap-info">
-            <div className="ap-field">
-              <label>Nombre</label>
-              <input value={nombre} onChange={(e) => setNombre(e.target.value)} />
-            </div>
-
-            <div className="ap-field">
-              <label>Correo</label>
-              <input value={correo} disabled />
-            </div>
-
-            <div className="ap-field">
-              <label>Contraseña</label>
-              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-            </div>
-          </div>
-        </section>
-      </main>
+        </div>
+      )}
     </div>
   );
 };

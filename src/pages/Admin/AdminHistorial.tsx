@@ -1,5 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import React, { useMemo, useState } from "react";
 import "./AdminHistorial.css";
 
 interface HistorialItem {
@@ -18,50 +17,31 @@ interface UserSummary {
   nombre: string;
   apellido: string;
   correo: string;
-  avatar?: string;
 }
 
-/* Usuarios que el admin podrá ver (4) */
+/* Usuarios que el admin podrá ver */
 const USUARIOS: UserSummary[] = [
-  { id: 1, nombre: "Camila", apellido: "Pinilla", correo: "camila@indracompany.cl", avatar: "/avatar.jpeg" },
-  { id: 2, nombre: "Noemi", apellido: "Muñoz", correo: "noemi@indracompany.cl", avatar: "/avatar.jpeg" },
-  { id: 3, nombre: "Juanito", apellido: "Perez", correo: "juanito@indracompany.cl", avatar: "/avatar.jpeg" },
-  { id: 4, nombre: "María", apellido: "López", correo: "maria@indracompany.cl", avatar: "/avatar.jpeg" },
+  { id: 1, nombre: "Camila", apellido: "Pinilla", correo: "camila@indracompany.cl" },
+  { id: 2, nombre: "Noemi", apellido: "Muñoz", correo: "noemi@indracompany.cl" },
+  { id: 3, nombre: "Juanito", apellido: "Perez", correo: "juanito@indracompany.cl" },
+  { id: 4, nombre: "María", apellido: "López", correo: "maria@indracompany.cl" },
 ];
 
 const AdminHistorial: React.FC = () => {
-  const navigate = useNavigate();
-
-  // Leer sesión para mostrar nombre / avatar en sidebar (si existen)
-  const stored = typeof window !== "undefined" ? localStorage.getItem("user") : null;
-  const adminNombre = stored
-    ? (() => {
-        try {
-          const u = JSON.parse(stored) as { name?: string };
-          return u?.name ?? "Francisca Andrade";
-        } catch {
-          return "Francisca Andrade";
-        }
-      })()
-    : "Francisca Andrade";
-
-  const adminAvatarSrc = typeof window !== "undefined" ? localStorage.getItem("avatar") || "/avatar.jpeg" : "/avatar.jpeg";
-
-  const [menuOpen, setMenuOpen] = useState(false);
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState<string>("Todos");
   const [filtroTabla, setFiltroTabla] = useState<string>("");
 
-  // Datos de ejemplo (reemplaza con datos reales si los tienes)
+  // Datos de ejemplo
   const historial: HistorialItem[] = [
     { id: 1, usuario: "Camila Pinilla", fecha: "2026-01-05", entrada: "08:00", inicioColacion: "12:30", finColacion: "13:15", salida: "17:30", totalHoras: "9.25" },
-    { id: 2, usuario: "Noemi Muñoz",  fecha: "2026-01-06", entrada: "08:10", inicioColacion: "12:30", finColacion: "13:15", salida: "17:40", totalHoras: "9.0" },
+    { id: 2, usuario: "Noemi Muñoz", fecha: "2026-01-06", entrada: "08:10", inicioColacion: "12:30", finColacion: "13:15", salida: "17:40", totalHoras: "9.0" },
     { id: 3, usuario: "Juanito Perez", fecha: "2026-01-05", entrada: "08:30", inicioColacion: "12:30", finColacion: "13:00", salida: "17:30", totalHoras: "8.5" },
-    { id: 4, usuario: "María López",   fecha: "2026-01-07", entrada: "08:15", inicioColacion: "13:00", finColacion: "14:00", salida: "17:15", totalHoras: "9.0" },
+    { id: 4, usuario: "María López", fecha: "2026-01-07", entrada: "08:15", inicioColacion: "13:00", finColacion: "14:00", salida: "17:15", totalHoras: "9.0" },
     { id: 5, usuario: "Camila Pinilla", fecha: "2025-12-01", entrada: "08:00", inicioColacion: "13:14", finColacion: "14:14", salida: "17:00", totalHoras: "9.0" },
     { id: 6, usuario: "Francisca Andrade", fecha: "2025-12-10", entrada: "08:00", inicioColacion: "13:00", finColacion: "14:00", salida: "18:00", totalHoras: "10.0" },
   ];
 
-  // Mapa por usuario para accesos rápidos (opcional)
+  // Mapa por usuario para accesos rápidos
   const mapa = useMemo(() => {
     const m = new Map<string, HistorialItem[]>();
     for (const it of historial) {
@@ -72,7 +52,7 @@ const AdminHistorial: React.FC = () => {
     return m;
   }, [historial]);
 
-  // Filtrado por usuario seleccionado (select)
+  // Filtrado por usuario seleccionado
   const filas = useMemo(() => {
     if (usuarioSeleccionado === "Todos") {
       return [...historial].sort((a, b) => (a.fecha < b.fecha ? 1 : -1));
@@ -95,85 +75,20 @@ const AdminHistorial: React.FC = () => {
     );
   }, [filtroTabla, filas]);
 
-  // Tooltips / touch behavior (mantengo tal cual)
-  useEffect(() => {
-    const onTouchStart = (e: TouchEvent) => {
-      const target = e.target as HTMLElement | null;
-      if (!target) return;
-      const tooltipEl = target.closest(".has-tooltip") as HTMLElement | null;
-      const visibles = document.querySelectorAll(".has-tooltip.tooltip-visible");
-      visibles.forEach((el) => el.classList.remove("tooltip-visible"));
-      if (tooltipEl) tooltipEl.classList.add("tooltip-visible");
-    };
-    document.addEventListener("touchstart", onTouchStart, { passive: true });
-
-    const onClick = (e: MouseEvent) => {
-      const target = e.target as HTMLElement | null;
-      const tooltipEl = target?.closest(".has-tooltip") as HTMLElement | null;
-      if (!tooltipEl) {
-        const visibles = document.querySelectorAll(".has-tooltip.tooltip-visible");
-        visibles.forEach((el) => el.classList.remove("tooltip-visible"));
-      }
-    };
-    document.addEventListener("click", onClick);
-
-    return () => {
-      document.removeEventListener("touchstart", onTouchStart);
-      document.removeEventListener("click", onClick);
-    };
-  }, []);
-
-  const logout = () => {
-    localStorage.removeItem("user");
-    navigate("/");
-  };
-
   const USUARIOS_NOMBRES = ["Todos", ...USUARIOS.map((u) => `${u.nombre} ${u.apellido}`)];
 
   return (
-    <div className="layout">
-      <aside className={`sidebar ${menuOpen ? "open" : ""}`}>
-        <div className="sidebar-avatar">
-          <img src={adminAvatarSrc} alt="avatar admin" className="admin-avatar" />
-          <div className="admin-info">
-            <div>{adminNombre}</div>
-            <div className="role">Administrador</div>
-          </div>
-        </div>
+    <div className="historial-page">
+      <div className="historial-container">
+        <h1 className="page-title">HISTORIAL DE USUARIOS</h1>
 
-        <NavLink
-          to="/admin/perfil"
-          className={({ isActive }) => `menu has-tooltip ${isActive ? "active" : ""}`}
-          data-tooltip="Ver perfil admin"
-        >
-          👤 Perfil
-        </NavLink>
-
-        <Link to="/admin/usuarios" className="menu has-tooltip" data-tooltip="Ir a usuarios">👥 Usuarios</Link>
-        <Link to="/admin/historial" className="menu active has-tooltip" data-tooltip="Ir al historial">📄 Historial</Link>
-
-        <div className="logout has-tooltip" data-tooltip="Cerrar sesión" onClick={logout}>🚪 Cerrar sesión</div>
-      </aside>
-
-      <main className="content">
-        <header className="header">
-          <button className="hamburger has-tooltip" onClick={() => setMenuOpen(!menuOpen)} data-tooltip="Abrir menú">☰</button>
-
-          <div className="perfil-top">
-            <h1>Historial</h1>
-          </div>
-
-          <img src="/krono2.1.png" className="logo" alt="Krono logo" />
-        </header>
-
-        <section className="card">
-          {/* FILTRO de búsqueda + select de usuario */}
-          <div className="table-filter-row">
+        <div className="historial-card">
+          <div className="card-header">
             <select
-              className="table-select"
+              className="user-select"
               value={usuarioSeleccionado}
               onChange={(e) => setUsuarioSeleccionado(e.target.value)}
-              aria-label="Filtrar por usuario"
+              title="Filtrar por usuario"
             >
               {USUARIOS_NOMBRES.map((n) => (
                 <option key={n} value={n}>{n}</option>
@@ -181,22 +96,20 @@ const AdminHistorial: React.FC = () => {
             </select>
 
             <input
-              className="table-filter"
-              placeholder="Buscar en registros (usuario, fecha, hora...)"
+              className="search-input"
+              placeholder="🔍 Buscar en registros..."
               value={filtroTabla}
               onChange={(e) => setFiltroTabla(e.target.value)}
-              aria-label="Buscar registros"
+              title="Buscar por usuario, fecha, hora, etc."
             />
 
-            <div className="table-filter-actions">
-              <button onClick={() => setFiltroTabla("")} className="btn-outline">Limpiar</button>
-            </div>
+            <button onClick={() => setFiltroTabla("")} className="btn-limpiar" title="Limpiar búsqueda">
+              Limpiar
+            </button>
           </div>
 
-          <div className="table-wrap">
-            <h2 className="table-title">Registros {usuarioSeleccionado !== "Todos" ? `de ${usuarioSeleccionado}` : "(todos)"}</h2>
-
-            <table>
+          <div className="table-wrapper">
+            <table className="historial-tabla">
               <thead>
                 <tr>
                   <th>Usuario</th>
@@ -210,7 +123,9 @@ const AdminHistorial: React.FC = () => {
               </thead>
               <tbody>
                 {filasFiltradas.length === 0 ? (
-                  <tr><td colSpan={7}>No hay registros</td></tr>
+                  <tr>
+                    <td colSpan={7} className="no-results">No hay registros disponibles</td>
+                  </tr>
                 ) : (
                   filasFiltradas.map((r) => (
                     <tr key={r.id}>
@@ -227,8 +142,14 @@ const AdminHistorial: React.FC = () => {
               </tbody>
             </table>
           </div>
-        </section>
-      </main>
+
+          <div className="paginacion">
+            <button className="btn-paginacion" title="Página anterior">Anterior</button>
+            <span className="pagina-actual">1</span>
+            <button className="btn-paginacion" title="Página siguiente">Siguiente</button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

@@ -12,6 +12,7 @@ const Login: React.FC = () => {
   });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   // Credenciales fijas para demo local
@@ -47,24 +48,41 @@ const Login: React.FC = () => {
   };
 
   const handleIngresar = () => {
+    console.log("Intento de login con:", { email, password });
+    
+    // Limpiar espacios en blanco
+    const emailTrimmed = email.trim();
+    const passwordTrimmed = password.trim();
+    
+    console.log("Credenciales limpias:", { emailTrimmed, passwordTrimmed });
+    
     // validación simple con credenciales fijas
-    if (email === ADMIN.email && password === ADMIN.password) {
+    if (emailTrimmed.toLowerCase() === ADMIN.email.toLowerCase() && passwordTrimmed === ADMIN.password) {
+      console.log("Login exitoso como ADMIN");
       const user = { email: ADMIN.email, role: ADMIN.role, name: ADMIN.name };
-      localStorage.setItem("user", JSON.stringify(user)); // guardamos sesión localmente
-      navigate("/admin/historial"); // admin -> página de historial admin
+      localStorage.setItem("user", JSON.stringify(user));
+      navigate("/admin/usuarios");
       return;
     }
 
-    if (email === USER.email && password === USER.password) {
+    if (emailTrimmed.toLowerCase() === USER.email.toLowerCase() && passwordTrimmed === USER.password) {
+      console.log("Login exitoso como USER");
       const user = { email: USER.email, role: USER.role, name: USER.name };
       localStorage.setItem("user", JSON.stringify(user));
-      navigate("/registro"); // usuario normal -> página de registro
+      navigate("/registro");
       return;
     }
 
+    console.log("Credenciales incorrectas");
     alert(
       "Usuario o contraseña incorrectos. Usa admin@correo.cl / 12345 o usuario@correo.cl / 12345",
     );
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleIngresar();
+    }
   };
 
   return (
@@ -98,13 +116,44 @@ const Login: React.FC = () => {
             placeholder="Usuario (email)"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            onKeyPress={handleKeyPress}
           />
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             placeholder="Contraseña"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            onKeyPress={handleKeyPress}
           />
+          
+          <label style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '4px', 
+            fontSize: '0.75rem',
+            cursor: 'pointer',
+            userSelect: 'none',
+            marginTop: '-12px',
+            marginBottom: '10px',
+            marginLeft: '2px',
+            width: 'fit-content'
+          }}>
+            <input
+              type="checkbox"
+              checked={showPassword}
+              onChange={(e) => setShowPassword(e.target.checked)}
+              style={{ 
+                cursor: 'pointer',
+                width: '12px',
+                height: '12px',
+                margin: '0',
+                flexShrink: 0,
+                position: 'relative',
+                top: '1px'
+              }}
+            />
+            Ver contraseña
+          </label>
 
           <button onClick={handleIngresar}>Ingresar</button>
 
