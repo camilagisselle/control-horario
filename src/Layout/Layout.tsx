@@ -1,5 +1,6 @@
 import { Outlet, useLocation } from "react-router-dom";
 import AvatarMenu from "../Menu/Avatarmenu";
+import Menuadmin from "../Menu/Menuadmin";
 import "./Layout.css";
 
 const Layout = () => {
@@ -9,7 +10,8 @@ const Layout = () => {
 
   return (
     <div className="layout">
-      {!esAdmin && <AvatarMenu />}
+      {esAdmin ? <Menuadmin /> : <AvatarMenu />}
+
       <main className="page-content">
         <Outlet />
       </main>
