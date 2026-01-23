@@ -5,7 +5,7 @@ interface Usuario {
   id: number;
   nombre: string;
   apellido: string;
-  correo: string;
+  correo: string; 
   password?: string;
   rol: "Administrador" | "Colaborador";
   activo: boolean;
@@ -113,7 +113,6 @@ const AdminUsuarios: React.FC = () => {
   };
 
   const guardarUsuario = () => {
-    // Validaciones
     if (!formData.nombre || !formData.apellido || !formData.correo) {
       alert("Por favor completa todos los campos requeridos");
       return;
@@ -130,7 +129,6 @@ const AdminUsuarios: React.FC = () => {
     }
 
     if (modoEdicion && usuarioEditando !== null) {
-      // Editar usuario existente
       setUsuarios((prev) =>
         prev.map((user) =>
           user.id === usuarioEditando
@@ -146,7 +144,6 @@ const AdminUsuarios: React.FC = () => {
       );
       setMensajeExito("REGISTRO ACTUALIZADO");
     } else {
-      // Crear nuevo usuario
       const nuevoUsuario: Usuario = {
         id: Math.max(...usuarios.map((u) => u.id), 0) + 1,
         nombre: formData.nombre,
@@ -208,7 +205,7 @@ const AdminUsuarios: React.FC = () => {
                             onClick={() => toggleEstado(user.id)}
                             title={user.activo ? "Usuario activo" : "Usuario inactivo"}
                           >
-                            {user.activo ? "●" : "●"}
+                            ●
                           </button>
                           <button
                             className="btn-accion editar"
