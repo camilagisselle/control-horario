@@ -1,4 +1,4 @@
-/* ==================== PÁGINA USUARIOS ==================== */
+
 .usuarios-page {
   min-height: 100%;
   display: flex;
@@ -24,7 +24,7 @@
   letter-spacing: 2px;
 }
 
-/* ==================== LOGO ==================== */
+/* LOGO */
 .usuarios-logo {
   position: absolute;  /* flotante sobre la página */
   top: -80px;          /* idéntico a la página de referencia */
@@ -43,7 +43,7 @@
   }
 }
 
-/* ==================== CARD PRINCIPAL ==================== */
+/*  CARD PRINCIPAL */
 .usuarios-card {
   background: rgba(230, 215, 255, 0.7);
   border-radius: 20px;
@@ -52,7 +52,7 @@
   backdrop-filter: blur(10px);
 }
 
-/* ==================== HEADER CARD ==================== */
+/*  HEADER CARD  */
 .card-header {
   display: flex;
   justify-content: space-between;
@@ -97,7 +97,7 @@
   box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
 }
 
-/* ==================== TABLA ==================== */
+/* TABLA  */
 .table-wrapper {
   overflow-x: auto;
   border-radius: 12px;
@@ -144,7 +144,7 @@
   color: #4a5568;
 }
 
-/* ==================== ACCIONES ==================== */
+/* ACCIONES  */
 .acciones {
   display: flex;
   gap: 0.5rem;       /* separación entre botones */
@@ -179,7 +179,7 @@
   color: #f56565;
 }
 
-/* ==================== PAGINACIÓN ==================== */
+/* PAGINACIÓN */
 .paginacion {
   display: flex;
   justify-content: center;
@@ -215,7 +215,7 @@
   text-align: center;
 }
 
-/* ==================== MODAL ==================== */
+/*  MODAL  */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -279,7 +279,7 @@
   text-transform: uppercase;
 }
 
-/* ==================== FORMULARIO ==================== */
+/* FORMULARIO */
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -389,7 +389,7 @@
   text-transform: uppercase;
 }
 
-/* ==================== RESPONSIVE ==================== */
+/* RESPONSIVE */
 @media (max-width: 1024px) {
   .page-title {
     font-size: 2rem;
