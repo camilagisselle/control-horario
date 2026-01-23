@@ -5,7 +5,7 @@ interface Usuario {
   id: number;
   nombre: string;
   apellido: string;
-  correo: string; 
+  correo: string;
   password?: string;
   rol: "Administrador" | "Colaborador";
   activo: boolean;
@@ -163,9 +163,14 @@ const AdminUsuarios: React.FC = () => {
 
   return (
     <div className="usuarios-page">
+      {/* LOGO Krono2.1 */}
+      <img src="/krono2.1.png" alt="Logo Krono" className="usuarios-logo" />
+
       <div className="usuarios-container">
+        {/* Título */}
         <h1 className="page-title">ADMINISTRADOR DE USUARIOS</h1>
 
+        {/* Card principal */}
         <div className="usuarios-card">
           <div className="card-header">
             <input
@@ -200,6 +205,7 @@ const AdminUsuarios: React.FC = () => {
                       <td>{user.rol}</td>
                       <td>
                         <div className="acciones">
+                          {/* Solo íconos, sin cuadros */}
                           <button
                             className={`btn-estado ${user.activo ? "activo" : "inactivo"}`}
                             onClick={() => toggleEstado(user.id)}

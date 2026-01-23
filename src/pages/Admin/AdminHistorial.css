@@ -5,7 +5,7 @@
   padding: 0;
 }
 
-/*  FONDO GENERAL  */
+/* FONDO */
 .dashboard-historial {
   min-height: 100vh;
   background: linear-gradient(
@@ -19,20 +19,32 @@
   flex-direction: column;
 }
 
-/*  CONTENIDO  */
+/* CONTENIDO */
 .historial-contenido {
   padding: 30px;
+  padding-top: 100px;
   display: flex;
   flex-direction: column;
   flex: 1;
+  position: relative; /* para el logo en desktop */
 }
 
-/* TÍTULO*/
+/* LOGO (DESKTOP) */
+.logo-img {
+  position: absolute;
+  top: -80px;
+  right: 40px;
+  width: 250px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* TÍTULO */
 .historial-titulo {
   font-size: 28px;
   font-weight: 700;
-  color: #1c2d8f; /* color original intacto */
-  margin-bottom: 20px;
+  color: #1f3bb3;
+  margin-bottom: 48px;
   text-align: center;
 }
 
@@ -65,9 +77,10 @@
   background: #9b7bff;
   color: white;
   border: none;
-  padding: 10px 22px;
-  border-radius: 20px;
-  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 18px;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
 }
 
@@ -75,12 +88,13 @@
   background: #6c5ce7;
 }
 
-/* TABLA  */
+/* TABLA */
 .tabla-container {
   background: #e7ddff;
   padding: 15px;
   border-radius: 12px;
   overflow-x: auto;
+  margin-top: 32px;
 }
 
 table {
@@ -103,7 +117,6 @@ tbody tr:hover {
   background: #f0e8ff;
 }
 
-/* FECHA */
 .fecha-pill {
   background: #9b7bff;
   color: white;
@@ -111,37 +124,12 @@ tbody tr:hover {
   border-radius: 10px;
   font-weight: 600;
 }
-*/
-.sidebar {
-  background: #ffffff;
-  border-right: 1px solid #e5e7eb;
-}
 
-.usuario-info-sidebar {
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 16px;
-  padding: 16px;
-}
-
-.usuario-nombre {
-  color: #1c2d8f;
-}
-
-.usuario-label {
-  color: #4a5568;
-}
-
-/* LOGO */
-/* Desktop: oculto */
-.logo-img {
-  display: none;
-}
-
-/* RESPONSIVE  */
+/* ================= MOBILE ================= */
 @media (max-width: 768px) {
-
   .historial-contenido {
     padding: 20px 16px;
+    padding-top: 60px;
   }
 
   .admin-filtros {
@@ -160,21 +148,14 @@ tbody tr:hover {
     padding: 8px;
   }
 
-  /* 🔥 LOGO ABAJO REAL */
+  /* LOGO ABAJO SOLO EN MOBILE */
   .logo-img {
-    display: block;
+    position: static;
+    margin-top: 32px;
     width: 180px;
-    height: auto;
-    margin-top: auto;      /* ← ESTO lo empuja al fondo */
+    display: block;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 20px;
-    opacity: 0.95;
-  }
-}
-
-@media (max-width: 480px) {
-  .logo-img {
-    width: 150px;
+    opacity: 0.9;
   }
 }

@@ -4,50 +4,71 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  position: relative; /* necesario para el logo flotante */
 }
 
 .usuarios-container {
-  max-width: 1400px; 
+  max-width: 1100px;  /* card más compacta */
   width: 100%;
   margin: 0 auto;
 }
 
 .page-title {
   text-align: center;
-  font-size: 2.5rem;
+  font-size: 28px;        /* como pediste */
   font-weight: 700;
-  color: #4a5568;
-  margin-bottom: 2rem;
+  color: #1f3bb3;         /* azul */
+  margin-top: 4rem;       /* más abajo */
+  margin-bottom: 3.5rem;  /* separación de la card */
   text-transform: uppercase;
   letter-spacing: 2px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ==================== LOGO ==================== */
+.usuarios-logo {
+  position: absolute;  /* flotante sobre la página */
+  top: -80px;          /* idéntico a la página de referencia */
+  right: 40px;         /* distancia del borde derecho */
+  width: 250px;        /* tamaño exacto */
+  height: auto;
+  object-fit: contain;
+  z-index: 10;
+}
+
+@media (max-width: 768px) {
+  .usuarios-logo {
+    position: static;       /* sigue el flujo normal en móvil */
+    display: block;
+    margin-top: 20px;       /* separación debajo del título */
+  }
 }
 
 /* ==================== CARD PRINCIPAL ==================== */
 .usuarios-card {
   background: rgba(230, 215, 255, 0.7);
   border-radius: 20px;
-  padding: 2rem;
+  padding: 1.8rem;          /* un poco más compacto */
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   backdrop-filter: blur(10px);
 }
 
+/* ==================== HEADER CARD ==================== */
 .card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;  /* menos espacio que antes */
   flex-wrap: wrap;
 }
 
 .search-input {
   flex: 1;
   min-width: 250px;
-  padding: 0.875rem 1.25rem;
+  padding: 0.75rem 1rem;
   border: 2px solid rgba(102, 126, 234, 0.3);
   border-radius: 12px;
-  font-size: 1rem;
+  font-size: 0.95rem;
   background: white;
   transition: all 0.3s;
 }
@@ -59,12 +80,12 @@
 }
 
 .btn-nuevo {
-  padding: 0.875rem 2rem;
+  padding: 0.75rem 1.5rem;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
   border-radius: 12px;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
@@ -89,6 +110,7 @@
   background: white;
   border-radius: 12px;
   overflow: hidden;
+  font-size: 0.9rem; /* más compacto */
 }
 
 .usuarios-tabla thead {
@@ -97,10 +119,9 @@
 }
 
 .usuarios-tabla th {
-  padding: 1rem;
+  padding: 0.8rem;
   text-align: left;
   font-weight: 600;
-  font-size: 0.95rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -119,34 +140,34 @@
 }
 
 .usuarios-tabla td {
-  padding: 1rem;
-  font-size: 0.95rem;
+  padding: 0.8rem;
   color: #4a5568;
-}
-
-.no-results {
-  text-align: center !important;
-  color: #a0aec0;
-  font-style: italic;
 }
 
 /* ==================== ACCIONES ==================== */
 .acciones {
   display: flex;
-  gap: 0.75rem;
+  gap: 0.5rem;       /* separación entre botones */
   align-items: center;
+  flex-wrap: nowrap;  /* evita que los botones se bajen a otra línea */
 }
 
-.btn-estado {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  transition: transform 0.2s;
-  padding: 0;
+.acciones button {
+  padding: 0.25rem 0.5rem; /* más pequeños que antes */
+  font-size: 0.9rem;       /* tamaño reducido */
+  border-radius: 8px;      /* ligeramente más pequeños */
+  min-width: auto;         /* evita ancho forzado */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.btn-estado:hover {
+.btn-estado,
+.btn-accion {
+  font-size: 1rem; /* ajusta iconos para que encajen con el tamaño reducido */
+}
+.btn-estado:hover,
+.btn-accion:hover {
   transform: scale(1.2);
 }
 
@@ -158,26 +179,13 @@
   color: #f56565;
 }
 
-.btn-accion {
-  background: none;
-  border: none;
-  font-size: 1.25rem;
-  cursor: pointer;
-  transition: transform 0.2s;
-  padding: 0.25rem;
-}
-
-.btn-accion:hover {
-  transform: scale(1.2);
-}
-
 /* ==================== PAGINACIÓN ==================== */
 .paginacion {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  margin-top: 1.5rem;
+  margin-top: 1rem;
 }
 
 .btn-paginacion {
@@ -223,12 +231,8 @@
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .modal-content {
@@ -245,14 +249,8 @@
 }
 
 @keyframes slideUp {
-  from {
-    transform: translateY(30px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
 .modal-close {
@@ -285,7 +283,7 @@
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+  gap: 1rem;
   margin-bottom: 2rem;
 }
 
@@ -307,7 +305,7 @@
 
 .form-group input,
 .form-group select {
-  padding: 0.875rem;
+  padding: 0.8rem;
   border: 2px solid #e2e8f0;
   border-radius: 10px;
   font-size: 1rem;
@@ -331,7 +329,7 @@
   padding-right: 2.5rem;
 }
 
-/* ==================== BOTONES DEL MODAL ==================== */
+/* BOTONES MODAL */
 .modal-buttons {
   display: flex;
   gap: 1rem;
@@ -354,26 +352,14 @@
 .btn-cancelar {
   background: linear-gradient(135deg, #48d1cc 0%, #40e0d0 100%);
   color: white;
-  box-shadow: 0 4px 12px rgba(72, 209, 204, 0.3);
-}
-
-.btn-cancelar:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(72, 209, 204, 0.4);
 }
 
 .btn-guardar {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
-.btn-guardar:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
-}
-
-/* ==================== MODAL ÉXITO ==================== */
+/* MODAL ÉXITO */
 .modal-exito {
   background: white;
   border-radius: 20px;
@@ -392,12 +378,8 @@
 }
 
 @keyframes scaleIn {
-  from {
-    transform: scale(0);
-  }
-  to {
-    transform: scale(1);
-  }
+  from { transform: scale(0); }
+  to { transform: scale(1); }
 }
 
 .modal-exito h2 {
@@ -427,20 +409,13 @@
     flex-direction: column;
   }
 
-  .search-input {
-    width: 100%;
-  }
-
+  .search-input,
   .btn-nuevo {
     width: 100%;
   }
 
   .form-grid {
     grid-template-columns: 1fr;
-  }
-
-  .form-group.full-width {
-    grid-column: 1;
   }
 
   .usuarios-tabla {

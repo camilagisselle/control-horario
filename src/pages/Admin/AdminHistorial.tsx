@@ -75,6 +75,7 @@ const AdminHistorial: React.FC = () => {
   return (
     <div className="dashboard-historial">
       <main className="historial-contenido">
+
         <h1 className="historial-titulo">Historial de Usuarios</h1>
 
         <div className="admin-filtros">
@@ -134,6 +135,10 @@ const AdminHistorial: React.FC = () => {
             </tbody>
           </table>
         </div>
+
+        {/* LOGO — AL FINAL (CLAVE PARA MOBILE) */}
+        <img src="/krono2.1.png" alt="Krono" className="logo-img" />
+
       </main>
     </div>
   );
