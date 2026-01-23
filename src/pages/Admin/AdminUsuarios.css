@@ -108,8 +108,9 @@ td {
   font-size: 14px;
 }
 
-thead {
-  color: #1c2d8f;
+.tablaAdminUsuarios thead {
+  color: white;
+  background-color: #9b7bff;
   font-weight: 700;
 }
 
@@ -122,22 +123,50 @@ tbody tr:nth-child(even) {
 }
 
 /* ACTION ICONS — CORRECCIÓN CLAVE */
-td.acciones {
+/*td.acciones {*/
+/*  display: flex;*/
+/*  align-items: center;*/
+/*  justify-content: center;*/
+/*  gap: 14px;*/
+/*  white-space: nowrap;*/
+/*}*/
+
+/*td.acciones span {*/
+/*  cursor: pointer;*/
+/*  font-size: 18px;*/
+/*  transition: transform 0.2s ease;*/
+/*}*/
+
+/*td.acciones span:hover {*/
+/*  transform: scale(1.25);*/
+/*}*/
+
+.accionesAdminUsuarios {
   display: flex;
-  align-items: center;
+  grid-template-columns: 1fr 1fr; /* Dos columnas de igual ancho */
+  gap: 20px;
+}
+
+.accionesAdminUsuarios button {
+  /* Estas 3 líneas aseguran el tamaño uniforme */
+  width: 100%;
+  min-height: 60px; /* Altura mínima fija para todos */
+  height: 100%; /* Se estiran para llenar la celda */
+
+  /* Centrado perfecto del texto */
+  display: flex;
   justify-content: center;
-  gap: 14px;
-  white-space: nowrap;
-}
+  align-items: center;
 
-td.acciones span {
+  /* Estilos visuales */
+  padding: 10px;
+  border-radius: 12px;
+  border: none;
+  background: #7dd3fc;
+  color: #1e40af;
+  font-weight: bold;
   cursor: pointer;
-  font-size: 18px;
-  transition: transform 0.2s ease;
-}
-
-td.acciones span:hover {
-  transform: scale(1.25);
+  font-size: 16px; /* Asegura tamaño de letra legible */
 }
 
 /* STATUS DOT */
@@ -231,6 +260,7 @@ td.acciones span:hover {
 .campo select {
   width: 100%;
   height: 42px;
+  line-height: 42px;
   padding: 0 12px;
   border-radius: 10px;
   border: 1px solid #c7d2fe;
@@ -267,15 +297,32 @@ td.acciones span:hover {
 }
 
 .btn-primario {
-  background: #6366f1;
+  background: #9b7bff;
   color: white;
   border: none;
 }
 
 .btn-secundario {
-  background: #eef2ff;
-  color: #1f3bb3;
-  border: 1px solid #c7d2fe;
+  background: #6366f1;
+  color: white;
+  border: none;
+}
+
+.btn-estado,
+.btn-accion {
+  font-size: 1rem; /* ajusta iconos para que encajen con el tamaño reducido */
+}
+.btn-estado:hover,
+.btn-accion:hover {
+  transform: scale(1.2);
+}
+
+.btn-estado.activo {
+  color: #48bb78;
+}
+
+.btn-estado.inactivo {
+  color: #f56565;
 }
 
 /* RESPONSIVE */

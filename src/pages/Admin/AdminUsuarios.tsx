@@ -150,7 +150,7 @@ const AdminUsuarios: React.FC = () => {
         </button>
       </div>
 
-      <div className="tabla-container">
+      <div className="tabla-container tablaAdminUsuarios">
         <table>
           <thead>
             <tr>
@@ -168,26 +168,29 @@ const AdminUsuarios: React.FC = () => {
                 <td>{u.rol}</td>
                 <td>
                   {/* 👇 CONTENEDOR CLAVE */}
-                  <div className="acciones">
-                    <span
-                      className={`estado ${u.activo ? "activo" : "inactivo"}`}
-                      title="Cambiar estado"
-                      onClick={() => toggleEstado(u.id)}
-                    />
-                    <span
-                      className="icon editar"
-                      title="Editar"
-                      onClick={() => editarUsuario(u)}
+                  <div className="accionesAdminUsuarios">
+                    {/* Solo íconos, sin cuadros */}
+                    <button
+                        className={`btn-estado ${u.activo ? "activo" : "inactivo"}`}
+                        onClick={() => toggleEstado(u.id)}
+                        title={u.activo ? "Usuario activo" : "Usuario inactivo"}
+                    >
+                      ●
+                    </button>
+                    <button
+                        className="btn-accion editar"
+                        onClick={() => editarUsuario(u)}
+                        title="Editar usuario"
                     >
                       ✏️
-                    </span>
-                    <span
-                      className="icon eliminar"
-                      title="Eliminar"
-                      onClick={() => eliminarUsuario(u.id)}
+                    </button>
+                    <button
+                        className="btn-accion eliminar"
+                        onClick={() => eliminarUsuario(u.id)}
+                        title="Eliminar usuario"
                     >
                       🗑️
-                    </span>
+                    </button>
                   </div>
                 </td>
               </tr>
