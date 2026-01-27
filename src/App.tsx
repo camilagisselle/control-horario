@@ -19,10 +19,10 @@ import Perfil from "./pages/Perfil/Perfil";
 import AdminUsuarios from "./pages/Admin/AdminUsuarios";
 import AdminHistorial from "./pages/Admin/AdminHistorial";
 import AdminPerfil from "./pages/Admin/AdminPerfil";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
 
 // Layout único
 import Layout from "./Layout/Layout";
-
 /**
  * RequireAuth:
  * - Checks session from localStorage ("user")
@@ -91,6 +91,14 @@ function App() {
             element={
               <RequireAuth role="admin">
                 <AdminPerfil />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/admin/dashboard"
+            element={
+              <RequireAuth role="admin">
+                <AdminDashboard />
               </RequireAuth>
             }
           />

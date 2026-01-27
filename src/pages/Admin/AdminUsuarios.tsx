@@ -11,20 +11,21 @@ interface Usuario {
 
 const AdminUsuarios: React.FC = () => {
   const [usuarios, setUsuarios] = useState<Usuario[]>([
-    {
-      id: 1,
-      nombre: "Juanito Perez",
-      correo: "juanito@indracompany.cl",
-      rol: "Administrador",
-      activo: false,
-    },
-    {
-      id: 2,
-      nombre: "María López",
-      correo: "maria@indracompany.cl",
-      rol: "Colaborador",
-      activo: true,
-    },
+  { id: 1, nombre: "Camila Pinilla", correo: "camila@indracompany.cl", rol: "Colaborador", activo: true },
+  { id: 2, nombre: "Noemi Muñoz", correo: "noemi@indracompany.cl", rol: "Colaborador", activo: true },
+  { id: 3, nombre: "Juanito Pérez", correo: "jperez@indracompany.cl", rol: "Administrador", activo: true },
+  { id: 4, nombre: "María López", correo: "m.lopez@indracompany.cl", rol: "Colaborador", activo: true },
+  { id: 5, nombre: "Carlos Sanhueza", correo: "csanhueza@indracompany.cl", rol: "Colaborador", activo: true },
+  { id: 6, nombre: "Francisca Andrade", correo: "fandrade@indracompany.cl", rol: "Administrador", activo: true },
+  { id: 7, nombre: "Ricardo Morgado", correo: "rmorgado@indracompany.cl", rol: "Colaborador", activo: true },
+  { id: 8, nombre: "Valentina Rojas", correo: "vrojas@indracompany.cl", rol: "Colaborador", activo: true },
+  { id: 9, nombre: "Sebastian Vargas", correo: "svargas@indracompany.cl", rol: "Colaborador", activo: true },
+  { id: 10, nombre: "Javiera Contreras", correo: "jcontreras@indracompany.cl", rol: "Colaborador", activo: false },
+  { id: 11, nombre: "Andrés Figueroa", correo: "afigueroa@indracompany.cl", rol: "Colaborador", activo: true },
+  { id: 12, nombre: "Beatriz Solís", correo: "bsolis@indracompany.cl", rol: "Colaborador", activo: true },
+  { id: 13, nombre: "Matías Fuentes", correo: "mfuentes@indracompany.cl", rol: "Colaborador", activo: true },
+  { id: 14, nombre: "Daniela Torres", correo: "dtorres@indracompany.cl", rol: "Colaborador", activo: true },
+  { id: 15, nombre: "Gonzalo Tapia", correo: "gtapia@indracompany.cl", rol: "Colaborador", activo: true },
   ]);
 
   const [busqueda, setBusqueda] = useState("");

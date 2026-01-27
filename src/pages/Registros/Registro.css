@@ -82,43 +82,47 @@
 }
 
 /* ================= CONTENIDO ================= */
+
 .contenido {
-  flex: 1;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  position: relative;
+  justify-content: flex-start; 
+  padding-top: 20px; /* Un poco de aire arriba */
+  width: 100%;
+  height: 100%;
 }
 
 /* ================= PANEL (TRANSPARENTE) ================= */
 .panel {
-  /* Transparencia (0.35) */
   background: rgba(255, 255, 255, 0.35);
-  /* Efecto Blur */
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-
-  padding: 60px;
+  /* --- AJUSTES PARA ACHICAR --- */
+  width: 450px;         /* Antes era 500px */
+  padding: 30px 30px;   /* Antes era 60px */
   border-radius: 24px;
-  width: 500px;
   text-align: center;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.3);
+  margin-top: 20px; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
-
 /* TÍTULO */
 .registro-titulo {
-  position: absolute;
-  top: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: #6c5ce7;
+  /* ELIMINAMOS: position: absolute, top, left, transform */
+  position: relative; /* Cambiado de absolute a relative */
+  color: #1f3bb3;
   font-size: 36px;
   font-weight: 700;
   z-index: 10;
-  white-space: nowrap;
+  text-align: center;
+  margin-bottom: 50px; /* Ahora este margen SÍ funcionará */
+  margin-top: 20px;    /* Espacio respecto al techo */
 }
-
 /* LOGO (POSICIÓN ORIGINAL) */
 .registro-logo {
   position: absolute;

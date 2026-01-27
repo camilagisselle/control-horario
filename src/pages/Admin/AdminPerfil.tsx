@@ -5,19 +5,20 @@ export default function AdminPerfil() {
   const [nombre, setNombre] = useState("Francisca Andrade");
   const [correo] = useState("admin@correo.cl");
   const [telefono, setTelefono] = useState("+56 9 1234 5678");
-  const [cargo, setCargo] = useState("Administrador General");
+  const [cargo, setCargo] = useState("Administrador de Sistema");
   const [password, setPassword] = useState("12345");
   const [avatar, setAvatar] = useState("/avatar.jpeg");
   const [mensajeExito, setMensajeExito] = useState(false);
+  const [verPassword, setVerPassword] = useState(false); // Estado para el checkbox
 
-  const cambiarAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
+  function cambiarAvatar(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
 
     const reader = new FileReader();
     reader.onload = () => setAvatar(reader.result as string);
     reader.readAsDataURL(file);
-  };
+  }
 
   const guardarCambios = () => {
     setMensajeExito(true);
@@ -46,7 +47,6 @@ export default function AdminPerfil() {
             hidden
             onChange={cambiarAvatar}
           />
-          <div className="perfil-badge">Administrador</div>
         </div>
 
         {/* COLUMNA FORMULARIO */}
@@ -74,15 +74,23 @@ export default function AdminPerfil() {
             <input value={cargo} onChange={(e) => setCargo(e.target.value)} />
           </div>
 
-          <div className="form-group">
+          <div className="form-group password-group">
             <label>Contraseña</label>
             <input
-              type="password"
+              type={verPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+            <div className="ver-password-container">
+              <input 
+                type="checkbox" 
+                id="checkVer" 
+                checked={verPassword} 
+                onChange={() => setVerPassword(!verPassword)} 
+              />
+              <label htmlFor="checkVer">Ver contraseña</label>
+            </div>
           </div>
-
           <button className="btn-guardar" onClick={guardarCambios}>
             Guardar Cambios
           </button>

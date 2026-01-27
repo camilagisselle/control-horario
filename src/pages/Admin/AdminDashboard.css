@@ -1,0 +1,171 @@
+.admin-dashboard {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #d9f7d6 0%, #c9f2f5 30%, #cfe3ff 65%, #b7d4ff 100%);
+  padding: 40px 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.dashboard-contenido {
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.dashboard-header-top h1 {
+  color: #1f3bb3;
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 30px;
+}
+
+/* CARDS SUPERIORES */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.stat-card-clean {
+  background: white;
+  padding: 15px 20px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  box-shadow: 0 10px 20px rgba(28, 45, 143, 0.05);
+}
+
+.stat-icon-circle {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-text strong { display: block; font-size: 22px; color: #1c2d8f; }
+.stat-text span { font-size: 13px; color: #64748b; font-weight: 600; }
+
+/* GRID PRINCIPAL */
+.dashboard-main-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.dashboard-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 22px;
+  padding: 20px;
+  border: 1px solid white;
+}
+
+.full-width { grid-column: 1 / -1; }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.card-header h2 { font-size: 15px; color: #1c2d8f; margin: 0; font-weight: 700; }
+
+/* ELEMENTOS DE LISTA */
+.item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.badge-red {
+  background: #fee2e2;
+  color: #ef4444;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.feed-bubble {
+  background: white;
+  padding: 10px 15px;
+  border-radius: 15px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.feed-info p { font-size: 12px; font-style: italic; color: #475569; margin: 2px 0; }
+.btn-fix-small {
+  background: #9b7bff;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* TOOLTIPS */
+.tooltip-container { position: relative; display: inline-block; }
+.tooltip-text {
+  visibility: hidden;
+  background: #1e293b;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  position: absolute;
+  bottom: 130%;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 10px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.tooltip-container:hover .tooltip-text { visibility: visible; opacity: 1; }
+
+.count-tag-simple {
+  background: #fff4e5;
+  color: #b45309;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 12px;
+}
+
+/* TABLA */
+.table-container { overflow-x: auto; }
+.dashboard-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.dashboard-table th { text-align: left; padding: 10px; color: #64748b; }
+.dashboard-table td { padding: 10px; border-top: 1px solid rgba(0,0,0,0.05); }
+.mod-cell { font-family: monospace; font-weight: bold; color: #334155; }
+.reason-label { background: #f1f5f9; padding: 3px 6px; border-radius: 5px; }
+
+.perfil-logo, .logo-img {
+  position: absolute;
+  top: -90px;      /* Elevado para que no tape el contenido */
+  right: -10px;    /* Se mueve hacia la esquina derecha (puedes usar 0 o valores negativos para pegarlo más) */
+  width: 220px;    /* Tamaño estándar para todas las páginas */
+  height: auto;
+  object-fit: contain;
+  z-index: 100;    /* Siempre por encima de todo */
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .dashboard-main-grid { grid-template-columns: 1fr; }
+  .logo-img { position: relative; top: 20px; margin: 0 auto; display: block; }
+}

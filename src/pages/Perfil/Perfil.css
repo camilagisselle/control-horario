@@ -1,134 +1,189 @@
 * {
-  box-sizing: border-box;
-  margin: 0;
-  font-family: "Segoe UI", sans-serif;
+ box-sizing: border-box;
+ margin: 0;
+ font-family: "Segoe UI", sans-serif;
 }
 
 .perfil-contenido {
-  flex: 1;
-  display: flex;
-  flex-direction: column; /* apila título y tarjeta */
-  align-items: center; /* centra ambos */
-  padding: 90px 40px 40px; /* espacio para el título */
-  position: relative;
+ flex: 1;
+ display: flex;
+ flex-direction: column; /* apila título y tarjeta */
+ align-items: center; /* centra ambos */
+ padding: 90px 40px 40px; /* espacio para el título */
+ position: relative;
 }
 
 /* Barra superior */
 .perfil-top {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 30px;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ margin-bottom: 30px;
 }
 
 .perfil-top h1 {
-  font-size: 40px;
-  font-weight: 800;
-  color: #1f3bb3;
-  text-align: center;
-  width: 100%;
+ font-size: 32px; /* Antes era 40px, lo bajamos un poco */
+ font-weight: 600; /* Cambiado de 800 a 600 para que no sea tan grueso */
+ color: #1f3bb3;
+ text-align: center;
+ width: 100%;
+ letter-spacing: 0.2px; /* Un pequeño espacio entre letras ayuda a la lectura */
 }
 
 /* Logo desktop */
 .perfil-logo {
-  position: absolute;
-  top: -70px;
-  right: 0;
-  height: 250px;
+ position: absolute;
+ top: -70px;
+ right: 0;
+ height: 250px;
 }
 
 /* Tarjeta */
 .perfil-card {
-  background: #e9f9f6;
-  border-radius: 20px;
-  padding: 40px;
-  display: flex;
-  gap: 40px;
-  max-width: 900px;
-  margin: 0 auto; /* centra la tarjeta */
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
-  align-items: flex-start; /* alinea avatar e info desde arriba */
+ background: #e9f9f6;
+ border-radius: 20px;
+ padding: 40px;
+ display: flex;
+ gap: 40px;
+ max-width: 900px;
+ margin: 0 auto; /* centra la tarjeta */
+ box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+ align-items: flex-start; /* alinea avatar e info desde arriba */
 }
 
 /* Avatar grande */
 .perfil-avatar-grande {
-  position: relative;
+ position: relative;
 }
 
 .perfil-avatar-grande img {
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  background: #00bcd4;
-  padding: 10px;
+ width: 160px;
+ height: 160px;
+ border-radius: 50%;
+ background: #00bcd4;
+ padding: 10px;
 }
 
 .perfil-avatar-grande span {
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-  background: #6a3df0;
-  color: white;
-  border-radius: 50%;
-  padding: 6px;
-  font-size: 14px;
+ position: absolute;
+ right: 10px;
+ bottom: 10px;
+ background: #6a3df0;
+ color: white;
+ border-radius: 50%;
+ padding: 6px;
+ font-size: 14px;
+}
+/* Alineación general de la info */
+.perfil-info {
+ display: flex;
+ flex-direction: column;
+ gap: 15px;
 }
 
-/* Inputs */
-.perfil-info label {
-  font-size: 14px;
-  color: #4a6ee0;
+/* Fila de cada campo */
+.perfil-info > div {
+ display: flex;
+ flex-direction: row; /* Cambiamos a fila para que el label esté al lado */
+ align-items: center;
+ gap: 10px;
 }
 
-.perfil-info input {
-  width: 280px;
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-  background: #f2f6ff;
-  font-size: 16px;
-  color: #1f3bb3;
+/* Esto es lo más importante: etiquetas con el mismo ancho */
+.perfil-info label:not(.checkbox-container) {
+ width: 90px; 
+ font-size: 14px;
+ color: #4a6ee0;
+ font-weight: 600;
+ flex-shrink: 0;
 }
 
-/* ================= MOBILE ================= */
+/* Cuadros de llenado uniformes */
+.perfil-info input:not([type="checkbox"]) {
+ width: 240px;
+ padding: 10px;
+ border-radius: 8px;
+ border: none;
+ background: #f2f6ff;
+ font-size: 15px;
+ color: #1f3bb3;
+}
 
-@media (max-width: 768px) {
+/* Ajuste del checkbox para que no se desplace */
+.checkbox-container {
+ display: flex;
+ align-items: center;
+ gap: 4px; /* <--- Se redujo el espacio con el texto */
+ margin-left: 10px;
+ cursor: pointer;
+}
+
+/* AQUÍ ACHICAMOS EL TEXTO */
+.checkbox-container span {
+ font-size: 14px !important; /* <--- Tamaño de letra pequeño */
+ color: #4a6ee0;
+ white-space: nowrap;
+ line-height: 1; /* Asegura que el texto se alinee bien verticalmente con el cuadro */
+}
+
+.checkbox-container input[type="checkbox"] {
+ all: unset !important;
+ width: 14px !important; /* Ajustado para que combine con la letra pequeña */
+ height: 14px !important;
+ border: 1px solid #4a6ee0 !important;
+ border-radius: 3px !important;
+ appearance: checkbox !important;
+ -webkit-appearance: checkbox !important;
+ cursor: pointer;
+ margin: 0 !important;
+}
+/* ================= RESPONSIVO (Tablets y Celulares) ================= */
+
+@media (max-width: 850px) {
   .perfil-contenido {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 60px; /* empuja todo el contenido hacia abajo para no tocar el avatar */
+    /* Este margen es la distancia entre el avatar del header y tu título 'Perfil' */
+    margin-top: 65px !important; 
   }
 
   .perfil-top {
-    margin-bottom: 40px; /* espacio antes de la tarjeta */
-  }
-
-  .perfil-top h1 {
-    font-size: 32px;
-    text-align: center;
-    margin-bottom: 0;
-  }
-
-  .perfil-card {
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    max-width: 360px;
-    padding: 25px;
-    gap: 25px;
-    margin-top: 20px;
-  }
-
-  .perfil-info input {
-    width: 100%;
+    /* Forzamos espacio extra debajo del título antes de la tarjeta */
+    margin-bottom: 40px; 
+    z-index: 10;
   }
 
   .perfil-logo {
-    position: static;
-    margin: 30px auto 10px;
-    height: 120px;
-    display: block;
+    /* Lo movemos para que no tape el nombre de usuario */
+    top: -100px; 
+    right: 10px;
+    height: 70px;
+  }
+}
+
+@media (max-width: 550px) {
+  .perfil-top h1 {
+    font-size: 26px;
+  }
+
+  /* Las filas se vuelven columnas en celulares pequeños */
+  .perfil-info > div {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  /* El label ocupa todo el ancho */
+  .perfil-info label:not(.checkbox-container) {
+    width: 100%;
+  }
+
+  /* El input se expande al ancho total de la tarjeta */
+  .perfil-info input:not([type="checkbox"]) {
+    max-width: 100%;
+  }
+
+  /* El checkbox se alinea a la izquierda debajo del input */
+  .checkbox-container {
+    margin-left: 0;
+    margin-top: 5px;
   }
 }

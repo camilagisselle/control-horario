@@ -1,3 +1,4 @@
+/* 1. ESTILOS GLOBALES Y GENERALES */
 * {
   box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
@@ -5,31 +6,25 @@
   padding: 0;
 }
 
-/* FONDO */
 .dashboard-historial {
   min-height: 100vh;
-  background: linear-gradient(
-    135deg,
-    #d9f7d6 0%,
-    #c9f2f5 30%,
-    #cfe3ff 65%,
-    #b7d4ff 100%
-  );
+  background: linear-gradient(135deg, #d9f7d6 0%, #c9f2f5 30%, #cfe3ff 65%, #b7d4ff 100%);
   display: flex;
   flex-direction: column;
 }
 
-/* CONTENIDO */
 .historial-contenido {
+  max-width: 1100px; /* Alineado con el ancho de la tabla */
+  margin: 0 auto;
+  width: 100%;
   padding: 30px;
   padding-top: 100px;
   display: flex;
   flex-direction: column;
   flex: 1;
-  position: relative; /* para el logo en desktop */
+  position: relative;
 }
 
-/* LOGO (DESKTOP) */
 .logo-img {
   position: absolute;
   top: -80px;
@@ -37,9 +32,9 @@
   width: 250px;
   height: auto;
   object-fit: contain;
+  z-index: 10;
 }
 
-/* TÍTULO */
 .historial-titulo {
   font-size: 28px;
   font-weight: 700;
@@ -48,114 +43,155 @@
   text-align: center;
 }
 
-/* FILTROS */
+/* 2. TABLA Y FILTROS REFORZADOS */
 .admin-filtros {
   display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-}
-
-.admin-select,
-.admin-search {
-  padding: 10px 16px;
-  border-radius: 20px;
-  border: none;
-  font-weight: 600;
-}
-
-.admin-select {
-  min-width: 200px;
-}
-
-.admin-search {
-  flex: 1;
-  min-width: 220px;
-}
-
-.btn-filtros {
-  background: #9b7bff;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 18px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.btn-filtros:hover {
-  background: #6c5ce7;
-}
-
-/* TABLA */
-.tabla-container {
-  background: #e7ddff;
-  padding: 15px;
-  border-radius: 12px;
-  overflow-x: auto;
-  margin-top: 32px;
-}
-
-table {
+  gap: 15px;
   width: 100%;
-  border-collapse: collapse;
-  text-align: center;
+  margin-bottom: 25px;
 }
 
-th,
-td {
-  padding: 10px;
-  border-bottom: 1px solid #cfc7ff;
+.filter-wrapper {
+  flex: 1;
 }
 
-thead {
-  color: #1c2d8f;
+.search-wide {
+  flex: 3; /* Más largo para que no corte el placeholder */
 }
 
-tbody tr:hover {
-  background: #f0e8ff;
-}
-
-.fecha-pill {
-  background: #9b7bff;
-  color: white;
-  padding: 4px 10px;
-  border-radius: 10px;
+.admin-select, .admin-search {
+  width: 100%;
+  height: 48px;
+  padding: 0 20px;
+  border-radius: 24px;
+  border: 1px solid rgba(155, 123, 255, 0.2);
+  background: white;
   font-weight: 600;
+  font-size: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  outline: none;
+  transition: all 0.2s ease;
 }
 
-/* ================= MOBILE ================= */
-@media (max-width: 768px) {
-  .historial-contenido {
-    padding: 20px 16px;
-    padding-top: 60px;
-  }
+.admin-select:focus, .admin-search:focus {
+  border-color: #9b7bff;
+  box-shadow: 0 0 0 3px rgba(155, 123, 255, 0.15);
+}
 
+/* BOTÓN EDITAR (FORMA CUADRADA) */
+.btn-editar-hora {
+  background: #7dd3fc;
+  color: white;
+  border: none;
+  width: 42px;          
+  height: 42px;          
+  padding: 0 !important; 
+  border-radius: 6px;    
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin: 0 auto;
+}
+
+.btn-editar-hora:hover {
+  background: #38bdf8;
+  transform: translateY(-1px);
+}
+
+/* Icono dentro del cuadrado */
+.btn-editar-hora svg {
+  width: 12px;  
+  height: 12px;
+  display: block;
+}
+/* 3. EL MODAL */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-contenido {
+  background-color: white !important;
+  padding: 40px;
+  border-radius: 20px;
+  width: 500px;
+  max-width: 90%;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primario, .btn-secundario {
+  padding: 10px 20px;
+  border-radius: 10px;
+  flex: 1;
+  cursor: pointer;
+  border: none;
+  color: white;
+  font-weight: bold;
+}
+
+.btn-primario { background: #9b7bff; }
+.btn-secundario { background: #6366f1; }
+
+/* 4. TOOLTIPS KRONO (Fuera del Media Query para que funcionen en PC) */
+[data-tooltip] {
+  position: relative;
+}
+
+[data-tooltip]::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%) translateY(5px);
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: #1e293b;
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  z-index: 99999;
+}
+
+[data-tooltip]:hover::before {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* --- Lógica de visibilidad y Media Queries --- */
+.mobile-only { display: none; }
+
+@media (max-width: 768px) {
+  .desktop-only { display: none; }
+  .mobile-only { display: block; }
+  
   .admin-filtros {
     flex-direction: column;
   }
 
-  .admin-select,
-  .admin-search,
-  .btn-filtros {
-    width: 100%;
-  }
-
-  th,
-  td {
-    font-size: 14px;
-    padding: 8px;
-  }
-
-  /* LOGO ABAJO SOLO EN MOBILE */
   .logo-img {
-    position: static;
-    margin-top: 32px;
-    width: 180px;
+    position: relative;
+    top: 0;
+    right: 0;
+    margin: 40px auto 20px auto; 
+    width: 180px; 
     display: block;
-    margin-left: auto;
-    margin-right: auto;
-    opacity: 0.9;
+    opacity: 0.8;
   }
 }

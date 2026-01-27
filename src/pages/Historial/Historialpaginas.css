@@ -1,3 +1,4 @@
+/* 1. RESET Y BASE */
 * {
   box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
@@ -5,108 +6,17 @@
   padding: 0;
 }
 
-/* LAYOUT */
+/* 2. LAYOUT */
 .dashboard-historial {
   display: flex;
   height: 100vh;
-  background: linear-gradient(
-    135deg,
-    #d9f7d6 0%,
-    #c9f2f5 30%,
-    #cfe3ff 65%,
-    #b7d4ff 100%
-  );
-  overflow-x: hidden;
-}
-
-/* SIDEBAR  */
-.sidebar {
-  width: 260px;
-  padding: 25px;
-  background: linear-gradient(180deg, #d9f7d6, #b7d4ff);
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-  transition: transform 0.3s ease;
-  z-index: 1000;
-  border-right: 1px solid rgba(255,255,255,0.5);
-}
-
-/* Usuario */
-.usuario-info-sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  align-items: center;
-  position: relative;
-  text-align: center;
-}
-
-.usuario-label {
-  color: #4c6ef5;
-  font-size: 14px;
-}
-
-.usuario-nombre {
-  color: #1c2d8f;
-  margin-top: 5px;
-  font-size: 18px;
-}
-
-.avatar {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
+  background: linear-gradient(135deg, #d9f7d6 0%, #c9f2f5 30%, #cfe3ff 65%, #b7d4ff 100%);
   overflow: hidden;
-  cursor: pointer;
-  border: 3px solid #4f46e5;
-  background: #eee;
 }
 
-.avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Menú avatar */
-.avatar-menu {
-  position: absolute;
-  top: 80px;
-  width: 200px;
-  background: white;
-  border-radius: 12px;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  z-index: 50;
-}
-
-.avatar-menu button {
-  background: transparent;
-  border: none;
-  text-align: center;
-  font-weight: 600;
-  padding: 10px;
-  cursor: pointer;
-  color: #333;
-  border-radius: 8px;
-}
-
-.avatar-menu button:hover {
-  background: #f0f0f0;
-}
-
-.avatar-menu .cerrar {
-  color: #dc2626;
-}
-
-/* CONTENIDO */
 .historial-contenido {
   flex: 1;
-  padding: 30px;
+  padding: 120px 30px 30px; 
   position: relative;
   display: flex;
   flex-direction: column;
@@ -117,289 +27,183 @@
   font-size: 28px;
   font-weight: 700;
   color: #1c2d8f;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
   text-align: center;
 }
 
-/*  LOGO */
+/* 3. FILTROS */
+.filtros-container {
+  margin-bottom: 25px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.rango-fechas-wrapper {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 20px;
+  background: rgba(255, 255, 255, 0.6);
+  padding: 10px 25px;
+  border-radius: 50px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(155, 123, 255, 0.4);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+.campo-datepicker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.campo-datepicker label {
+  font-size: 13px;
+  color: #1f3bb3;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.input-custom-datepicker {
+  padding: 8px;
+  border-radius: 12px;
+  border: 1px solid #9b7bff;
+  text-align: center;
+  color: #1f3bb3;
+  width: 110px; 
+  font-size: 13px;
+  background: white;
+  outline: none;
+}
+
+/* 4. BOTONES */
+.grupo-botones-filtros {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 12px !important;
+  border-left: 2px solid rgba(155, 123, 255, 0.3);
+  padding-left: 15px;
+  margin-left: 5px;
+}
+
+.btn-historial-buscar,
+.btn-historial-limpiar {
+  background: #9b7bff !important;
+  color: white !important;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 15px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 13px;
+  transition: all 0.3s ease;
+}
+
+/* 5. TABLA (SÓLIDA CON CABECERA MORADA Y SCROLL) */
+.tabla-container {
+  background: white; 
+  border-radius: 20px;
+  flex: 1;
+  margin-top: 10px;
+  max-height: 450px;
+  overflow-y: auto; 
+  overflow-x: auto;
+  box-shadow: 0 10px 30px rgba(28, 45, 143, 0.1);
+  border: 1px solid rgba(155, 123, 255, 0.2);
+  position: relative;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background-color: #9b7bff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+th {
+  padding: 18px 15px;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+tbody { background-color: #ffffff; }
+
+td {
+  padding: 15px;
+  border-bottom: 1px solid rgba(155, 123, 255, 0.1);
+  text-align: center;
+  color: #1c2d8f;
+  font-size: 14px;
+}
+
+/* 6. SCROLLBAR */
+.tabla-container::-webkit-scrollbar { width: 8px; }
+.tabla-container::-webkit-scrollbar-track { background: rgba(155, 123, 255, 0.1); border-radius: 10px; }
+.tabla-container::-webkit-scrollbar-thumb { background: #9b7bff; border-radius: 10px; }
+
+/* 7. MÓVIL (CARDS RESTAURADAS CON TUS COLORES) */
+.mobile-only {
+  display: none;
+}
+
+.historial-card {
+  background: #e7ddff; /* Fondo lila restaurado */
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.card-fecha {
+  font-weight: 800;
+  color: #1f3bb3;
+  font-size: 18px;
+  margin-bottom: 12px;
+  border-bottom: 2px solid #9b7bff;
+  padding-bottom: 5px;
+}
+
+.card-row {
+  display: flex;
+  justify-content: space-between;   
+  margin: 8px 0;
+  color: #3954cc; /* Color azul solicitado restaurado */
+}
+
+.card-total {
+  margin-top: 15px;
+  font-weight: 800;
+  text-align: right;
+  color: #3954cc; /* Color azul solicitado restaurado */
+  font-size: 16px;
+  background: rgba(155, 123, 255, 0.1);
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+
+/* 8. LOGO Y OTROS */
 .logo-img {
   position: absolute;
   top: -50px;
   right: 20px;
   height: 250px;
   width: auto;
-  z-index: 10;
   pointer-events: none;
 }
 
-/*  FILTROS  */
-.filtros-container {
-  position: relative;
-  margin-bottom: 20px;
-}
-
-.btn-filtros {
-  background: #9b7bff;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.menu-filtros {
-  position: absolute;
-  top: 45px;
-  left: 0;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
-  overflow: hidden;
-  z-index: 20;
-  min-width: 150px;
-}
-
-.menu-filtros button {
-  width: 100%;
-  padding: 10px 16px;
-  background: white;
-  border: none;
-  text-align: left;
-  cursor: pointer;
-  color: #333;
-  border-bottom: 1px solid #eee;
-}
-
-.menu-filtros button:hover {
-  background: #ef6def;
-  color: white;
-}
-
-.tabla-container {
-  background: #e7ddff;
-  padding: 15px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  overflow-x: auto;
-}
-
-table,
-thead,
-tbody,
-tr,
-th,
-td {
-  background: transparent;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: center;
-}
-
-thead {
-  color: #1c1c3c;
-}
-
-th,
-td {
-  padding: 10px;
-  border-bottom: 1px solid #ccc;
-}
-
-tbody tr:hover {
-  background: #f0e8ff;
-}
-
-.fecha-pill {
-  background: #9b7bff;
-  color: white;
-  padding: 4px 8px;
-  border-radius: 8px;
-}
-
-/* MOBILE CARDS  */
-.mobile-only {
-  display: none;
-}
-
-.historial-card {
-  background: #e7ddff;
-  border-radius: 12px;
-  padding: 15px;
-  margin-bottom: 15px;
-}
-
-.card-fecha {
-  font-weight: bold;
-  color: #4c3ecb;
-  margin-bottom: 10px;
-}
-
-.card-row {
-  display: flex;
-  justify-content: space-between;
-  margin: 6px 0;
-  border-bottom: 1px dashed rgba(0,0,0,0.1);
-  padding-bottom: 4px;
-}
-
-.card-total {
-  margin-top: 10px;
-  font-weight: bold;
-  text-align: right;
-  color: #1c2d8f;
-}
-
-/*  PAGINACIÓN*/
-.paginacion {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-top: auto;
-  padding-bottom: 20px;
-}
-
-.paginacion button {
-  background: #9b7bff;
-  color: white;
-  border: none;
-  border-radius: 20px;
-  padding: 8px 16px;
-  cursor: pointer;
-}
-
-.pagina-activa {
-  background: #6c5ce7;
-}
-
-/* HAMBURGUESA */
-.btn-hamburguesa {
-  display: none;
-  position: absolute;
-  top: 25px;
-  left: 25px;
-  font-size: 30px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #4f46e5;
-  z-index: 1100;
-}
-
-/*  RESPONSIVo*/
 @media (max-width: 900px) {
-
-  .btn-hamburguesa {
-    display: block;
-  }
-
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 280px;
-    transform: translateX(-100%);
-    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
-  }
-
-  .sidebar.active {
-    transform: translateX(0);
-  }
-
-  .historial-contenido {
-    padding: 80px 20px 20px;
-  }
-
-  .desktop-only {
-    display: none;
-  }
-
-  .mobile-only {
-    display: block;
-  }
-
-  .logo-img {
-    position: static;
-    display: block;
-    margin: 40px auto 0;
-    width: 150px;
-    height: auto;
-  }
-
-  .avatar-menu {
-    position: static;
-    width: 100%;
-    margin-top: 15px;
-    box-shadow: none;
-    background: rgba(255,255,255,0.9);
-  }
-
-  .avatar-menu button {
-    width: 100%;
-  }
-
-.react-datepicker {
-  background: rgba(201, 242, 245, 0.9) !important;
-  border-radius: 28px !important;
-  padding: 16px !important;
-  border: none !important;
-  box-shadow: 0 18px 40px rgba(28, 45, 143, 0.25) !important;
-  backdrop-filter: blur(10px);
-}
-
-.react-datepicker__header {
-  background: transparent !important;
-  border-bottom: none !important;
-}
-
-.react-datepicker__current-month {
-  color: #1c2d8f !important;
-  font-weight: 800 !important;
-  font-size: 18px !important;
-}
-
-.react-datepicker__day {
-  width: 38px !important;
-  height: 38px !important;
-  line-height: 38px !important;
-  border-radius: 50% !important;
-  margin: 2px !important;
-  color: #1c2d8f !important;
-  font-weight: 600 !important;
-}
-
-.react-datepicker__day:hover {
-  background: rgba(155, 123, 255, 0.3) !important;
-}
-
-.react-datepicker__day--selected,
-.react-datepicker__day--keyboard-selected {
-  background: #6c5ce7 !important;
-  color: white !important;
-}
-
-.react-datepicker__day--today {
-  border: 2px solid rgba(76, 110, 245, 0.6) !important;
-}
-
-/* días con registros */
-.dia-con-registro {
-  background: rgba(76, 201, 240, 0.85) !important;
-  color: #1c2d8f !important;
-  font-weight: 800 !important;
-}
-
-/* días futuros */
-.dia-futuro {
-  opacity: 0.4 !important;
-  pointer-events: none !important;
-}
-
-.react-datepicker__triangle {
-  display: none !important;
-}
+  .desktop-only { display: none; }
+  .mobile-only { display: block; }
+  .historial-contenido { padding: 140px 20px 20px; }
+  .rango-fechas-wrapper { flex-direction: column !important; border-radius: 20px; gap: 15px; }
+  .grupo-botones-filtros { border-left: none; padding-left: 0; }
 }

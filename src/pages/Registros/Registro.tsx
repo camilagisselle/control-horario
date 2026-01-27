@@ -30,7 +30,7 @@ export default function Registro() {
   return (
     <div className="dashboard">
       <main className="contenido">
-        <h1 className="registro-titulo">Registro de asistencia</h1>
+        <h1 className="registro-titulo">Registro de Asistencia</h1>
 
         <div className="panel">
           <div className="hora">{hora}</div>
