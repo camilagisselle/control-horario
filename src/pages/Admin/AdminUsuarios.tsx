@@ -29,6 +29,7 @@ const AdminUsuarios: React.FC = () => {
 
   const [busqueda, setBusqueda] = useState("");
   const [modalAbierto, setModalAbierto] = useState(false);
+  const [pokemon, setPokemon] = useState<string>("");
   const [modoModal, setModoModal] = useState<"nuevo" | "editar">("nuevo");
   const [usuarioEditando, setUsuarioEditando] = useState<Usuario | null>(null);
 
@@ -128,12 +129,35 @@ const AdminUsuarios: React.FC = () => {
 
     cerrarModal();
   };
+   const obtenerPokemon = async () => {
+    try {
+      const response = await fetch(
+        "https://pokeapi.co/api/v2/pokemon/pikachu"
+      );
+      const data = await response.json();
+      setPokemon(data.name);
+    } catch (error) {
+      console.error("Error al obtener Pokémon", error);
+    }
+  };
 
   return (
     <div className="admin-page">
-      <img src="/krono2.1.png" alt="Krono" className="logo-top" />
+      <img
+      src="/krono2.1.png"
+       alt="Krono"
+       className="logo-top"
+       onClick={obtenerPokemon}
+       style={{ cursor: "pointer" }}
+        />
+      
 
       <h1 className="admin-title">ADMINISTRADOR DE USUARIOS</h1>
+      {pokemon && (
+      <p style={{ textAlign: "center", marginTop: "10px" }}>
+       Pokémon encontrado: <strong>{pokemon}</strong>
+       </p>
+      )}
 
       <div className="admin-actions">
         <div className="search-box">
