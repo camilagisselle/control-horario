@@ -12,7 +12,9 @@ const Layout = () => {
     <div className="layout">
       {esAdmin ? <Menuadmin /> : <AvatarMenu />}
 
-      <main className="page-content">
+      <main className="page-content probando-leseras">
+
+          <img src="/krono2.1.png" className="registro-logo" alt="Logo" />
         <Outlet />
       </main>
     </div>

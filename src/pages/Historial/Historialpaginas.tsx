@@ -160,7 +160,7 @@ export default function HistorialPage() {
             </div>
           ))}
         </div>
-        <img src="/krono2.1.png" alt="Logo" className="logo-img" />
+
       </main>
     </div>
   );

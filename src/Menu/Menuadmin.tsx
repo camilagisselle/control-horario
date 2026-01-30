@@ -24,26 +24,10 @@ const Menuadmin = () => {
 
       {open && (
         <div className="avatar-menu">
-          {/* OPCIÓN AÑADIDA: DASHBOARD / INICIO */}
-          <button onClick={() => { navigate("/admin/dashboard"); setOpen(false); }}>
-            🏠 Inicio (Panel)
-          </button>
-          
-          <button onClick={() => { navigate("/admin/perfil"); setOpen(false); }}>
-            👤 Perfil
-          </button>
-          
-          <button onClick={() => { navigate("/admin/usuarios"); setOpen(false); }}>
-            👥 Usuarios
-          </button>
-          
-          <button onClick={() => { navigate("/admin/historial"); setOpen(false); }}>
-            📋 Historial
-          </button>
-          
-          <button className="cerrar" onClick={cerrarSesion}>
-            🚪 Cerrar sesión
-          </button>
+          <button onClick={() => { navigate("/admin/perfil"); setOpen(false); }}>Perfil</button>
+          <button onClick={() => { navigate("/admin/usuarios"); setOpen(false); }}>Usuarios</button>
+          <button onClick={() => { navigate("/admin/historial"); setOpen(false); }}>Historial</button>
+          <button className="cerrar" onClick={cerrarSesion}>Cerrar sesión</button>
         </div>
       )}
     </div>

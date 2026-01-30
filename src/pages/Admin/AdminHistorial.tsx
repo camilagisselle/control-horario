@@ -215,7 +215,7 @@ const AdminHistorial: React.FC = () => {
           </div>
         )}
 
-        <img src="/krono2.1.png" alt="Krono" className="logo-img" />
+
       </main>
     </div>
   );
