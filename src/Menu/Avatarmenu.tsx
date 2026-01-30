@@ -23,12 +23,10 @@ const AvatarMenu = () => {
 
       {open && (
         <div className="avatar-menu">
-          <button onClick={() => navigate("/perfil")}>Perfil</button>
-          <button onClick={() => navigate("/registro")}>Registro</button>
-          <button onClick={() => navigate("/historial")}>Historial</button>
-          <button className="logout" onClick={cerrarSesion}>
-            Cerrar sesión
-          </button>
+          <button onClick={() => { navigate("/perfil"); setOpen(false);}}>Perfil</button>
+          <button onClick={() => { navigate("/registro"); setOpen(false); }}>Registro</button>
+          <button onClick={() => { navigate("/historial"); setOpen(false); }}>Historial</button>
+          <button className="logout" onClick={cerrarSesion}>Cerrar sesión</button>
         </div>
       )}
     </div>

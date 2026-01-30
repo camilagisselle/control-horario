@@ -144,16 +144,8 @@ const AdminUsuarios: React.FC = () => {
 
   return (
     <div className="admin-page">
-      <img
-      src="/krono2.1.png"
-       alt="Krono"
-       className="logo-top"
-       onClick={obtenerPokemon}
-       style={{ cursor: "pointer" }}
-        />
-      
 
-      <h1 className="admin-title">ADMINISTRADOR DE USUARIOS</h1>
+      <h1 className="admin-title" onClick={obtenerPokemon}>ADMINISTRADOR DE USUARIOS</h1>
       {pokemon && (
       <p style={{ textAlign: "center", marginTop: "10px" }}>
        Pokémon encontrado: <strong>{pokemon}</strong>

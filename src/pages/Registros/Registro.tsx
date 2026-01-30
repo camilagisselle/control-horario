@@ -49,7 +49,6 @@ export default function Registro() {
           </div>
         </div>
 
-        <img src="/krono2.1.png" className="registro-logo" alt="Logo" />
       </main>
 
       {mostrarModal && (

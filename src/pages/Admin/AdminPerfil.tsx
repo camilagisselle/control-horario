@@ -97,8 +97,6 @@ export default function AdminPerfil() {
         </div>
       </div>
 
-      {/* LOGO */}
-      <img src="/krono2.1.png" alt="Logo" className="perfil-logo" />
 
       {/* Modal de éxito */}
       {mensajeExito && (

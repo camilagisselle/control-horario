@@ -68,7 +68,7 @@ export default function Perfil() {
   </div>
 </div>  
       </div>
-      <img src="/krono2.1.png" className="perfil-logo" alt="Logo" />
+
     </main>
   );
 }
