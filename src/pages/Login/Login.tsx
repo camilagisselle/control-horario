@@ -1,82 +1,81 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../auth/auth.hook";
 import "./Login.css";
 
 const Login: React.FC = () => {
   const [avatar, setAvatar] = useState<string>(() => {
     try {
-      return (localStorage.getItem("avatar") as string) || "/avatar.jpeg";
+      return localStorage.getItem("avatar") || "/avatar.jpeg";
     } catch {
       return "/avatar.jpeg";
     }
   });
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
+  const { login } = useAuth();
 
-  // Credenciales fijas para demo local
-  const ADMIN = {
-    email: "admin@correo.cl",
-    password: "12345",
-    role: "admin",
-    name: "Francisca Andrade",
-  };
-  const USER = {
-    email: "usuario@correo.cl",
-    password: "12345",
-    role: "user",
-    name: "Camila Pinilla",
-  };
-
+  // Avatar (NO TOCAR)
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+
     if (file) {
       const reader = new FileReader();
+
       reader.onloadend = () => {
         const dataUrl = reader.result as string;
+
         setAvatar(dataUrl);
-        // Guardamos avatar en localStorage para que otras páginas lo usen
+
         try {
           localStorage.setItem("avatar", dataUrl);
-        } catch {
-          // si falla, seguimos sin bloquear
+        } catch (err) {
+          console.error("Error guardando avatar:", err);
         }
       };
+
       reader.readAsDataURL(file);
     }
   };
 
-  const handleIngresar = () => {
-    console.log("Intento de login con:", { email, password });
-    
-    // Limpiar espacios en blanco
-    const emailTrimmed = email.trim();
-    const passwordTrimmed = password.trim();
-    
-    console.log("Credenciales limpias:", { emailTrimmed, passwordTrimmed });
-    
-    // validación simple con credenciales fijas
-    if (emailTrimmed.toLowerCase() === ADMIN.email.toLowerCase() && passwordTrimmed === ADMIN.password) {
-      console.log("Login exitoso como ADMIN");
-      const user = { email: ADMIN.email, role: ADMIN.role, name: ADMIN.name };
-      localStorage.setItem("user", JSON.stringify(user));
-      navigate("/admin/usuarios");
+  const handleIngresar = async () => {
+    if (!email || !password) {
+      alert("Ingresa correo y contraseña");
       return;
     }
 
-    if (emailTrimmed.toLowerCase() === USER.email.toLowerCase() && passwordTrimmed === USER.password) {
-      console.log("Login exitoso como USER");
-      const user = { email: USER.email, role: USER.role, name: USER.name };
-      localStorage.setItem("user", JSON.stringify(user));
-      navigate("/registro");
-      return;
-    }
+    try {
+      setLoading(true);
 
-    console.log("Credenciales incorrectas");
-    alert(
-      "Usuario o contraseña incorrectos. Usa admin@correo.cl / 12345 o usuario@correo.cl / 12345",
-    );
+      // Llama al backend via AuthContext
+      await login(email.trim(), password.trim());
+
+      // Esperamos a que user se actualice
+      setTimeout(() => {
+        const stored = localStorage.getItem("user");
+
+        if (!stored) return;
+
+        const data = JSON.parse(stored);
+
+        // Redirección por rol
+        if (data.role === "admin") {
+          navigate("/admin/usuarios");
+        } else {
+          navigate("/registro");
+        }
+      }, 100);
+    } catch (error) {
+      console.error(error);
+      alert("Credenciales incorrectas");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -87,12 +86,12 @@ const Login: React.FC = () => {
 
   return (
     <div className="login-container">
-      {/* COLUMNA IZQUIERDA */}
+      {/* IZQUIERDA */}
       <div className="login-left">
         <img src="/krono.png" alt="Logo Krono" className="login-logo" />
       </div>
 
-      {/* COLUMNA DERECHA */}
+      {/* DERECHA */}
       <div className="login-right">
         <div className="login-card">
           {/* AVATAR */}
@@ -100,6 +99,7 @@ const Login: React.FC = () => {
             <label htmlFor="avatar-upload">
               <img src={avatar} alt="avatar" className="login-avatar" />
             </label>
+
             <input
               id="avatar-upload"
               type="file"
@@ -118,6 +118,7 @@ const Login: React.FC = () => {
             onChange={(e) => setEmail(e.target.value)}
             onKeyPress={handleKeyPress}
           />
+
           <input
             type={showPassword ? "text" : "password"}
             placeholder="Contraseña"
@@ -125,37 +126,42 @@ const Login: React.FC = () => {
             onChange={(e) => setPassword(e.target.value)}
             onKeyPress={handleKeyPress}
           />
-          
-          <label style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '4px', 
-            fontSize: '0.75rem',
-            cursor: 'pointer',
-            userSelect: 'none',
-            marginTop: '-12px',
-            marginBottom: '10px',
-            marginLeft: '2px',
-            width: 'fit-content'
-          }}>
+
+          {/* Mostrar contraseña */}
+          <label
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "4px",
+              fontSize: "0.75rem",
+              cursor: "pointer",
+              userSelect: "none",
+              marginTop: "-12px",
+              marginBottom: "10px",
+              marginLeft: "2px",
+              width: "fit-content",
+            }}
+          >
             <input
               type="checkbox"
               checked={showPassword}
               onChange={(e) => setShowPassword(e.target.checked)}
-              style={{ 
-                cursor: 'pointer',
-                width: '12px',
-                height: '12px',
-                margin: '0',
+              style={{
+                cursor: "pointer",
+                width: "12px",
+                height: "12px",
+                margin: "0",
                 flexShrink: 0,
-                position: 'relative',
-                top: '1px'
+                position: "relative",
+                top: "1px",
               }}
             />
             Ver contraseña
           </label>
 
-          <button onClick={handleIngresar}>Ingresar</button>
+          <button onClick={handleIngresar} disabled={loading}>
+            {loading ? "Ingresando..." : "Ingresar"}
+          </button>
 
           <Link to="/recuperarpassword" className="recuperar-link">
             Recuperar contraseña

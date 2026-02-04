@@ -19,7 +19,7 @@ import Perfil from "./pages/Perfil/Perfil";
 import AdminUsuarios from "./pages/Admin/AdminUsuarios";
 import AdminHistorial from "./pages/Admin/AdminHistorial";
 import AdminPerfil from "./pages/Admin/AdminPerfil";
-
+import { AuthProvider } from "./auth/auth.context"; 
 // Layout único
 import Layout from "./Layout/Layout";
 /**
@@ -33,72 +33,76 @@ const RequireAuth: React.FC<{
   children: React.ReactElement;
 }> = ({ role, children }) => {
   const stored = localStorage.getItem("user");
-
   if (!stored) return <Navigate to="/" replace />;
 
+  let user: { role?: string } | null = null;
+
   try {
-    const user = JSON.parse(stored) as { role?: string };
-    if (role && user.role !== role) return <Navigate to="/" replace />;
+    user = JSON.parse(stored);
   } catch {
     localStorage.removeItem("user");
     return <Navigate to="/" replace />;
   }
+
+  if (role && user?.role !== role) return <Navigate to="/" replace />;
 
   return children;
 };
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        {/* Public */}
-        <Route path="/" element={<Login />} />
-        <Route path="/recuperarpassword" element={<RecuperarPassword />} />
+    <AuthProvider>
+      <Router>
+        <Routes>
+          {/* Public */}
+          <Route path="/" element={<Login />} />
+          <Route path="/recuperarpassword" element={<RecuperarPassword />} />
 
-        {/* Todas las páginas protegidas usan el mismo Layout */}
-        <Route
-          element={
-            <RequireAuth>
-              <Layout />
-            </RequireAuth>
-          }
-        >
-          {/* User */}
-          <Route path="/registro" element={<Registro />} />
-          <Route path="/historial" element={<Historial />} />
-          <Route path="/perfil" element={<Perfil />} />
-
-          {/* Admin */}
+          {/* Todas las páginas protegidas usan el mismo Layout */}
           <Route
-            path="/admin/usuarios"
             element={
-              <RequireAuth role="admin">
-                <AdminUsuarios />
+              <RequireAuth>
+                <Layout />
               </RequireAuth>
             }
-          />
-          <Route
-            path="/admin/historial"
-            element={
-              <RequireAuth role="admin">
-                <AdminHistorial />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/admin/perfil"
-            element={
-              <RequireAuth role="admin">
-                <AdminPerfil />
-              </RequireAuth>
-            }
-          />
-        </Route>
+          >
+            {/* User */}
+            <Route path="/registro" element={<Registro />} />
+            <Route path="/historial" element={<Historial />} />
+            <Route path="/perfil" element={<Perfil />} />
 
-        {/* Fallback */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </Router>
+            {/* Admin */}
+            <Route
+              path="/admin/usuarios"
+              element={
+                <RequireAuth role="admin">
+                  <AdminUsuarios />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/admin/historial"
+              element={
+                <RequireAuth role="admin">
+                  <AdminHistorial />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/admin/perfil"
+              element={
+                <RequireAuth role="admin">
+                  <AdminPerfil />
+                </RequireAuth>
+              }
+            />
+          </Route>
+
+          {/* Fallback */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 
