@@ -133,15 +133,6 @@ body {
 .btn-guardar:active {
   transform: scale(0.98);
 }
-
-/* LOGO DESKTOP */
-.perfil-logo {
-  position: absolute;
-  top: -80px;
-  right: 40px;
-  width: 220px;
-}
-
 /* --- MODO RESPONSIVO --- */
 @media (max-width: 850px) {
   .perfil-card {
@@ -153,13 +144,5 @@ body {
   .grid-form {
     grid-template-columns: 1fr; /* En tablets/celulares una sola columna */
     width: 100%;
-  }
-
-  .perfil-logo {
-    position: relative;
-    top: 0;
-    right: 0;
-    margin: 40px auto 0 auto;
-    display: block;
   }
 }

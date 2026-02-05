@@ -123,16 +123,6 @@
   margin-bottom: 50px; /* Ahora este margen SÍ funcionará */
   margin-top: 20px;    /* Espacio respecto al techo */
 }
-/* LOGO (POSICIÓN ORIGINAL) */
-.registro-logo {
-  position: absolute;
-  top: -50px;
-  right: 30px;
-  width: 250px;
-  opacity: 0.95;
-  z-index: 10;
-}
-
 /* RELOJ */
 .hora {
   margin: 20px auto;
@@ -294,13 +284,6 @@
     max-width: 420px;
     padding: 30px;
     margin-bottom: 40px;
-  }
-
-  .registro-logo {
-    position: static;
-    width: 130px;
-    margin: 0 auto;
-    display: block;
   }
 
   .acciones {

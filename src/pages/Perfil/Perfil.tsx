@@ -7,6 +7,7 @@ export default function Perfil() {
   const [password, setPassword] = useState("12345");
   const [avatar, setAvatar] = useState("/avatar.jpeg");
   const [showPassword, setShowPassword] = useState(false);
+  const [mensajeExito, setMensajeExito] = useState(false);
 
   const cambiarAvatar = (e: any) => {
     const file = e.target.files[0];
@@ -15,6 +16,12 @@ export default function Perfil() {
     const reader = new FileReader();
     reader.onload = () => setAvatar(reader.result as string);
     reader.readAsDataURL(file);
+  };
+
+  const guardarCambios = () => {
+    console.log("Guardando cambios:", { nombre, password });
+    setMensajeExito(true);
+    setTimeout(() => setMensajeExito(false), 3000);
   };
 
   return (
@@ -66,9 +73,22 @@ export default function Perfil() {
       <span className="checkbox-text">Ver contraseña</span>
     </label>
   </div>
-</div>  
+   {/* ⬇️ BOTÓN GUARDAR */}
+          <button className="btn-guardar" onClick={guardarCambios}>
+            Guardar Cambios
+          </button>
+        </div>  
       </div>
 
+      {/* ⬇️ MODAL DE ÉXITO */}
+      {mensajeExito && (
+        <div className="modal-exito-overlay">
+          <div className="modal-exito">
+            <div className="exito-icon">✓</div>
+            <h2>Perfil actualizado exitosamente</h2>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
