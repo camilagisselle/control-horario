@@ -100,56 +100,104 @@
   transition: all 0.3s ease;
 }
 
-/* 5. TABLA (SÓLIDA CON CABECERA MORADA Y SCROLL) */
-.tabla-container {
-  background: white; 
+/* 5. TABLA CON ENCABEZADO SEPARADO (SOLUCIÓN 100% EFECTIVA) */
+
+/* Contenedor principal */
+.tabla-wrapper {
+  background: white;
   border-radius: 20px;
   flex: 1;
   margin-top: 10px;
-  max-height: 450px;
-  overflow-y: auto; 
-  overflow-x: auto;
   box-shadow: 0 10px 30px rgba(28, 45, 143, 0.1);
   border: 1px solid rgba(155, 123, 255, 0.2);
-  position: relative;
+  overflow: hidden; /* IMPORTANTE */
+  display: flex;
+  flex-direction: column;
+  max-height: 450px;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-thead {
+/* ENCABEZADO FIJO SEPARADO */
+.tabla-header-fixed {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); /* 6 columnas */
   background-color: #9b7bff;
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 999;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0; /* NO se reduce */
 }
 
-th {
+.tabla-header-cell {
   padding: 18px 15px;
   color: white;
   font-size: 14px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  text-align: center;
+  background-color: #9b7bff;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-tbody { background-color: #ffffff; }
+.tabla-header-cell:last-child {
+  border-right: none;
+}
 
-td {
+/* CONTENEDOR CON SCROLL */
+.tabla-container-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* TABLA SIN THEAD */
+.tabla-sin-header {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla-sin-header tbody {
+  background-color: #ffffff;
+}
+
+.tabla-sin-header tr {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); /* Mismo grid que el header */
+  background-color: #ffffff;
+}
+
+.tabla-sin-header td {
   padding: 15px;
   border-bottom: 1px solid rgba(155, 123, 255, 0.1);
   text-align: center;
   color: #1c2d8f;
   font-size: 14px;
+  background-color: #ffffff;
 }
 
-/* 6. SCROLLBAR */
-.tabla-container::-webkit-scrollbar { width: 8px; }
-.tabla-container::-webkit-scrollbar-track { background: rgba(155, 123, 255, 0.1); border-radius: 10px; }
-.tabla-container::-webkit-scrollbar-thumb { background: #9b7bff; border-radius: 10px; }
+.tabla-sin-header tr:hover {
+  background-color: #f8faff;
+}
 
+.tabla-sin-header tr:hover td {
+  background-color: #f8faff;
+}
+
+/* 6. SCROLLBAR (MANTÉN IGUAL) */
+.tabla-container-scroll::-webkit-scrollbar { 
+  width: 8px; 
+}
+
+.tabla-container-scroll::-webkit-scrollbar-track { 
+  background: rgba(155, 123, 255, 0.1); 
+  border-radius: 10px; 
+}
+
+.tabla-container-scroll::-webkit-scrollbar-thumb { 
+  background: #9b7bff; 
+  border-radius: 10px; 
+}
 /* 7. MÓVIL (CARDS RESTAURADAS CON TUS COLORES) */
 .mobile-only {
   display: none;
@@ -189,20 +237,11 @@ td {
   padding: 5px 10px;
   border-radius: 10px;
 }
-
-/* 8. LOGO Y OTROS */
-.logo-img {
-  position: absolute;
-  top: -50px;
-  right: 20px;
-  height: 250px;
-  width: auto;
-  pointer-events: none;
-}
-
+/* 8. RESPONSIVE */
 @media (max-width: 900px) {
   .desktop-only { display: none; }
   .mobile-only { display: block; }
+
   .historial-contenido { padding: 140px 20px 20px; }
   .rango-fechas-wrapper { flex-direction: column !important; border-radius: 20px; gap: 15px; }
   .grupo-botones-filtros { border-left: none; padding-left: 0; }

@@ -2,7 +2,7 @@
   position: absolute;
   top: 20px;
   left: 20px;
-  z-index: 100;
+  z-index: 1100;
 }
 
 /* Header clickeable (avatar + nombre) */
@@ -53,6 +53,7 @@
   display: flex;
   flex-direction: column;
   gap: 18px;
+  z-index: 1200;  
 }
 
 /* Botones del menú */

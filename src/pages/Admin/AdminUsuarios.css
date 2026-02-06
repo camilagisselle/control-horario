@@ -10,16 +10,6 @@
   background: linear-gradient(135deg, #d9fbe5, #cfe0ff);
   position: relative;
 }
-
-/* LOGO */
-.logo-top {
-  position: fixed;
-  top: -50px;
-  right: 30px;
-  width: 180px;
-  z-index: 1000;
-}
-
 /* TITLE */
 .admin-title {
   text-align: center;
@@ -344,14 +334,6 @@ tbody tr:nth-child(even) {
   .search-box {
     width: 100%;
   }
-
-  .logo-top {
-    position: static;
-    display: block;
-    margin: 30px auto 0;
-    width: 150px;
-  }
-
   .modal-usuario.admin-style {
     width: 100%;
     padding: 22px 18px;
