@@ -29,7 +29,7 @@ import Layout from "./Layout/Layout";
  * - If a `role` is passed, and the role doesn't match, redirect to login
  */
 const RequireAuth: React.FC<{
-  role?: "admin" | "user";
+  role?: "ROLE_ADMIN" | "ROLE_USER";
   children: React.ReactElement;
 }> = ({ role, children }) => {
   const stored = localStorage.getItem("user");
@@ -75,7 +75,7 @@ function App() {
             <Route
               path="/admin/usuarios"
               element={
-                <RequireAuth role="admin">
+                <RequireAuth role="ROLE_ADMIN">
                   <AdminUsuarios />
                 </RequireAuth>
               }
@@ -83,7 +83,7 @@ function App() {
             <Route
               path="/admin/historial"
               element={
-                <RequireAuth role="admin">
+                <RequireAuth role="ROLE_ADMIN">
                   <AdminHistorial />
                 </RequireAuth>
               }
@@ -91,7 +91,7 @@ function App() {
             <Route
               path="/admin/perfil"
               element={
-                <RequireAuth role="admin">
+                <RequireAuth role="ROLE_ADMIN">
                   <AdminPerfil />
                 </RequireAuth>
               }
