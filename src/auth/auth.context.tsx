@@ -1,28 +1,50 @@
-import React, { useState } from "react";
-import { login as loginApi,  } from "./auth.service";
-import type { LoginResponse } from "./auth.service"; // tipo-only
-import { AuthContext } from "./auth.hook";
+// auth.context.tsx
+import React, { createContext, useContext, useState } from "react";
+import { login as loginApi } from "./auth.service";
+import { jwtDecode } from "jwt-decode";
+
+export interface JwtPayload {
+  role: string;
+  usuario: { correo: string; nombre: string; estado: number };
+  iat: number;
+  exp: number;
+}
+
+export interface LoginResponse {
+  correo: string;
+  role: string;
+  name: string;
+  token: string;
+}
 
 export interface AuthContextType {
   user: LoginResponse | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<LoginResponse>;
   logout: () => void;
 }
 
+export const AuthContext = createContext<AuthContextType | null>(null);
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<LoginResponse | null>(() => {
-    try {
-      const stored = localStorage.getItem("user");
-      return stored ? (JSON.parse(stored) as LoginResponse) : null;
-    } catch {
-      return null;
-    }
+    const stored = localStorage.getItem("user");
+    return stored ? JSON.parse(stored) : null;
   });
 
   const login = async (email: string, password: string) => {
     const data = await loginApi(email, password);
-    setUser(data);
-    localStorage.setItem("user", JSON.stringify(data));
+    const decoded = jwtDecode<JwtPayload>(data.token);
+
+    const userWithInfo: LoginResponse = {
+      token: data.token,
+      correo: decoded.usuario.correo,
+      name: decoded.usuario.nombre,
+      role: decoded.role,
+    };
+
+    setUser(userWithInfo);
+    localStorage.setItem("user", JSON.stringify(userWithInfo));
+    return userWithInfo;
   };
 
   const logout = () => {
@@ -30,9 +52,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.removeItem("user");
   };
 
-  return (
-    <AuthContext.Provider value={{ user, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>;
+};
+
+export const useAuth = (): AuthContextType => {
+  const context = useContext(AuthContext);
+  if (!context) throw new Error("useAuth debe usarse dentro de AuthProvider");
+  return context;
 };
