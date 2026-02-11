@@ -19,7 +19,7 @@ export default function Perfil() {
   };
 
   const guardarCambios = () => {
-    console.log("Guardando cambios:", { nombre, password });
+    // console.log("Guardando cambios:", { nombre, password });
     setMensajeExito(true);
     setTimeout(() => setMensajeExito(false), 3000);
   };

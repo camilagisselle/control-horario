@@ -29,7 +29,7 @@ export default function HistorialPage() {
         return response.json();
       })
       .then((data) => {
-        console.log("Historial desde backend:", data);
+        // console.log("Historial desde backend:", data);
 
       
         setRegistros(data);

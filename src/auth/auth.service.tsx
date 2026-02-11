@@ -22,6 +22,6 @@ export async function login(email: string, password: string): Promise<LoginRespo
   }
 
   const data: LoginResponse = await res.json();
-  console.log("Data recibida del back:", data);
+  // console.log("Data recibida del back:", data);
   return data;
 }

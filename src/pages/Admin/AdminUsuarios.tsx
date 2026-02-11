@@ -16,7 +16,7 @@ interface Usuario {
 const AdminUsuarios = () => {
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [busqueda, setBusqueda] = useState("");
-  const [usuarioEditando, setUsuarioEditando] = useState<Usuario | null>(null);
+  // const [usuarioEditando, setUsuarioEditando] = useState<Usuario | null>(null);
 
   useEffect(() => {
     listarUsuarios()
