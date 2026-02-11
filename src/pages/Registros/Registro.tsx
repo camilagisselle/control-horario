@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "./Registro.css";
+import { crearHistorial } from "../../services/HistorialService";
 
 export default function Registro() {
   const [hora, setHora] = useState("");
@@ -22,10 +23,33 @@ export default function Registro() {
     setMostrarModal(true);
   };
 
-  const confirmar = () => {
+  const confirmar = async () => {
     setMostrarModal(false);
-    setTimeout(() => setMostrarConfirmado(true), 200);
+
+    const storedUser = localStorage.getItem("user");
+    if (!storedUser) return;
+
+    const user = JSON.parse(storedUser);
+    const correo = user.correo;
+
+    const now = new Date();
+    const fecha = now.toISOString().split("T")[0];
+    const horaActual = now.toLocaleTimeString("sv-SE");
+    const payload: any = { fecha };
+
+    if (accion === "Entrada") payload.entrada = horaActual;
+    if (accion === "Salida") payload.salida = horaActual;
+    if (accion === "Inicio colación") payload.inicioColacion = horaActual;
+    if (accion === "Fin colación") payload.finColacion = horaActual;
+
+    try {
+      await crearHistorial(correo, payload);
+      setTimeout(() => setMostrarConfirmado(true), 200);
+    } catch (error) {
+      console.error("Error registrando:", error);
+    }
   };
+
 
   return (
     <div className="dashboard">
