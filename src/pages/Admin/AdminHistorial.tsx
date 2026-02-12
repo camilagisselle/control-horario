@@ -15,7 +15,6 @@ interface HistorialItem {
 
 const AdminHistorial: React.FC = () => {
   const [historial, setHistorial] = useState<HistorialItem[]>([]);
-  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState("Todos");
   const [filtroTabla, setFiltroTabla] = useState("");
   const [modalEdicion, setModalEdicion] = useState(false);
   const [registroEditando, setRegistroEditando] = useState<HistorialItem | null>(null);
@@ -47,9 +46,6 @@ const AdminHistorial: React.FC = () => {
 
   const filasFiltradas = useMemo(() => {
     let resultado = historial;
-    if (usuarioSeleccionado !== "Todos") {
-      resultado = resultado.filter((h) => h.usuario === usuarioSeleccionado);
-    }
     if (filtroTabla.trim()) {
       const q = filtroTabla.toLowerCase();
       resultado = resultado.filter((r) =>
@@ -57,17 +53,11 @@ const AdminHistorial: React.FC = () => {
       );
     }
     return [...resultado].sort((a, b) => (a.fecha < b.fecha ? 1 : -1));
-  }, [historial, usuarioSeleccionado, filtroTabla]);
-
+    }, [historial, filtroTabla]);
   const abrirEdicion = (registro: HistorialItem) => {
     setRegistroEditando(registro);
     setModalEdicion(true);
   };
-
-  const usuariosUnicos = useMemo(() => {
-    const correos = historial.map(h => h.usuario);
-    return ["Todos", ...Array.from(new Set(correos))];
-  }, [historial]);
 
   return (
     <div className="dashboard-historial">
@@ -75,18 +65,6 @@ const AdminHistorial: React.FC = () => {
         <h1 className="historial-titulo">Historial de Usuarios</h1>
         {/* 1. FILTROS */}
         <div className="admin-filtros">
-          <div data-tooltip="Filtrar por empleado" className="filter-wrapper">
-            <select
-              value={usuarioSeleccionado}
-              onChange={(e) => setUsuarioSeleccionado(e.target.value)}
-            >
-              {usuariosUnicos.map(u => (
-                <option key={u} value={u}>
-                  {u}
-                </option>
-              ))}
-            </select>
-          </div>
           <div data-tooltip="Buscar usuario" className="filter-wrapper search-wide">
             <input 
               className="admin-search" 

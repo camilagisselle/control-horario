@@ -121,6 +121,7 @@ export default function HistorialPage() {
                 locale={es}
                 placeholderText="DD/MM/AAAA"
                 className="input-custom-datepicker"
+                portalId="root-portal"
               />
             </div>
 
@@ -137,6 +138,7 @@ export default function HistorialPage() {
                 locale={es}
                 placeholderText="DD/MM/AAAA"
                 className="input-custom-datepicker"
+                portalId="root-portal"
               />
             </div>
 

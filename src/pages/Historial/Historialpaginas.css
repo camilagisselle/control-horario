@@ -11,7 +11,7 @@
   display: flex;
   height: 100vh;
   background: linear-gradient(135deg, #d9f7d6 0%, #c9f2f5 30%, #cfe3ff 65%, #b7d4ff 100%);
-  overflow: hidden;
+  overflow: visible;
 }
 
 .historial-contenido {
@@ -20,7 +20,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  overflow-y: visible;
 }
 
 .historial-titulo {
@@ -100,9 +100,8 @@
   transition: all 0.3s ease;
 }
 
-/* 5. TABLA CON ENCABEZADO SEPARADO (SOLUCIÓN 100% EFECTIVA) */
+/* 5. TABLA CON ENCABEZADO SEPARADO */
 
-/* Contenedor principal */
 .tabla-wrapper {
   background: white;
   border-radius: 20px;
@@ -110,22 +109,21 @@
   margin-top: 10px;
   box-shadow: 0 10px 30px rgba(28, 45, 143, 0.1);
   border: 1px solid rgba(155, 123, 255, 0.2);
-  overflow: hidden; /* IMPORTANTE */
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   max-height: 450px;
 }
 
-/* ENCABEZADO FIJO SEPARADO */
 .tabla-header-fixed {
   display: grid;
-  grid-template-columns: repeat(6, 1fr); /* 6 columnas */
+  grid-template-columns: repeat(6, 1fr);
   background-color: #9b7bff;
   position: sticky;
   top: 0;
-  z-index: 999;
+  z-index: 1; /* 🔥 CAMBIO AQUÍ */
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  flex-shrink: 0; /* NO se reduce */
+  flex-shrink: 0;
 }
 
 .tabla-header-cell {
@@ -144,14 +142,12 @@
   border-right: none;
 }
 
-/* CONTENEDOR CON SCROLL */
 .tabla-container-scroll {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
 }
 
-/* TABLA SIN THEAD */
 .tabla-sin-header {
   width: 100%;
   border-collapse: collapse;
@@ -163,7 +159,7 @@
 
 .tabla-sin-header tr {
   display: grid;
-  grid-template-columns: repeat(6, 1fr); /* Mismo grid que el header */
+  grid-template-columns: repeat(6, 1fr);
   background-color: #ffffff;
 }
 
@@ -184,7 +180,7 @@
   background-color: #f8faff;
 }
 
-/* 6. SCROLLBAR (MANTÉN IGUAL) */
+/* SCROLLBAR */
 .tabla-container-scroll::-webkit-scrollbar { 
   width: 8px; 
 }
@@ -198,51 +194,10 @@
   background: #9b7bff; 
   border-radius: 10px; 
 }
-/* 7. MÓVIL (CARDS RESTAURADAS CON TUS COLORES) */
-.mobile-only {
-  display: none;
-}
 
-.historial-card {
-  background: #e7ddff; /* Fondo lila restaurado */
-  border-radius: 15px;
-  padding: 20px;
-  margin-bottom: 15px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
+/* MÓVIL */
+.mobile-only { display: none; }
 
-.card-fecha {
-  font-weight: 800;
-  color: #1f3bb3;
-  font-size: 18px;
-  margin-bottom: 12px;
-  border-bottom: 2px solid #9b7bff;
-  padding-bottom: 5px;
-}
-
-.card-row {
-  display: flex;
-  justify-content: space-between;   
-  margin: 8px 0;
-  color: #3954cc; /* Color azul solicitado restaurado */
-}
-
-.card-total {
-  margin-top: 15px;
-  font-weight: 800;
-  text-align: right;
-  color: #3954cc; /* Color azul solicitado restaurado */
-  font-size: 16px;
-  background: rgba(155, 123, 255, 0.1);
-  padding: 5px 10px;
-  border-radius: 10px;
-}
-.mensaje-error-fechas {
-  color: #d32f2f;
-  font-weight: 500;
-  margin-top: 8px;
-}
-/* 8. RESPONSIVE */
 @media (max-width: 900px) {
   .desktop-only { display: none; }
   .mobile-only { display: block; }
@@ -250,4 +205,13 @@
   .historial-contenido { padding: 140px 20px 20px; }
   .rango-fechas-wrapper { flex-direction: column !important; border-radius: 20px; gap: 15px; }
   .grupo-botones-filtros { border-left: none; padding-left: 0; }
+}
+
+/* 🔥 SOLUCIÓN DEFINITIVA CALENDARIO */
+.react-datepicker-popper {
+  z-index: 10000 !important;
+}
+
+.react-datepicker {
+  z-index: 10000 !important;
 }
