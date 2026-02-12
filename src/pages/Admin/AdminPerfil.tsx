@@ -1,12 +1,14 @@
 import { useState } from "react";
 import "./AdminPerfil.css";
+import { actualizarUsuario, cambiarPassword } from "../../services/UsuarioService";
 
 export default function AdminPerfil() {
   const [nombre, setNombre] = useState("Francisca Andrade");
   const [correo] = useState("admin@correo.cl");
   const [telefono, setTelefono] = useState("+56 9 1234 5678");
   const [cargo, setCargo] = useState("Administrador de Sistema");
-  const [password, setPassword] = useState("12345");
+const [passwordActual, setPasswordActual] = useState("");
+const [passwordNueva, setPasswordNueva] = useState("");
   const [avatar, setAvatar] = useState("/avatar.jpeg");
   const [mensajeExito, setMensajeExito] = useState(false);
   const [verPassword, setVerPassword] = useState(false); // Estado para el checkbox
@@ -20,10 +22,28 @@ export default function AdminPerfil() {
     reader.readAsDataURL(file);
   }
 
-  const guardarCambios = () => {
+const guardarCambios = async () => {
+  try {
+
+    await actualizarUsuario(correo, {
+      nombre,
+    });
+
+    if (passwordNueva) {
+      await cambiarPassword({
+        passwordActual,
+        passwordNueva,
+      });
+    }
+
     setMensajeExito(true);
     setTimeout(() => setMensajeExito(false), 3000);
-  };
+
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 
   return (
     <main className="perfil-contenido">
@@ -75,12 +95,34 @@ export default function AdminPerfil() {
           </div>
 
           <div className="form-group password-group">
-            <label>Contraseña</label>
-            <input
-              type={verPassword ? "text" : "password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+  <div className="form-group">
+  <label>Contraseña actual</label>
+  <input
+    type={verPassword ? "text" : "password"}
+    value={passwordActual}
+    onChange={(e) => setPasswordActual(e.target.value)}
+  />
+</div>
+
+<div className="form-group">
+  <label>Nueva contraseña</label>
+  <input
+    type={verPassword ? "text" : "password"}
+    value={passwordNueva}
+    onChange={(e) => setPasswordNueva(e.target.value)}
+  />
+</div>
+
+<div className="ver-password-container">
+  <input 
+    type="checkbox" 
+    id="checkVer" 
+    checked={verPassword} 
+    onChange={() => setVerPassword(!verPassword)} 
+  />
+  <label htmlFor="checkVer">Ver contraseña</label>
+</div>
+
             <div className="ver-password-container">
               <input 
                 type="checkbox" 
