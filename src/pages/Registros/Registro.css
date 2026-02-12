@@ -290,6 +290,17 @@
     grid-template-columns: 1fr;
   }
 }
+
+.acciones button:disabled,
+.acciones button.deshabilitado {
+  background-color: #cbd5e1 !important; /* gris clarito */
+  color: #6b7280 !important;            /* texto gris oscuro */
+  cursor: not-allowed !important;
+  opacity: 0.6 !important;
+  pointer-events: none;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
 @keyframes modalFade {
   from {
     opacity: 0;
@@ -305,3 +316,14 @@
   grid-template-columns: repeat(2, 1fr) !important;
   gap: 20px !important;
 }
+
+.panel {
+  opacity: 0;
+  min-height: 320px; /* evita saltos de layout */
+  transition: opacity 0.3s ease;
+}
+
+.panel.loaded {
+  opacity: 1;
+}
+

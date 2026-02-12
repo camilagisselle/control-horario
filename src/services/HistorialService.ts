@@ -21,6 +21,6 @@ export const obtenerTodosLosHistoriales = async () => {
 };
 
 export const obtenerHistorialPorCorreo = async (correo: string) => {
-  const response = await api.get(`/usuario/${correo}`);
+  const response = await api.get(`/historial/usuario/${correo}`);
   return response.data;
 };
