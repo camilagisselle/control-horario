@@ -1,5 +1,6 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import "./AdminHistorial.css";
+import { obtenerTodosLosHistoriales } from "../../services/HistorialService";
 
 interface HistorialItem {
   id: number;
@@ -41,25 +42,34 @@ const AdminHistorial: React.FC = () => {
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState("Todos");
   const [filtroTabla, setFiltroTabla] = useState("");
   const [modalEdicion, setModalEdicion] = useState(false);
+  const [historial, setHistorial] = useState<HistorialItem[]>([]);
   const [registroEditando, setRegistroEditando] = useState<HistorialItem | null>(null);
 
-  const historial: HistorialItem[] = [
-    { id: 1, usuario: "Camila Pinilla", fecha: "2026-01-26", entrada: "08:00", inicioColacion: "13:00", finColacion: "14:00", salida: "18:00", totalHoras: "9.0" },
-    { id: 2, usuario: "Noemi Muñoz", fecha: "2026-01-26", entrada: "08:15", inicioColacion: "13:30", finColacion: "14:15", salida: "17:45", totalHoras: "8.75" },
-    { id: 3, usuario: "Juanito Pérez", fecha: "2026-01-26", entrada: "08:30", inicioColacion: "13:00", finColacion: "13:30", salida: "17:30", totalHoras: "8.5" },
-    { id: 4, usuario: "María López", fecha: "2026-01-26", entrada: "09:00", inicioColacion: "14:00", finColacion: "15:00", salida: "19:00", totalHoras: "9.0" },
-    { id: 5, usuario: "Carlos Sanhueza", fecha: "2026-01-26", entrada: "08:05", inicioColacion: "13:00", finColacion: "14:00", salida: "18:05", totalHoras: "9.0" },
-    { id: 6, usuario: "Francisca Andrade", fecha: "2026-01-26", entrada: "07:55", inicioColacion: "12:30", finColacion: "13:30", salida: "17:55", totalHoras: "9.0" },
-    { id: 7, usuario: "Ricardo Morgado", fecha: "2026-01-26", entrada: "08:10", inicioColacion: "13:15", finColacion: "14:15", salida: "18:10", totalHoras: "9.0" },
-    { id: 8, usuario: "Valentina Rojas", fecha: "2026-01-26", entrada: "08:00", inicioColacion: "13:00", finColacion: "14:00", salida: "17:00", totalHoras: "8.0" },
-    { id: 9, usuario: "Sebastian Vargas", fecha: "2026-01-26", entrada: "09:15", inicioColacion: "13:30", finColacion: "14:30", salida: "19:15", totalHoras: "9.0" },
-    { id: 10, usuario: "Javiera Contreras", fecha: "2026-01-26", entrada: "08:00", inicioColacion: "13:00", finColacion: "14:00", salida: "18:00", totalHoras: "9.0" },
-    { id: 11, usuario: "Andrés Figueroa", fecha: "2026-01-26", entrada: "08:20", inicioColacion: "13:00", finColacion: "14:00", salida: "18:20", totalHoras: "9.0" },
-    { id: 12, usuario: "Beatriz Solís", fecha: "2026-01-26", entrada: "08:45", inicioColacion: "13:30", finColacion: "14:00", salida: "17:45", totalHoras: "8.5" },
-    { id: 13, usuario: "Matías Fuentes", fecha: "2026-01-26", entrada: "08:00", inicioColacion: "13:00", finColacion: "14:00", salida: "18:00", totalHoras: "9.0" },
-    { id: 14, usuario: "Daniela Torres", fecha: "2026-01-26", entrada: "08:30", inicioColacion: "13:30", finColacion: "14:30", salida: "18:30", totalHoras: "9.0" },
-    { id: 15, usuario: "Gonzalo Tapia", fecha: "2026-01-26", entrada: "08:10", inicioColacion: "13:00", finColacion: "14:00", salida: "17:10", totalHoras: "8.0" },
-  ];
+  useEffect(() => {
+    const cargarHistorial = async () => {
+      try {
+        const data = await obtenerTodosLosHistoriales();
+
+        const historialFormateado = data.map((item: any) => ({
+          id: item.id,
+          usuario: item.correoUsuario,
+          fecha: item.fecha,
+          entrada: item.entrada,
+          inicioColacion: item.inicioColacion,
+          finColacion: item.finColacion,
+          salida: item.salida,
+          totalHoras: "0" // después lo calculamos
+        }));
+
+        setHistorial(historialFormateado);
+      } catch (error) {
+        console.error("Error cargando historial:", error);
+      }
+    };
+
+    cargarHistorial();
+  }, []);
+
 
   const filasFiltradas = useMemo(() => {
     let resultado = historial;
@@ -73,7 +83,7 @@ const AdminHistorial: React.FC = () => {
       );
     }
     return [...resultado].sort((a, b) => (a.fecha < b.fecha ? 1 : -1));
-  }, [usuarioSeleccionado, filtroTabla]);
+  }, [historial, usuarioSeleccionado, filtroTabla]);
 
   const abrirEdicion = (registro: HistorialItem) => {
     setRegistroEditando(registro);

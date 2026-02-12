@@ -19,7 +19,6 @@ import Perfil from "./pages/Perfil/Perfil";
 import AdminUsuarios from "./pages/Admin/AdminUsuarios";
 import AdminHistorial from "./pages/Admin/AdminHistorial";
 import AdminPerfil from "./pages/Admin/AdminPerfil";
-import { AuthProvider } from "./auth/auth.context"; 
 // Layout único
 import Layout from "./Layout/Layout";
 /**
@@ -51,7 +50,6 @@ const RequireAuth: React.FC<{
 
 function App() {
   return (
-    <AuthProvider>
       <Router>
         <Routes>
           {/* Public */}
@@ -102,7 +100,6 @@ function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
-    </AuthProvider>
   );
 }
 
