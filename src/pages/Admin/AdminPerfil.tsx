@@ -1,17 +1,40 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { detallePerfilUsuario } from "../../services/PerfilServices";
 import "./AdminPerfil.css";
 import { actualizarUsuario, cambiarPassword } from "../../services/UsuarioService";
 
+interface Usuario {
+  id: number;
+  nombre: string;
+  correo: string;
+  estado: number;
+  perfil: {
+    id: number;
+    nombre: string;
+  };
+}
+
 export default function AdminPerfil() {
-  const [nombre, setNombre] = useState("Francisca Andrade");
-  const [correo] = useState("admin@correo.cl");
-  const [telefono, setTelefono] = useState("+56 9 1234 5678");
-  const [cargo, setCargo] = useState("Administrador de Sistema");
-const [passwordActual, setPasswordActual] = useState("");
-const [passwordNueva, setPasswordNueva] = useState("");
+  const [perfil, setPerfil] = useState<Usuario | null>(null);
+
+  const [passwordActual, setPasswordActual] = useState("");
+  const [passwordNueva, setPasswordNueva] = useState("");
+
   const [avatar, setAvatar] = useState("/avatar.jpeg");
   const [mensajeExito, setMensajeExito] = useState(false);
-  const [verPassword, setVerPassword] = useState(false); // Estado para el checkbox
+  const [verPassword, setVerPassword] = useState(false);
+
+  // ✅ Traer datos del usuario logueado
+  useEffect(() => {
+    detallePerfilUsuario()
+      .then((data) => {
+        console.log("detalle usuario:", data);
+        setPerfil(data);
+      })
+      .catch((error) => {
+        console.error("Error detalle:", error);
+      });
+  }, []);
 
   function cambiarAvatar(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -22,39 +45,47 @@ const [passwordNueva, setPasswordNueva] = useState("");
     reader.readAsDataURL(file);
   }
 
-const guardarCambios = async () => {
-  try {
+  const guardarCambios = async () => {
+    if (!perfil) return;
 
-    await actualizarUsuario(correo, {
-      nombre,
-    });
-
-    if (passwordNueva) {
-      await cambiarPassword({
-        passwordActual,
-        passwordNueva,
+    try {
+      // ✅ Actualizar nombre
+      await actualizarUsuario(perfil.correo, {
+        nombre: perfil.nombre,
       });
+
+      // ✅ Cambiar password solo si se escribió una nueva
+      if (passwordNueva) {
+        if (!passwordActual) {
+          alert("Debes ingresar la contraseña actual");
+          return;
+        }
+
+        await cambiarPassword({
+          passwordActual,
+          passwordNueva,
+        });
+
+        setPasswordActual("");
+        setPasswordNueva("");
+      }
+
+      setMensajeExito(true);
+      setTimeout(() => setMensajeExito(false), 3000);
+
+    } catch (error) {
+      console.error("Error guardando cambios:", error);
     }
-
-    setMensajeExito(true);
-    setTimeout(() => setMensajeExito(false), 3000);
-
-  } catch (error) {
-    console.error(error);
-  }
-};
-
+  };
 
   return (
     <main className="perfil-contenido">
-      {/* HEADER CON TÍTULO */}
       <div className="perfil-header-top">
         <h1>Perfil Administrador</h1>
       </div>
 
-      {/* TARJETA PERFIL */}
       <div className="perfil-card">
-        {/* COLUMNA AVATAR */}
+        {/* Avatar */}
         <div className="perfil-avatar-grande">
           <label htmlFor="avatarInput">
             <img src={avatar} alt="Avatar" />
@@ -69,78 +100,59 @@ const guardarCambios = async () => {
           />
         </div>
 
-        {/* COLUMNA FORMULARIO */}
-        <div className="perfil-info grid-form">
-          <div className="form-group">
+        {/* Formulario */}
+        <div className="perfil-info">
+          <div className="input-group">
             <label>Nombre</label>
-            <input value={nombre} onChange={(e) => setNombre(e.target.value)} />
-          </div>
-
-          <div className="form-group">
-            <label>Correo</label>
-            <input value={correo} disabled />
-          </div>
-
-          <div className="form-group">
-            <label>Teléfono</label>
             <input
-              value={telefono}
-              onChange={(e) => setTelefono(e.target.value)}
+              value={perfil?.nombre || ""}
+              onChange={(e) =>
+                setPerfil((prev) =>
+                  prev ? { ...prev, nombre: e.target.value } : prev
+                )
+              }
             />
           </div>
 
-          <div className="form-group">
-            <label>Cargo</label>
-            <input value={cargo} onChange={(e) => setCargo(e.target.value)} />
+          <div className="input-group">
+            <label>Correo</label>
+            <input value={perfil?.correo || ""} disabled />
           </div>
 
-          <div className="form-group password-group">
-  <div className="form-group">
-  <label>Contraseña actual</label>
-  <input
-    type={verPassword ? "text" : "password"}
-    value={passwordActual}
-    onChange={(e) => setPasswordActual(e.target.value)}
-  />
-</div>
-
-<div className="form-group">
-  <label>Nueva contraseña</label>
-  <input
-    type={verPassword ? "text" : "password"}
-    value={passwordNueva}
-    onChange={(e) => setPasswordNueva(e.target.value)}
-  />
-</div>
-
-<div className="ver-password-container">
-  <input 
-    type="checkbox" 
-    id="checkVer" 
-    checked={verPassword} 
-    onChange={() => setVerPassword(!verPassword)} 
-  />
-  <label htmlFor="checkVer">Ver contraseña</label>
-</div>
-
-            <div className="ver-password-container">
-              <input 
-                type="checkbox" 
-                id="checkVer" 
-                checked={verPassword} 
-                onChange={() => setVerPassword(!verPassword)} 
-              />
-              <label htmlFor="checkVer">Ver contraseña</label>
-            </div>
+          {/* 🔐 PASSWORD */}
+          <div className="input-group">
+            <label>Contraseña actual</label>
+            <input
+              type={verPassword ? "text" : "password"}
+              value={passwordActual}
+              onChange={(e) => setPasswordActual(e.target.value)}
+            />
           </div>
+
+          <div className="input-group">
+            <label>Nueva contraseña</label>
+            <input
+              type={verPassword ? "text" : "password"}
+              value={passwordNueva}
+              onChange={(e) => setPasswordNueva(e.target.value)}
+            />
+          </div>
+
+          <label className="checkbox-container">
+            <input
+              type="checkbox"
+              checked={verPassword}
+              onChange={() => setVerPassword(!verPassword)}
+            />
+            <span className="checkbox-text">Ver contraseña</span>
+          </label>
+
           <button className="btn-guardar" onClick={guardarCambios}>
             Guardar Cambios
           </button>
         </div>
       </div>
 
-
-      {/* Modal de éxito */}
       {mensajeExito && (
         <div className="modal-exito-overlay">
           <div className="modal-exito">
