@@ -3,14 +3,13 @@
   font-family: "Segoe UI", sans-serif;
 }
 
-/* PAGE */
 .admin-page {
   min-height: 100vh;
   padding: 40px;
   background: linear-gradient(135deg, #d9fbe5, #cfe0ff);
   position: relative;
 }
-/* TITLE */
+
 .admin-title {
   text-align: center;
   font-size: 26px;
@@ -19,14 +18,13 @@
   font-weight: 700;
 }
 
-/* ACTIONS */
 .admin-actions {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
   position: relative;
-  z-index: 1100;
+  z-index: 10;
 }
 
 .search-box {
@@ -51,7 +49,6 @@
   transform: translateY(-50%);
 }
 
-/* BUTTON NUEVO */
 .btn-nuevo {
   width: 140px;
   height: 42px;
@@ -61,11 +58,9 @@
   border: none;
   font-weight: 600;
   cursor: pointer;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   transition:
     background 0.25s ease,
     transform 0.15s ease;
@@ -76,7 +71,6 @@
   transform: translateY(-1px);
 }
 
-/* TABLE */
 .tabla-container {
   background: #e7ddff;
   padding: 18px;
@@ -112,78 +106,55 @@ tbody tr:nth-child(even) {
   background: rgba(255, 255, 255, 0.35);
 }
 
-/* ACTION ICONS — CORRECCIÓN CLAVE */
-/*td.acciones {*/
-/*  display: flex;*/
-/*  align-items: center;*/
-/*  justify-content: center;*/
-/*  gap: 14px;*/
-/*  white-space: nowrap;*/
-/*}*/
-
-/*td.acciones span {*/
-/*  cursor: pointer;*/
-/*  font-size: 18px;*/
-/*  transition: transform 0.2s ease;*/
-/*}*/
-
-/*td.acciones span:hover {*/
-/*  transform: scale(1.25);*/
-/*}*/
-
 .accionesAdminUsuarios {
-  display: flex;
-  grid-template-columns: 1fr 1fr; /* Dos columnas de igual ancho */
-  gap: 20px;
-}
-
-.accionesAdminUsuarios button {
-  /* Estas 3 líneas aseguran el tamaño uniforme */
-  width: 100%;
-  min-height: 60px; /* Altura mínima fija para todos */
-  height: 100%; /* Se estiran para llenar la celda */
-
-  /* Centrado perfecto del texto */
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 12px;
+}
 
-  /* Estilos visuales */
-  padding: 10px;
-  border-radius: 12px;
+.accionesAdminUsuarios button {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
   border: none;
-  background: #7dd3fc;
-  color: #1e40af;
-  font-weight: bold;
+  background: transparent;
   cursor: pointer;
-  font-size: 16px; /* Asegura tamaño de letra legible */
+  font-size: 16px;
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
 }
 
-/* STATUS DOT */
-.estado {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  flex-shrink: 0;
+.accionesAdminUsuarios button:hover {
+  background: rgba(0, 0, 0, 0.08);
+  transform: scale(1.05);
 }
 
-.estado.activo {
-  background: #22c55e;
+.btn-estado {
+  font-size: 18px;
 }
 
-.estado.inactivo {
-  background: #ef4444;
+.btn-estado.activo {
+  color: #22c55e;
 }
 
-.icon.editar {
-  color: #6366f1;
+.btn-estado.inactivo {
+  color: #ef4444;
 }
 
-.icon.eliminar {
+.btn-accion.editar {
+  color: #4f46e5;
+}
+
+.btn-accion.eliminar {
   color: #dc2626;
 }
 
-/* MODAL OVERLAY */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -195,21 +166,21 @@ tbody tr:nth-child(even) {
   z-index: 3000;
 }
 
-/* MODAL */
 .modal-usuario.admin-style {
-  background: white;
-  border-radius: 18px;
-  padding: 28px 32px;
-  width: 720px;
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 30px 34px;
+  width: 640px;
   max-width: 95vw;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+  border: 2px solid #1f3bb3;
+  box-shadow: 0 20px 50px rgba(31, 59, 179, 0.25);
   animation: modalIn 0.25s ease;
 }
 
 @keyframes modalIn {
   from {
     opacity: 0;
-    transform: translateY(20px) scale(0.96);
+    transform: translateY(16px) scale(0.96);
   }
   to {
     opacity: 1;
@@ -217,73 +188,62 @@ tbody tr:nth-child(even) {
   }
 }
 
-/* MODAL TITLE */
 .modal-title {
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 26px;
   color: #1f3bb3;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
 }
 
-/* MODAL GRID */
-.modal-grid.admin-grid {
+.modal-form {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 18px;
 }
 
-/* FIELDS */
-.campo {
-  display: flex;
-  flex-direction: column;
-}
-
-.campo label {
-  font-size: 12px;
-  margin-bottom: 6px;
-  color: #1f3bb3;
-  font-weight: 700;
-}
-
-.campo input,
-.campo select {
+.modal-form input,
+.modal-form select {
   width: 100%;
-  height: 42px;
-  line-height: 42px;
-  padding: 0 12px;
-  border-radius: 10px;
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 12px;
   border: 1px solid #c7d2fe;
-  outline: none;
   font-size: 14px;
+  background: #f9fafb;
+  outline: none;
+  color: #111111;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-/* DISABLED INPUT */
-.input-disabled {
-  background: #f1f5f9;
-  color: #64748b;
-  cursor: not-allowed;
+.modal-form select option {
+  color: #111111;
+  background-color: #ffffff;
 }
 
-/* MODAL ACTIONS */
+.modal-form input:focus,
+.modal-form select:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  background: #ffffff;
+}
+
 .modal-actions {
   display: flex;
   justify-content: center;
   gap: 20px;
-  margin-top: 32px;
+  margin-top: 34px;
 }
 
 .modal-actions button {
   width: 180px;
   height: 46px;
-  border-radius: 12px;
+  border-radius: 14px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .btn-primario {
@@ -293,29 +253,11 @@ tbody tr:nth-child(even) {
 }
 
 .btn-secundario {
-  background: #6366f1;
+  background: #26c6da;
   color: white;
   border: none;
 }
 
-.btn-estado,
-.btn-accion {
-  font-size: 1rem; /* ajusta iconos para que encajen con el tamaño reducido */
-}
-.btn-estado:hover,
-.btn-accion:hover {
-  transform: scale(1.2);
-}
-
-.btn-estado.activo {
-  color: #48bb78;
-}
-
-.btn-estado.inactivo {
-  color: #f56565;
-}
-
-/* RESPONSIVE */
 @media (max-width: 768px) {
   .admin-page {
     padding: 24px 16px 40px;
@@ -334,12 +276,12 @@ tbody tr:nth-child(even) {
   .search-box {
     width: 100%;
   }
+
   .modal-usuario.admin-style {
-    width: 100%;
     padding: 22px 18px;
   }
 
-  .modal-grid.admin-grid {
+  .modal-form {
     grid-template-columns: 1fr;
   }
 
@@ -350,4 +292,62 @@ tbody tr:nth-child(even) {
   .modal-actions button {
     width: 100%;
   }
+}
+/* ===== FIX SELECT PERFIL ===== */
+
+.modal-form select {
+  color: #111111;
+  background-color: #ffffff;
+}
+
+.modal-form select option {
+  color: #111111;
+  background-color: #ffffff;
+}
+
+/* option seleccionado / hover (Chrome) */
+.modal-form select option:checked,
+.modal-form select option:hover {
+  background-color: #e0e7ff;
+  color: #111111;
+}
+
+/* placeholder del select */
+.modal-form select option[value=""] {
+  color: #6b7280;
+}
+.modal-form select option {
+  color: #1f2937; /* texto oscuro */
+  background: #ffffff; /* fondo blanco */
+}
+.modal-form select {
+  color: #1f2937;
+}
+
+.modal-form select option {
+  color: #1f2937;
+  background-color: #ffffff;
+}
+
+/* 🔥 FORZAR VISIBILIDAD DE SELECT Y OPTIONS 🔥 */
+.modal-form select {
+  color: #111827 !important;
+  background-color: #ffffff !important;
+  -webkit-appearance: menulist;
+  appearance: menulist;
+}
+
+.modal-form select option {
+  color: #111827 !important;
+  background-color: #ffffff !important;
+}
+
+/* cuando pasas el mouse */
+.modal-form select option:hover,
+.modal-form select option:checked {
+  background-color: #e0e7ff !important;
+  color: #111827 !important;
+}
+.modal-form select {
+  background-image: none !important;
 }

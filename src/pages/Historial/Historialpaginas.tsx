@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import { es } from "date-fns/locale";
 import "react-datepicker/dist/react-datepicker.css";
 import "./Historialpaginas.css";
+import { obtenerHistorialPorCorreo } from "../../services/HistorialService";
 
 type Registro = {
   fecha: string;
@@ -18,42 +19,79 @@ export default function HistorialPage() {
   const [fechaHasta, setFechaHasta] = useState<Date | null>(null);
   const [registros, setRegistros] = useState<Registro[]>([]);
   const [registrosFiltrados, setRegistrosFiltrados] = useState<Registro[]>([]);
+  const [modalWarning, setModalWarning] = useState(false);
+  const [mensajeWarning, setMensajeWarning] = useState("");
 
+    // Obtenemos el correo del usuario logueado
+  const correoUsuario = (() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      return JSON.parse(storedUser).correo;
+    }
+    return null;
+  })();
 
   useEffect(() => {
-    fetch("http://localhost:8080/v1/control-horario/historial/manuel@usuario.cl")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Error al obtener historial");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        // console.log("Historial desde backend:", data);
+    const cargarRegistros = async () => {
+      if (!correoUsuario) return;
 
-      
-        setRegistros(data);
-        setRegistrosFiltrados(data);
-      })
-      .catch((error) => {
-        console.error("Error en fetch:", error);
-      });
-  }, []);
+      try {
+        const data = await obtenerHistorialPorCorreo(correoUsuario);
+        const registrosFormateados: Registro[] = data.map((item: any) => ({
+          fecha: item.fecha,
+          entrada: item.entrada || "-",
+          inicioColacion: item.inicioColacion || "-",
+          finColacion: item.finColacion || "-",
+          salida: item.salida || "-",
+          total: item.totalHoras || "0",
+        }));
+
+        setRegistros(registrosFormateados);
+        setRegistrosFiltrados(registrosFormateados);
+      } catch (error) {
+        console.error("Error cargando historial:", error);
+      }
+    };
+
+    cargarRegistros();
+  }, [correoUsuario]);
 
   const manejarBusqueda = () => {
+
+    if (fechaDesde && fechaHasta && fechaDesde > fechaHasta) {
+      setMensajeWarning("La fecha 'Desde' no puede ser mayor que la fecha 'Hasta'.");
+      setModalWarning(true);
+      return;
+    }
+
     const filtrados = registros.filter((r) => {
-      const [dia, mes, anio] = r.fecha.split("/").map(Number);
-      const fechaReg = new Date(anio, mes - 1, dia);
+      const [anio, mes, dia] = r.fecha.split("-").map(Number);
+      const fechaReg = new Date(anio, mes - 1, dia); // ← SIN UTC bug
 
-      if (fechaDesde && fechaHasta)
-        return fechaReg >= fechaDesde && fechaReg <= fechaHasta;
-      if (fechaDesde) return fechaReg >= fechaDesde;
-      if (fechaHasta) return fechaReg <= fechaHasta;
+      const desde = fechaDesde
+        ? new Date(fechaDesde.getFullYear(), fechaDesde.getMonth(), fechaDesde.getDate())
+        : null;
 
-      return true;
-    });
+      const hasta = fechaHasta
+        ? new Date(fechaHasta.getFullYear(), fechaHasta.getMonth(), fechaHasta.getDate())
+        : null;
 
-    setRegistrosFiltrados(filtrados);
+        if (desde && hasta) {
+          return fechaReg >= desde && fechaReg <= hasta;
+        }
+
+        if (desde) {
+          return fechaReg >= desde;
+        }
+
+        if (hasta) {
+          return fechaReg <= hasta;
+        }
+
+        return true;
+      });
+
+      setRegistrosFiltrados(filtrados);
   };
 
   const manejarLimpiar = () => {
@@ -66,8 +104,9 @@ export default function HistorialPage() {
   return (
     <div className="dashboard-historial">
       <main className="historial-contenido">
-        <h1 className="historial-titulo">Historial</h1>
+        <h1 className="historial-titulo">Mi Historial</h1>
 
+        {/* FILTROS */}
         <div className="filtros-container">
           <div className="rango-fechas-wrapper">
             <div className="campo-datepicker">
@@ -111,10 +150,8 @@ export default function HistorialPage() {
             </div>
           </div>
         </div>
-
-        {/* NUEVA ESTRUCTURA: Encabezado Separado */}
+        {/* TABLA DESKTOP */}
         <div className="tabla-wrapper desktop-only">
-          {/* ENCABEZADO FIJO FUERA DE LA TABLA */}
           <div className="tabla-header-fixed">
             <div className="tabla-header-cell">Fecha</div>
             <div className="tabla-header-cell">Entrada</div>
@@ -124,7 +161,6 @@ export default function HistorialPage() {
             <div className="tabla-header-cell">Total</div>
           </div>
 
-          {/* TABLA CON SOLO TBODY */}
           <div className="tabla-container-scroll">
             <table className="tabla-sin-header">
               <tbody>
@@ -143,6 +179,7 @@ export default function HistorialPage() {
           </div>
         </div>
 
+        {/* MOBILE */}
         <div className="mobile-only">
           {registrosFiltrados.map((r, i) => (
             <div key={i} className="historial-card">
@@ -167,6 +204,28 @@ export default function HistorialPage() {
             </div>
           ))}
         </div>
+        {modalWarning && (
+          <div className="modal-overlay">
+            <div className="modal-contenido">
+              <h2 className="admin-title" style={{ marginBottom: "20px" }}>
+                Atención
+              </h2>
+
+              <p style={{ textAlign: "center", marginBottom: "25px" }}>
+                {mensajeWarning}
+              </p>
+
+              <div className="modal-actions">
+                <button
+                  className="btn-primario"
+                  onClick={() => setModalWarning(false)}
+                >
+                  Aceptar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );

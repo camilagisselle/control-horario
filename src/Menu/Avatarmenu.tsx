@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../auth/useAuth";
 import "./AvatarMenu.css";
 
 const AvatarMenu = () => {
   const [open, setOpen] = useState(false);
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   const cerrarSesion = () => {
@@ -17,7 +19,7 @@ const AvatarMenu = () => {
         <img src="/avatar.jpeg" alt="Avatar" />
         <div className="user-info">
           <span className="label">Usuario:</span>
-          <strong>Camila Pinilla Cabrera</strong>
+            <strong>{user?.name || "Invitado"}</strong> {}
         </div>
       </div>
 

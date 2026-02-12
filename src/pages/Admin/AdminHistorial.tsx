@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import "./AdminHistorial.css";
-import { listarHistorial } from "../../services/HistorialService";
+import { obtenerTodosLosHistoriales } from "../../services/HistorialService";
 
 interface HistorialItem {
   id: number;
@@ -13,31 +13,6 @@ interface HistorialItem {
   totalHoras: string;
 }
 
-interface UserSummary {
-  id: number;
-  nombre: string;
-  apellido: string;
-  correo: string;
-}
-
-const USUARIOS: UserSummary[] = [
-  { id: 1, nombre: "Camila", apellido: "Pinilla", correo: "camila@indracompany.cl" },
-  { id: 2, nombre: "Noemi", apellido: "Muñoz", correo: "noemi@indracompany.cl" },
-  { id: 3, nombre: "Juanito", apellido: "Pérez", correo: "jperez@indracompany.cl" },
-  { id: 4, nombre: "María", apellido: "López", correo: "m.lopez@indracompany.cl" },
-  { id: 5, nombre: "Carlos", apellido: "Sanhueza", correo: "csanhueza@indracompany.cl" },
-  { id: 6, nombre: "Francisca", apellido: "Andrade", correo: "fandrade@indracompany.cl" },
-  { id: 7, nombre: "Ricardo", apellido: "Morgado", correo: "rmorgado@indracompany.cl" },
-  { id: 8, nombre: "Valentina", apellido: "Rojas", correo: "vrojas@indracompany.cl" },
-  { id: 9, nombre: "Sebastian", apellido: "Vargas", correo: "svargas@indracompany.cl" },
-  { id: 10, nombre: "Javiera", apellido: "Contreras", correo: "jcontreras@indracompany.cl" },
-  { id: 11, nombre: "Andrés", apellido: "Figueroa", correo: "afigueroa@indracompany.cl" },
-  { id: 12, nombre: "Beatriz", apellido: "Solís", correo: "bsolis@indracompany.cl" },
-  { id: 13, nombre: "Matías", apellido: "Fuentes", correo: "mfuentes@indracompany.cl" },
-  { id: 14, nombre: "Daniela", apellido: "Torres", correo: "dtorres@indracompany.cl" },
-  { id: 15, nombre: "Gonzalo", apellido: "Tapia", correo: "gtapia@indracompany.cl" },
-];
-
 const AdminHistorial: React.FC = () => {
   const [historial, setHistorial] = useState<HistorialItem[]>([]);
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState("Todos");
@@ -45,37 +20,30 @@ const AdminHistorial: React.FC = () => {
   const [modalEdicion, setModalEdicion] = useState(false);
   const [registroEditando, setRegistroEditando] = useState<HistorialItem | null>(null);
 
-  // const historial: HistorialItem[] = [
-  //   { id: 1, usuario: "Camila Pinilla", fecha: "2026-01-26", entrada: "08:00", inicioColacion: "13:00", finColacion: "14:00", salida: "18:00", totalHoras: "9.0" },
-  //   { id: 2, usuario: "Noemi Muñoz", fecha: "2026-01-26", entrada: "08:15", inicioColacion: "13:30", finColacion: "14:15", salida: "17:45", totalHoras: "8.75" },
-  //   { id: 3, usuario: "Juanito Pérez", fecha: "2026-01-26", entrada: "08:30", inicioColacion: "13:00", finColacion: "13:30", salida: "17:30", totalHoras: "8.5" },
-  //   { id: 4, usuario: "María López", fecha: "2026-01-26", entrada: "09:00", inicioColacion: "14:00", finColacion: "15:00", salida: "19:00", totalHoras: "9.0" },
-  //   { id: 5, usuario: "Carlos Sanhueza", fecha: "2026-01-26", entrada: "08:05", inicioColacion: "13:00", finColacion: "14:00", salida: "18:05", totalHoras: "9.0" },
-  //   { id: 6, usuario: "Francisca Andrade", fecha: "2026-01-26", entrada: "07:55", inicioColacion: "12:30", finColacion: "13:30", salida: "17:55", totalHoras: "9.0" },
-  //   { id: 7, usuario: "Ricardo Morgado", fecha: "2026-01-26", entrada: "08:10", inicioColacion: "13:15", finColacion: "14:15", salida: "18:10", totalHoras: "9.0" },
-  //   { id: 8, usuario: "Valentina Rojas", fecha: "2026-01-26", entrada: "08:00", inicioColacion: "13:00", finColacion: "14:00", salida: "17:00", totalHoras: "8.0" },
-  //   { id: 9, usuario: "Sebastian Vargas", fecha: "2026-01-26", entrada: "09:15", inicioColacion: "13:30", finColacion: "14:30", salida: "19:15", totalHoras: "9.0" },
-  //   { id: 10, usuario: "Javiera Contreras", fecha: "2026-01-26", entrada: "08:00", inicioColacion: "13:00", finColacion: "14:00", salida: "18:00", totalHoras: "9.0" },
-  //   { id: 11, usuario: "Andrés Figueroa", fecha: "2026-01-26", entrada: "08:20", inicioColacion: "13:00", finColacion: "14:00", salida: "18:20", totalHoras: "9.0" },
-  //   { id: 12, usuario: "Beatriz Solís", fecha: "2026-01-26", entrada: "08:45", inicioColacion: "13:30", finColacion: "14:00", salida: "17:45", totalHoras: "8.5" },
-  //   { id: 13, usuario: "Matías Fuentes", fecha: "2026-01-26", entrada: "08:00", inicioColacion: "13:00", finColacion: "14:00", salida: "18:00", totalHoras: "9.0" },
-  //   { id: 14, usuario: "Daniela Torres", fecha: "2026-01-26", entrada: "08:30", inicioColacion: "13:30", finColacion: "14:30", salida: "18:30", totalHoras: "9.0" },
-  //   { id: 15, usuario: "Gonzalo Tapia", fecha: "2026-01-26", entrada: "08:10", inicioColacion: "13:00", finColacion: "14:00", salida: "17:10", totalHoras: "8.0" },
-  // ];
+  useEffect(() => {
+    const cargarHistorial = async () => {
+      try {
+        const data = await obtenerTodosLosHistoriales();
 
+        const historialFormateado = data.map((item: any) => ({
+          id: item.id,
+          usuario: item.correoUsuario,
+          fecha: item.fecha,
+          entrada: item.entrada,
+          inicioColacion: item.inicioColacion,
+          finColacion: item.finColacion,
+          salida: item.salida,
+          totalHoras: "0" // calcular si es necesario ese dato
+        }));
 
-    useEffect(() => {
-    listarHistorial()
-      .then((data) => {
-        console.log("detalle de fran: " + data);
-        console.log("detalle de data fran: " + JSON.stringify(data, null, 2));
-        setHistorial(data);
-      })
-      .catch((error) => {
-        console.error("Error detalle:", error);
-      });
+        setHistorial(historialFormateado);
+      } catch (error) {
+        console.error("Error cargando historial:", error);
+      }
+    };
+
+    cargarHistorial();
   }, []);
-    
 
   const filasFiltradas = useMemo(() => {
     let resultado = historial;
@@ -96,34 +64,38 @@ const AdminHistorial: React.FC = () => {
     setModalEdicion(true);
   };
 
-  const USUARIOS_NOMBRES = ["Todos", ...USUARIOS.map(u => `${u.nombre} ${u.apellido}`)];
+  const usuariosUnicos = useMemo(() => {
+    const correos = historial.map(h => h.usuario);
+    return ["Todos", ...Array.from(new Set(correos))];
+  }, [historial]);
 
   return (
     <div className="dashboard-historial">
       <main className="historial-contenido">
         <h1 className="historial-titulo">Historial de Usuarios</h1>
-
-       {/* 1. FILTROS */}
-<div className="admin-filtros">
-  <div data-tooltip="Filtrar por empleado" className="filter-wrapper">
-    <select 
-      className="admin-select" 
-      value={usuarioSeleccionado} 
-      onChange={(e) => setUsuarioSeleccionado(e.target.value)}
-    >
-      {USUARIOS_NOMBRES.map(n => <option key={n} value={n}>{n}</option>)}
-    </select>
-  </div>
-
-  <div data-tooltip="Buscar usuario" className="filter-wrapper search-wide">
-    <input 
-      className="admin-search" 
-      placeholder=" 🔍 Buscar por nombre al usuario"
-      value={filtroTabla}
-      onChange={(e) => setFiltroTabla(e.target.value)}
-    />
-  </div>
-</div>
+        {/* 1. FILTROS */}
+        <div className="admin-filtros">
+          <div data-tooltip="Filtrar por empleado" className="filter-wrapper">
+            <select
+              value={usuarioSeleccionado}
+              onChange={(e) => setUsuarioSeleccionado(e.target.value)}
+            >
+              {usuariosUnicos.map(u => (
+                <option key={u} value={u}>
+                  {u}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div data-tooltip="Buscar usuario" className="filter-wrapper search-wide">
+            <input 
+              className="admin-search" 
+              placeholder=" 🔍 Buscar por nombre al usuario"
+              value={filtroTabla}
+              onChange={(e) => setFiltroTabla(e.target.value)}
+            />
+          </div>
+        </div>
 
         {/* 2. TABLA DESKTOP */}
         <div className="tabla-container desktop-only">
@@ -196,7 +168,6 @@ const AdminHistorial: React.FC = () => {
                   Fecha: {registroEditando.fecha.split('-').reverse().join('/')}
                 </span>
               </p>
-
               <div className="grid-campos">
                 <div className="campo">
                   <label>Entrada</label>
@@ -215,7 +186,6 @@ const AdminHistorial: React.FC = () => {
                   <input type="time" defaultValue={registroEditando.salida} />
                 </div>
               </div>
-
               <div className="modal-actions" style={{ marginTop: '30px' }}>
                 <button className="btn-secundario" onClick={() => setModalEdicion(false)}>
                   Cancelar
@@ -230,8 +200,6 @@ const AdminHistorial: React.FC = () => {
             </div>
           </div>
         )}
-
-
       </main>
     </div>
   );
