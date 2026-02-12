@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../auth/auth.context";
+import { useAuth } from "../../auth/useAuth";
 import "./Login.css";
 
 const Login: React.FC = () => {
@@ -43,36 +43,34 @@ const Login: React.FC = () => {
     }
   };
 
-const handleIngresar = async () => {
-  if (!email || !password) {
-    alert("Ingresa correo y contraseña");
-    return;
-  }
-
-  try {
-    setLoading(true);
-
-    // Llamamos a login del provider, ya devuelve LoginResponse
-    const user = await login(email.trim(), password.trim());
-    console.log("LOGIN - data desde useAuth:", user);
-    console.log("LOGIN - TOKEN: ", user.token);
-
-    // Redirección por rol
-    if (user.role === "ROLE_ADMIN") {
-      navigate("/admin/usuarios");
-    } else {
-      navigate("/registro");
+  const handleIngresar = async () => {
+    if (!email || !password) {
+      alert("Ingresa correo y contraseña");
+      return;
     }
 
-  } catch (error) {
-    console.error(error);
-    alert("Credenciales incorrectas");
-  } finally {
-    setLoading(false);
-  }
-};
+    try {
+      setLoading(true);
 
+      // Llamamos a login del provider, devuelve LoginResponse
+      const user = await login(email.trim(), password.trim());
+      console.log("LOGIN - data desde useAuth:", user);
+      console.log("LOGIN - TOKEN: ", user.token);
 
+      // Redirección por rol
+      if (user.role === "ROLE_ADMIN") {
+        navigate("/admin/usuarios");
+      } else {
+        navigate("/registro");
+      }
+
+    } catch (error) {
+      console.error(error);
+      alert("Credenciales incorrectas");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
