@@ -8,7 +8,7 @@ export default function Registro() {
   const [mostrarConfirmado, setMostrarConfirmado] = useState(false);
   const [accion, setAccion] = useState("");
   const [loading, setLoading] = useState(true);
-  const [procesando, setProcesando] = useState(false); // <-- nuevo flag
+  const [procesando, setProcesando] = useState(false);
 
   const [botonesHabilitados, setBotonesHabilitados] = useState({
     entrada: true,
@@ -168,7 +168,7 @@ export default function Registro() {
                 <button
                   key={tipo}
                   onClick={() => abrirConfirmacion(tipo)}
-                  disabled={loading || !botonesHabilitados[key] || mostrarModal || procesando} // <-- aquí
+                  disabled={loading || !botonesHabilitados[key] || mostrarModal || procesando}
                   className={loading || !botonesHabilitados[key] || mostrarModal || procesando ? "deshabilitado" : ""}
                 >
                   {tipo}
