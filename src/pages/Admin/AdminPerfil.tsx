@@ -16,24 +16,16 @@ interface Usuario {
 
 export default function AdminPerfil() {
   const [perfil, setPerfil] = useState<Usuario | null>(null);
-
-  const [passwordActual, setPasswordActual] = useState("");
   const [passwordNueva, setPasswordNueva] = useState("");
-
   const [avatar, setAvatar] = useState("/avatar.jpeg");
   const [mensajeExito, setMensajeExito] = useState(false);
   const [verPassword, setVerPassword] = useState(false);
 
-  // ✅ Traer datos del usuario logueado
+  // Traer datos del usuario logueado
   useEffect(() => {
     detallePerfilUsuario()
-      .then((data) => {
-        console.log("detalle usuario:", data);
-        setPerfil(data);
-      })
-      .catch((error) => {
-        console.error("Error detalle:", error);
-      });
+      .then((data) => setPerfil(data))
+      .catch((error) => console.error("Error detalle:", error));
   }, []);
 
   function cambiarAvatar(e: React.ChangeEvent<HTMLInputElement>) {
@@ -49,24 +41,14 @@ export default function AdminPerfil() {
     if (!perfil) return;
 
     try {
-      // ✅ Actualizar nombre
+      // Actualizar nombre
       await actualizarUsuario(perfil.correo, {
         nombre: perfil.nombre,
       });
 
-      // ✅ Cambiar password solo si se escribió una nueva
+      // Cambiar password solo si se escribió una nueva
       if (passwordNueva) {
-        if (!passwordActual) {
-          alert("Debes ingresar la contraseña actual");
-          return;
-        }
-
-        await cambiarPassword({
-          passwordActual,
-          passwordNueva,
-        });
-
-        setPasswordActual("");
+        await cambiarPassword({ passwordNueva });
         setPasswordNueva("");
       }
 
@@ -119,21 +101,13 @@ export default function AdminPerfil() {
             <input value={perfil?.correo || ""} disabled />
           </div>
 
-          {/* 🔐 PASSWORD */}
-          <div className="input-group">
-            <label>Contraseña actual</label>
-            <input
-              type={verPassword ? "text" : "password"}
-              value={passwordActual}
-              onChange={(e) => setPasswordActual(e.target.value)}
-            />
-          </div>
-
+          {/* 🔐 NUEVA CONTRASEÑA */}
           <div className="input-group">
             <label>Nueva contraseña</label>
             <input
               type={verPassword ? "text" : "password"}
               value={passwordNueva}
+              placeholder={"Ej: 12345"}
               onChange={(e) => setPasswordNueva(e.target.value)}
             />
           </div>

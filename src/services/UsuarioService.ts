@@ -25,7 +25,6 @@ export type PerfilAPI = {
 };
 
 export type CambiarPasswordDTO = {
-  passwordActual: string;
   passwordNueva: string;
 };
 
