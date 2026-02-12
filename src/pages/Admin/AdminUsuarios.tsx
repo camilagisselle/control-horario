@@ -21,6 +21,7 @@ const AdminUsuarios = () => {
   useEffect(() => {
     listarUsuarios()
       .then((data) => {
+        //console.log("Usuarios del backend de admin usuarios:", data);
         setUsuarios(data);
       })
       .catch((error) => {

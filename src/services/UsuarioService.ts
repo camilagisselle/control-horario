@@ -20,7 +20,7 @@ export type CrearUsuarioDTO = {
 
 export const listarUsuarios = async (): Promise<UsuarioAPI[]> => {
   const response = await api.get("/usuario");
-  console.log("token de api: " + response.data);
+  //console.log("token de api: " + response.data);
 
   return response.data;
 };

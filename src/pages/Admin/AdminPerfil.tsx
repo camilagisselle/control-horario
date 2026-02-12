@@ -1,15 +1,37 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { detallePerfilUsuario } from "../../services/PerfilServices";
 import "./AdminPerfil.css";
 
+interface Usuario {
+  id: number;
+  nombre: string;
+  correo: string;
+  estado: number;
+  perfil: {
+    id: number;
+    nombre: string;
+  };
+}
+
 export default function AdminPerfil() {
-  const [nombre, setNombre] = useState("Francisca Andrade");
-  const [correo] = useState("admin@correo.cl");
-  const [telefono, setTelefono] = useState("+56 9 1234 5678");
-  const [cargo, setCargo] = useState("Administrador de Sistema");
-  const [password, setPassword] = useState("12345");
+  const [usuarios, setPerfil] = useState<Usuario>();
+  const [password, setPassword] = useState("Ej: 12345");
   const [avatar, setAvatar] = useState("/avatar.jpeg");
   const [mensajeExito, setMensajeExito] = useState(false);
-  const [verPassword, setVerPassword] = useState(false); // Estado para el checkbox
+  const [verPassword, setVerPassword] = useState(false);
+  
+  // ✅ ESTO SE MANTIENE (useEffect con tu servicio)
+  useEffect(() => {
+    detallePerfilUsuario()
+      .then((data) => {
+        console.log("detalle de noemi:", data);
+        console.log("detalle de data noemi:", data);
+        setPerfil(data);
+      })
+      .catch((error) => {
+        console.error("Error detalle:", error);
+      });
+  }, []);
 
   function cambiarAvatar(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -27,7 +49,7 @@ export default function AdminPerfil() {
 
   return (
     <main className="perfil-contenido">
-      {/* HEADER CON TÍTULO */}
+      {/* HEADER CON TÍTULO - ✅ CAMBIO: perfil-top → perfil-header-top */}
       <div className="perfil-header-top">
         <h1>Perfil Administrador</h1>
       </div>
@@ -49,54 +71,51 @@ export default function AdminPerfil() {
           />
         </div>
 
-        {/* COLUMNA FORMULARIO */}
-        <div className="perfil-info grid-form">
-          <div className="form-group">
+        {/* COLUMNA FORMULARIO - ✅ CAMBIO: quitamos grid-form */}
+        <div className="perfil-info">
+          {/* NOMBRE - ✅ CAMBIO: form-group → input-group */}
+          <div className="input-group">
             <label>Nombre</label>
-            <input value={nombre} onChange={(e) => setNombre(e.target.value)} />
-          </div>
-
-          <div className="form-group">
-            <label>Correo</label>
-            <input value={correo} disabled />
-          </div>
-
-          <div className="form-group">
-            <label>Teléfono</label>
-            <input
-              value={telefono}
-              onChange={(e) => setTelefono(e.target.value)}
+            <input 
+              value={usuarios?.nombre || ''} 
+              onChange={(e) => setPerfil(usuarios)} 
             />
           </div>
 
-          <div className="form-group">
-            <label>Cargo</label>
-            <input value={cargo} onChange={(e) => setCargo(e.target.value)} />
+          {/* CORREO - ✅ CAMBIO: form-group → input-group */}
+          <div className="input-group">
+            <label>Correo</label>
+            <input 
+              value={usuarios?.correo || ''} 
+              disabled 
+            />
           </div>
 
-          <div className="form-group password-group">
+          {/* CONTRASEÑA - ✅ CAMBIO: form-group → input-group */}
+          <div className="input-group">
             <label>Contraseña</label>
             <input
               type={verPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <div className="ver-password-container">
+            {/* ✅ CAMBIO: ver-password-container → checkbox-container */}
+            <label className="checkbox-container">
               <input 
                 type="checkbox" 
-                id="checkVer" 
                 checked={verPassword} 
                 onChange={() => setVerPassword(!verPassword)} 
               />
-              <label htmlFor="checkVer">Ver contraseña</label>
-            </div>
+              <span className="checkbox-text">Ver contraseña</span>
+            </label>
           </div>
+
+          {/* BOTÓN GUARDAR */}
           <button className="btn-guardar" onClick={guardarCambios}>
             Guardar Cambios
           </button>
         </div>
       </div>
-
 
       {/* Modal de éxito */}
       {mensajeExito && (
