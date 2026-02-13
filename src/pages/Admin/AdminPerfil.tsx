@@ -67,7 +67,7 @@ export default function AdminPerfil() {
 
   return (
     <main className="perfil-contenido">
-      <div className="perfil-header-top">
+      <div className="perfil-top">
         <h1>Perfil Administrador</h1>
       </div>
 
@@ -112,20 +112,18 @@ export default function AdminPerfil() {
             <input
               type={verPassword ? "text" : "password"}
               value={passwordNueva}
-              placeholder={"Ej: 12345"}
+              placeholder="Ej: 12345"
               onChange={(e) => setPasswordNueva(e.target.value)}
             />
+            <label className="checkbox-container">
+              <input
+                type="checkbox"
+                checked={verPassword}
+                onChange={(e) => setVerPassword(e.target.checked)}
+              />
+              <span>Ver contraseña</span>
+            </label>
           </div>
-
-          <label className="checkbox-container">
-            <input
-              type="checkbox"
-              checked={verPassword}
-              onChange={() => setVerPassword(!verPassword)}
-            />
-            <span className="checkbox-text">Ver contraseña</span>
-          </label>
-
           <button className="btn-guardar" onClick={guardarCambios}>
             Guardar Cambios
           </button>
