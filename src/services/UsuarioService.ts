@@ -56,7 +56,7 @@ export const actualizarUsuario = async (
 export const cambiarPassword = async (
   data: CambiarPasswordDTO,
 ): Promise<void> => {
-  await api.put(`/usuario/password`, data);
+  await api.put("/usuario/cambiar-password", data);
 };
 
 export const listarPerfiles = async (): Promise<PerfilAPI[]> => {
