@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { detallePerfilUsuario } from "../../services/PerfilServices";
-import "./AdminPerfil.css";
 import { actualizarUsuario, cambiarPassword } from "../../services/UsuarioService";
+import { useAuth } from "../../auth/useAuth";
+import "./AdminPerfil.css";
+
 
 interface Usuario {
   id: number;
@@ -15,6 +17,7 @@ interface Usuario {
 }
 
 export default function AdminPerfil() {
+  const { user } = useAuth();
   const [perfil, setPerfil] = useState<Usuario | null>(null);
   const [passwordNueva, setPasswordNueva] = useState("");
   const [avatar, setAvatar] = useState("/avatar.jpeg");
@@ -23,10 +26,12 @@ export default function AdminPerfil() {
 
   // Traer datos del usuario logueado
   useEffect(() => {
-    detallePerfilUsuario()
+    if (!user?.correo) return;
+
+    detallePerfilUsuario(user.correo)
       .then((data) => setPerfil(data))
       .catch((error) => console.error("Error detalle:", error));
-  }, []);
+  }, [user]);
 
   function cambiarAvatar(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -38,16 +43,16 @@ export default function AdminPerfil() {
   }
 
   const guardarCambios = async () => {
-    if (!perfil) return;
+    if (!perfil || !user?.correo) return;
 
     try {
       // Actualizar nombre
-      await actualizarUsuario(perfil.correo, {
+      await actualizarUsuario(user.correo, {
         nombre: perfil.nombre,
       });
 
-      // Cambiar password solo si se escribió una nueva
-      if (passwordNueva) {
+      // Cambiar password si hay nueva
+      if (passwordNueva.trim()) {
         await cambiarPassword({ passwordNueva });
         setPasswordNueva("");
       }

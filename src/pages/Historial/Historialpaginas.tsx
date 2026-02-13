@@ -113,7 +113,7 @@ export default function HistorialPage() {
   return (
     <div className="dashboard-historial">
       <main className="historial-contenido">
-        <h1 className="historial-titulo">Mi Historial</h1>
+        <h1 className="historial-titulo">Historial</h1>
 
         {/* FILTROS */}
         <div className="filtros-container">

@@ -115,7 +115,7 @@ export default function Perfil() {
             <input
               type={showPassword ? "text" : "password"}
               value={password}
-              placeholder="Dejar vacío para no cambiar"
+              placeholder={"Ej: 12345"}
               onChange={(e) => setPassword(e.target.value)}
             />
             <label className="checkbox-container">
