@@ -36,7 +36,6 @@ export default function Registro() {
 
       try {
         const historial = await obtenerHistorialPorCorreo(correo);
-        console.log("data historial", historial);
 
         const hoy = new Intl.DateTimeFormat("sv-SE", {
           timeZone: "America/Santiago",

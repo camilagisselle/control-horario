@@ -237,6 +237,11 @@
   padding: 5px 10px;
   border-radius: 10px;
 }
+.mensaje-error-fechas {
+  color: #d32f2f;
+  font-weight: 500;
+  margin-top: 8px;
+}
 /* 8. RESPONSIVE */
 @media (max-width: 900px) {
   .desktop-only { display: none; }

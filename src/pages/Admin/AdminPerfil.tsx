@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
-import { detallePerfilUsuario, actualizarUsuario } from "../../services/PerfilServices";
+import { detallePerfilUsuario } from "../../services/PerfilServices";
+import { actualizarUsuario, cambiarPassword } from "../../services/UsuarioService";
 import { useAuth } from "../../auth/useAuth";
 import "./AdminPerfil.css";
+
 
 interface Usuario {
   id: number;
@@ -15,24 +17,20 @@ interface Usuario {
 }
 
 export default function AdminPerfil() {
-  const { user } = useAuth(); // ✅ Obtener el usuario logueado
-  const [usuarios, setPerfil] = useState<Usuario>();
-  const [password, setPassword] = useState("");
+  const { user } = useAuth();
+  const [perfil, setPerfil] = useState<Usuario | null>(null);
+  const [passwordNueva, setPasswordNueva] = useState("");
   const [avatar, setAvatar] = useState("/avatar.jpeg");
   const [mensajeExito, setMensajeExito] = useState(false);
   const [verPassword, setVerPassword] = useState(false);
-  
+
+  // Traer datos del usuario logueado
   useEffect(() => {
     if (!user?.correo) return;
 
-    detallePerfilUsuario(user.correo) // ✅ Pasar el correo
-      .then((data) => {
-        console.log("detalle de usuario:", data);
-        setPerfil(data);
-      })
-      .catch((error) => {
-        console.error("Error detalle:", error);
-      });
+    detallePerfilUsuario(user.correo)
+      .then((data) => setPerfil(data))
+      .catch((error) => console.error("Error detalle:", error));
   }, [user]);
 
   function cambiarAvatar(e: React.ChangeEvent<HTMLInputElement>) {
@@ -45,46 +43,36 @@ export default function AdminPerfil() {
   }
 
   const guardarCambios = async () => {
-    if (!usuarios) return;
+    if (!perfil || !user?.correo) return;
 
     try {
-      // Preparar datos para actualizar
-      const datosActualizados: { nombre?: string; password?: string } = {
-        nombre: usuarios.nombre,
-      };
+      // Actualizar nombre
+      await actualizarUsuario(user.correo, {
+        nombre: perfil.nombre,
+      });
 
-      // Solo agregar password si se escribió algo
-      if (password.trim()) {
-        datosActualizados.password = password;
+      // Cambiar password si hay nueva
+      if (passwordNueva.trim()) {
+        await cambiarPassword({ passwordNueva });
+        setPasswordNueva("");
       }
 
-      // ✅ Llamar a actualizarUsuario (NO actualizarPerfil)
-      await actualizarUsuario(usuarios.correo, datosActualizados);
-
-      // Mostrar mensaje de éxito
       setMensajeExito(true);
       setTimeout(() => setMensajeExito(false), 3000);
 
-      // Limpiar password después de guardar
-      setPassword("");
-      
-      console.log("Perfil actualizado exitosamente");
     } catch (error) {
-      console.error("Error al actualizar perfil:", error);
-      alert("Error al guardar los cambios. Inténtalo nuevamente.");
+      console.error("Error guardando cambios:", error);
     }
   };
 
   return (
     <main className="perfil-contenido">
-      {/* HEADER CON TÍTULO */}
       <div className="perfil-header-top">
         <h1>Perfil Administrador</h1>
       </div>
 
-      {/* TARJETA PERFIL */}
       <div className="perfil-card">
-        {/* COLUMNA AVATAR */}
+        {/* Avatar */}
         <div className="perfil-avatar-grande">
           <label htmlFor="avatarInput">
             <img src={avatar} alt="Avatar" />
@@ -99,53 +87,51 @@ export default function AdminPerfil() {
           />
         </div>
 
-        {/* COLUMNA FORMULARIO */}
+        {/* Formulario */}
         <div className="perfil-info">
-          {/* NOMBRE */}
           <div className="input-group">
             <label>Nombre</label>
-            <input 
-              value={usuarios?.nombre || ''} 
-              onChange={(e) => setPerfil(usuarios ? {...usuarios, nombre: e.target.value} : undefined)} 
+            <input
+              value={perfil?.nombre || ""}
+              onChange={(e) =>
+                setPerfil((prev) =>
+                  prev ? { ...prev, nombre: e.target.value } : prev
+                )
+              }
             />
           </div>
 
-          {/* CORREO */}
           <div className="input-group">
             <label>Correo</label>
-            <input 
-              value={usuarios?.correo || ''} 
-              disabled 
-            />
+            <input value={perfil?.correo || ""} disabled />
           </div>
 
-          {/* CONTRASEÑA */}
+          {/* 🔐 NUEVA CONTRASEÑA */}
           <div className="input-group">
-            <label>Contraseña</label>
+            <label>Nueva contraseña</label>
             <input
               type={verPassword ? "text" : "password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder=""
+              value={passwordNueva}
+              placeholder="Dejar vacío para no cambiar"
+              onChange={(e) => setPasswordNueva(e.target.value)}
             />
-            <label className="checkbox-container">
-              <input 
-                type="checkbox" 
-                checked={verPassword} 
-                onChange={() => setVerPassword(!verPassword)} 
-              />
-              <span className="checkbox-text">Ver contraseña</span>
-            </label>
           </div>
 
-          {/* BOTÓN GUARDAR */}
+          <label className="checkbox-container">
+            <input
+              type="checkbox"
+              checked={verPassword}
+              onChange={() => setVerPassword(!verPassword)}
+            />
+            <span className="checkbox-text">Ver contraseña</span>
+          </label>
+
           <button className="btn-guardar" onClick={guardarCambios}>
             Guardar Cambios
           </button>
         </div>
       </div>
 
-      {/* Modal de éxito */}
       {mensajeExito && (
         <div className="modal-exito-overlay">
           <div className="modal-exito">
