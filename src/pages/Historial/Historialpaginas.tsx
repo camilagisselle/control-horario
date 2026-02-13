@@ -109,6 +109,7 @@ export default function HistorialPage() {
     setRegistrosFiltrados(registros);
   };
 
+
   return (
     <div className="dashboard-historial">
       <main className="historial-contenido">
@@ -129,8 +130,10 @@ export default function HistorialPage() {
                 locale={es}
                 placeholderText="DD/MM/AAAA"
                 className="input-custom-datepicker"
+                portalId="root-portal"
               />
             </div>
+
             <div className="campo-datepicker">
               <label>Hasta:</label>
               <DatePicker
@@ -144,11 +147,17 @@ export default function HistorialPage() {
                 locale={es}
                 placeholderText="DD/MM/AAAA"
                 className="input-custom-datepicker"
+                portalId="root-portal"
               />
             </div>
+
             <div className="grupo-botones-filtros">
-              <button className="btn-historial-buscar" onClick={manejarBusqueda}>BUSCAR</button>
-              <button className="btn-historial-limpiar" onClick={manejarLimpiar}>LIMPIAR</button>
+              <button className="btn-historial-buscar" onClick={manejarBusqueda}>
+                BUSCAR
+              </button>
+              <button className="btn-historial-limpiar" onClick={manejarLimpiar}>
+                LIMPIAR
+              </button>
             </div>
           </div>
         </div>
@@ -186,10 +195,22 @@ export default function HistorialPage() {
           {registrosFiltrados.map((r, i) => (
             <div key={i} className="historial-card">
               <div className="card-fecha">{r.fecha}</div>
-              <div className="card-row"><span>Entrada</span><strong>{r.entrada}</strong></div>
-              <div className="card-row"><span>Inicio colación</span><strong>{r.inicioColacion}</strong></div>
-              <div className="card-row"><span>Fin colación</span><strong>{r.finColacion}</strong></div>
-              <div className="card-row"><span>Salida</span><strong>{r.salida}</strong></div>
+              <div className="card-row">
+                <span>Entrada</span>
+                <strong>{r.entrada}</strong>
+              </div>
+              <div className="card-row">
+                <span>Inicio colación</span>
+                <strong>{r.inicioColacion}</strong>
+              </div>
+              <div className="card-row">
+                <span>Fin colación</span>
+                <strong>{r.finColacion}</strong>
+              </div>
+              <div className="card-row">
+                <span>Salida</span>
+                <strong>{r.salida}</strong>
+              </div>
               <div className="card-total">{r.total}</div>
             </div>
           ))}
