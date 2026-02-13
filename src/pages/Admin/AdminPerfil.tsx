@@ -103,7 +103,7 @@ export default function AdminPerfil() {
 
           {/* 🔐 NUEVA CONTRASEÑA */}
           <div className="input-group">
-            <label>Nueva contraseña</label>
+            <label>Contraseña</label>
             <input
               type={verPassword ? "text" : "password"}
               value={passwordNueva}
