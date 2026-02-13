@@ -19,16 +19,27 @@ export type UsuarioAPI = {
   };
 };
 
-const storedUser = localStorage.getItem("user");
-const correo = storedUser ? JSON.parse(storedUser).correo : "";
-console.log("correo en perfil services: " + correo);
-export const detallePerfilUsuario = async (): Promise<UsuarioAPI> => {
+export const detallePerfilUsuario = async (
+  correo: string
+): Promise<UsuarioAPI> => {
+
+  console.log("correo en perfil services:", correo);
+
   const response = await api.get<UsuarioAPI>(
     `/usuario/${encodeURIComponent(correo)}`
   );
-  
+
   return response.data;
 };
+
+export const actualizarUsuario = async (
+  correo: string,
+  data: { nombre?: string; password?: string }
+) => {
+  const response = await api.put(`/usuario/${encodeURIComponent(correo)}`, data);
+  return response.data;
+};
+
 
 // export const obtenerAccesosPorUsuario = async (
 //   correo: string

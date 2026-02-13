@@ -1,13 +1,39 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAuth } from "../../auth/useAuth";
+import { detallePerfilUsuario, actualizarUsuario } from "../../services/PerfilServices";
 import "./Perfil.css";
 
+interface Usuario {
+  id: number;
+  nombre: string;
+  correo: string;
+  estado: number;
+  perfil: {
+    id: number;
+    nombre: string;
+  };
+}
+
 export default function Perfil() {
-  const [nombre, setNombre] = useState("Camila Pinilla Cabrera");
-  const [correo] = useState("camila@correo.cl"); 
-  const [password, setPassword] = useState("12345");
+  const [usuario, setUsuario] = useState<Usuario | null>(null);
+  const { user } = useAuth(); 
+  const [password, setPassword] = useState("");
   const [avatar, setAvatar] = useState("/avatar.jpeg");
   const [showPassword, setShowPassword] = useState(false);
   const [mensajeExito, setMensajeExito] = useState(false);
+
+  useEffect(() => {
+  if (user?.correo) {
+    detallePerfilUsuario(user.correo)
+      .then((data) => {
+        setUsuario(data);
+      })
+      .catch((error) => {
+        console.error("Error detalle:", error);
+      });
+  }
+}, [user]);
+
 
   const cambiarAvatar = (e: any) => {
     const file = e.target.files[0];
@@ -18,11 +44,32 @@ export default function Perfil() {
     reader.readAsDataURL(file);
   };
 
-  const guardarCambios = () => {
-    console.log("Guardando cambios:", { nombre, password });
+const guardarCambios = async () => {
+  if (!usuario) return;
+
+  try {
+    const datosActualizados: { nombre?: string; password?: string } = {
+      nombre: usuario.nombre,
+    };
+
+    if (password.trim()) {
+      datosActualizados.password = password;
+    }
+
+    await actualizarUsuario(usuario.correo, datosActualizados);
+
     setMensajeExito(true);
     setTimeout(() => setMensajeExito(false), 3000);
-  };
+
+    setPassword("");        // 👈 limpia el input
+    setShowPassword(false); // 👈 vuelve a modo oculto
+
+  } catch (error) {
+    console.error("Error al actualizar:", error);
+  }
+};
+
+
 
   return (
     <main className="perfil-contenido">
@@ -49,12 +96,20 @@ export default function Perfil() {
         <div className="perfil-info">
   <div className="input-group">
     <label>Nombre</label>
-    <input value={nombre} onChange={(e) => setNombre(e.target.value)} />
+    <input
+  value={usuario?.nombre ?? ""}
+  onChange={(e) =>
+    setUsuario((prev) =>
+      prev ? { ...prev, nombre: e.target.value } : prev
+    )
+  }
+/>
+
   </div>
 
   <div className="input-group">
     <label>Correo</label>
-    <input value={correo} disabled />
+    <input value={usuario?.correo ?? ""} disabled />
   </div>
 
   <div className="input-group">
