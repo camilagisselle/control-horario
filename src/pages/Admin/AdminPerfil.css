@@ -1,137 +1,126 @@
-* {
- box-sizing: border-box;
- margin: 0;
- font-family: "Segoe UI", sans-serif;
-}
-
 .perfil-contenido {
- flex: 1;
- display: flex;
- flex-direction: column; /* apila título y tarjeta */
- align-items: center; /* centra ambos */
- padding: 90px 40px 40px; /* espacio para el título */
- position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px;
+  position: relative;
 }
 
-/* Barra superior */
-.perfil-top {
- display: flex;
- justify-content: center;
- align-items: center;
- margin-bottom: 30px;
+/* TÍTULO */
+.perfil-header-top {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 30px;
 }
 
-.perfil-top h1 {
- font-size: 32px; /* Antes era 40px, lo bajamos un poco */
- font-weight: 600; /* Cambiado de 800 a 600 para que no sea tan grueso */
- color: #1f3bb3;
- text-align: center;
- width: 100%;
- letter-spacing: 0.2px; /* Un pequeño espacio entre letras ayuda a la lectura */
+.perfil-header-top h1 {
+  font-size: 32px;
+  font-weight: 600;
+  color: #1f3bb3;
+  letter-spacing: 0.2px;
 }
-/* Tarjeta */
+
+/* TARJETA */
 .perfil-card {
- background: #e9f9f6;
- border-radius: 20px;
- padding: 40px;
- display: flex;
- gap: 40px;
- max-width: 900px;
- margin: 0 auto; /* centra la tarjeta */
- box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
- align-items: flex-start; /* alinea avatar e info desde arriba */
+  background: #e9f9f6;
+  border-radius: 20px;
+  padding: 40px;
+  display: flex;
+  gap: 40px;
+  max-width: 900px;
+  margin: 0 auto;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+  align-items: flex-start;
 }
 
-/* Avatar grande */
+/* AVATAR */
 .perfil-avatar-grande {
- position: relative;
+  position: relative;
+  cursor: pointer;
 }
 
 .perfil-avatar-grande img {
- width: 160px;
- height: 160px;
- border-radius: 50%;
- background: #00bcd4;
- padding: 10px;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: #00bcd4;
+  padding: 10px;
+  object-fit: cover;
 }
 
 .perfil-avatar-grande span {
- position: absolute;
- right: 10px;
- bottom: 10px;
- background: #6a3df0;
- color: white;
- border-radius: 50%;
- padding: 6px;
- font-size: 14px;
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  background: #6a3df0;
+  color: white;
+  border-radius: 50%;
+  padding: 6px;
+  font-size: 14px;
+  cursor: pointer;
 }
-/* Alineación general de la info */
+
+/* FORMULARIO */
 .perfil-info {
- display: flex;
- flex-direction: column;
- gap: 15px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
-/* Fila de cada campo */
-.perfil-info > div {
- display: flex;
- flex-direction: row; /* Cambiamos a fila para que el label esté al lado */
- align-items: center;
- gap: 10px;
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-/* Esto es lo más importante: etiquetas con el mismo ancho */
-.perfil-info label:not(.checkbox-container) {
- width: 90px; 
- font-size: 14px;
- color: #4a6ee0;
- font-weight: 600;
- flex-shrink: 0;
+.input-group label:not(.checkbox-container) {
+  font-size: 14px;
+  color: #4a6ee0;
+  font-weight: 600;
 }
 
-/* Cuadros de llenado uniformes */
-.perfil-info input:not([type="checkbox"]) {
- width: 240px;
- padding: 10px;
- border-radius: 8px;
- border: none;
- background: #f2f6ff;
- font-size: 15px;
- color: #1f3bb3;
+.input-group input:not([type="checkbox"]) {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #e0e7ff;
+  background: #f8faff;
+  font-size: 15px;
+  color: #1f3bb3;
+  outline: none;
 }
 
-/* Ajuste del checkbox para que no se desplace */
+.input-group input:disabled {
+  background: #f0f0f0;
+  cursor: not-allowed;
+}
+
+/* CHECKBOX VER CONTRASEÑA */
 .checkbox-container {
- display: flex;
- align-items: center;
- gap: 4px; /* <--- Se redujo el espacio con el texto */
- margin-left: 10px;
- cursor: pointer;
-}
-
-/* AQUÍ ACHICAMOS EL TEXTO */
-.checkbox-container span {
- font-size: 14px !important; /* <--- Tamaño de letra pequeño */
- color: #4a6ee0;
- white-space: nowrap;
- line-height: 1; /* Asegura que el texto se alinee bien verticalmente con el cuadro */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  cursor: pointer;
 }
 
 .checkbox-container input[type="checkbox"] {
- all: unset !important;
- width: 14px !important; /* Ajustado para que combine con la letra pequeña */
- height: 14px !important;
- border: 1px solid #4a6ee0 !important;
- border-radius: 3px !important;
- appearance: checkbox !important;
- -webkit-appearance: checkbox !important;
- cursor: pointer;
- margin: 0 !important;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
 }
+
+.checkbox-container .checkbox-text {
+  font-size: 13px;
+  color: #6a3df0;
+  font-weight: 600;
+}
+
 /* BOTÓN GUARDAR */
 .btn-guardar {
   width: 100%;
-  max-width: 340px; /* Mismo ancho que los inputs (90px label + 240px input + gap) */
   padding: 12px;
   margin-top: 20px;
   border-radius: 12px;
@@ -142,7 +131,6 @@
   font-size: 16px;
   cursor: pointer;
   transition: all 0.2s ease;
-  align-self: center; /* Centra el botón */
 }
 
 .btn-guardar:hover {
@@ -198,7 +186,30 @@
   font-size: 18px;
   margin: 0;
 }
-
+.cargando-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  font-size: 18px;
+  font-weight: bold;
+  color: #414ac3;
+  border-radius: 12px;
+}
+ 
+.cargando-texto {
+  padding: 20px 30px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
 /* ANIMACIONES */
 @keyframes fadeIn {
   from { opacity: 0; }
@@ -240,20 +251,12 @@
     width: 100%;
   }
 
-  .perfil-info > div {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .perfil-info label:not(.checkbox-container) {
-    width: 100%;
-  }
-
-  .perfil-info input:not([type="checkbox"]) {
-    width: 100%;
+  .perfil-avatar-grande img {
+    width: 120px;
+    height: 120px;
   }
 
   .btn-guardar {
-    max-width: 100%;
+    width: 100%;
   }
 }

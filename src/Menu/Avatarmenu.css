@@ -1,8 +1,9 @@
-.avatar-wrapper {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  z-index: 1100;
+.avatar-wrapper,
+.menuadmin-wrapper { 
+  position: absolute; 
+  top: 20px; 
+  left: 20px; 
+  z-index: 11; /* Más arriba que el fondo blanco */
 }
 
 /* Header clickeable (avatar + nombre) */

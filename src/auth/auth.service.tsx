@@ -22,6 +22,5 @@ export async function login(email: string, password: string): Promise<LoginRespo
   }
 
   const data: LoginResponse = await res.json();
-  console.log("Datos de usuario logueado: ",data);
   return data;
 }

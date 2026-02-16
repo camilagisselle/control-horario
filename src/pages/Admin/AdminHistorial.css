@@ -1,30 +1,27 @@
-/* 1. ESTILOS GLOBALES Y GENERALES */
+
+.admin-page {
+  padding: 30px;
+  background: transparent; /* 🔥 importante */
+}
+
 * {
   box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
   margin: 0;
   padding: 0;
 }
- 
+
 .dashboard-historial {
   min-height: 100vh;
   background: linear-gradient(135deg, #d9f7d6 0%, #c9f2f5 30%, #cfe3ff 65%, #b7d4ff 100%);
   display: flex;
   flex-direction: column;
 }
- 
+
 .historial-contenido {
-  max-width: 1100px;
-  margin: 0 auto;
-  width: 100%;
   padding: 30px;
-  padding-top: 100px;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  position: relative;
 }
- 
+
 .historial-titulo {
   font-size: 28px;
   font-weight: 700;
@@ -32,7 +29,7 @@
   margin-bottom: 48px;
   text-align: center;
 }
- 
+
 /* 2. TABLA Y FILTROS */
 .admin-filtros {
   display: flex;
@@ -40,15 +37,15 @@
   width: 100%;
   margin-bottom: 25px;
 }
- 
+
 .filter-wrapper {
   flex: 1;
 }
- 
+
 .search-wide {
   flex: 3;
 }
- 
+
 .admin-select,
 .admin-search {
   width: 100%;
@@ -63,13 +60,13 @@
   outline: none;
   transition: all 0.2s ease;
 }
- 
+
 .admin-select:focus,
 .admin-search:focus {
   border-color: #9b7bff;
   box-shadow: 0 0 0 3px rgba(155, 123, 255, 0.15);
 }
- 
+
 /* BOTÓN EDITAR */
 .btn-editar-hora {
   background: #7dd3fc;
@@ -85,12 +82,12 @@
   cursor: pointer;
   transition: all 0.2s ease;
 }
- 
+
 .btn-editar-hora:hover {
   background: #38bdf8;
   transform: translateY(-1px) scale(1.05);
 }
- 
+
 /* 3. MODAL */
 .modal-overlay {
   position: fixed;
@@ -104,7 +101,7 @@
   align-items: center;
   z-index: 9999;
 }
- 
+
 .modal-contenido {
   background-color: white !important;
   padding: 40px;
@@ -113,26 +110,26 @@
   max-width: 90%;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
 }
- 
+
 /* GRID CAMPOS DEL MODAL */
 .grid-campos {
   display: flex;
   flex-direction: column;
   gap: 18px;
 }
- 
+
 .campo {
   display: flex;
   flex-direction: column;
 }
- 
+
 .campo label {
   font-weight: 600;
   color: #1f3bb3;
   margin-bottom: 6px;
   font-size: 14px;
 }
- 
+
 /* 🔥 INPUT TIME MODERNIZADO */
 .campo input[type="time"] {
   appearance: none;
@@ -148,26 +145,26 @@
   transition: all 0.25s ease;
   cursor: pointer;
 }
- 
+
 /* Hover elegante */
 .campo input[type="time"]:hover {
   border-color: #9b7bff;
   background: #ffffff;
 }
- 
+
 /* Focus moderno */
 .campo input[type="time"]:focus {
   border-color: #7dd3fc;
   box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.25);
   background: #ffffff;
 }
- 
+
 /* Mejorar icono interno (Chrome) */
 .campo input[type="time"]::-webkit-calendar-picker-indicator {
   opacity: 0.7;
   cursor: pointer;
 }
- 
+
 /* BOTONES DEL MODAL */
 .btn-primario,
 .btn-secundario {
@@ -179,20 +176,20 @@
   color: white;
   font-weight: bold;
 }
- 
+
 .btn-primario {
   background: #9b7bff;
 }
- 
+
 .btn-secundario {
   background: #6366f1;
 }
- 
+
 /* TOOLTIP */
 [data-tooltip] {
   position: relative;
 }
- 
+
 [data-tooltip]::before {
   content: attr(data-tooltip);
   position: absolute;
@@ -212,23 +209,45 @@
   transition: all 0.2s ease;
   z-index: 99999;
 }
- 
+
 [data-tooltip]:hover::before {
   opacity: 1;
   visibility: visible;
   transform: translateX(-50%) translateY(0);
 }
- 
+
 /* MEDIA QUERY */
 .mobile-only {
   display: none;
 }
- 
+
 @media (max-width: 768px) {
   .desktop-only { display: none; }
   .mobile-only { display: block; }
- 
+
   .admin-filtros {
     flex-direction: column;
   }
+}
+
+.dashboard-historial .search-box {
+  position: relative;
+  width: 280px;  
+}
+
+.dashboard-historial .search-box input {
+  width: 100%;
+  height: 42px;
+  padding: 0 36px 0 14px;
+  border-radius: 10px;
+  border: 1px solid #c7d2fe;
+  outline: none;
+  font-size: 14px;
+}
+
+.dashboard-historial .search-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
 }

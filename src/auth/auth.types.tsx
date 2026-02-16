@@ -20,4 +20,5 @@ export interface AuthContextType {
   user: LoginResponse | null;
   login: (email: string, password: string) => Promise<LoginResponse>;
   logout: () => void;
+  updateUser: (data: Partial<LoginResponse>) => void;
 }
