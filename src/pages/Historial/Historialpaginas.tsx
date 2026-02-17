@@ -105,6 +105,7 @@ export default function HistorialPage() {
     return `${String(dia).padStart(2, "0")}/${String(mes).padStart(2, "0")}/${anio}`;
   };
 
+
   return (
     <div className="admin-page">
       <h1 className="historial-titulo">Historial</h1>
