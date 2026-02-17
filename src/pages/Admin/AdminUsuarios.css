@@ -1,13 +1,6 @@
-* {
-  box-sizing: border-box;
-  font-family: "Segoe UI", sans-serif;
-}
-
 .admin-page {
-  min-height: 100vh;
-  padding: 40px;
-  background: linear-gradient(135deg, #d9fbe5, #cfe0ff);
-  position: relative;
+  padding: 30px;
+  background: transparent; /* 🔥 importante */
 }
 
 .admin-title {
@@ -257,6 +250,45 @@ tbody tr:nth-child(even) {
   color: white;
   border: none;
 }
+
+/* ===== PAGINACIÓN ===== */
+
+.paginacion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.paginacion button {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 8px;
+  border: 1px solid #c7d2fe;
+  background: white;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.paginacion button:hover:not(:disabled) {
+  background: #e0e7ff;
+  transform: translateY(-1px);
+}
+
+.paginacion button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.paginacion span {
+  font-size: 13px;
+  font-weight: 500;
+  color: #1f3bb3;
+}
+
 
 @media (max-width: 768px) {
   .admin-page {

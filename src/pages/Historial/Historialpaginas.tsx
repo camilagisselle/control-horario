@@ -22,7 +22,9 @@ export default function HistorialPage() {
   const [modalWarning, setModalWarning] = useState(false);
   const [mensajeWarning, setMensajeWarning] = useState("");
 
-  // Obtenemos el correo del usuario logueadoW
+  const [paginaActual, setPaginaActual] = useState(1);
+  const registrosPorPagina = 5;
+
   const correoUsuario = (() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -37,6 +39,7 @@ export default function HistorialPage() {
 
       try {
         const data = await obtenerHistorialPorCorreo(correoUsuario);
+
         const registrosFormateados: Registro[] = data.map((item: any) => ({
           fecha: item.fecha,
           entrada: item.entrada || "-",
@@ -56,6 +59,11 @@ export default function HistorialPage() {
     cargarRegistros();
   }, [correoUsuario]);
 
+  const indiceUltimo = paginaActual * registrosPorPagina;
+  const indicePrimero = indiceUltimo - registrosPorPagina;
+  const registrosPaginados = registrosFiltrados.slice(indicePrimero, indiceUltimo);
+  const totalPaginas = Math.ceil(registrosFiltrados.length / registrosPorPagina);
+
   const manejarBusqueda = () => {
     if (fechaDesde && fechaHasta && fechaDesde > fechaHasta) {
       setMensajeWarning("La fecha 'Desde' no puede ser mayor que la fecha 'Hasta'.");
@@ -65,179 +73,171 @@ export default function HistorialPage() {
 
     const filtrados = registros.filter((r) => {
       const [anio, mes, dia] = r.fecha.split("-").map(Number);
-      const fechaReg = new Date(anio, mes - 1, dia); // ← SIN UTC bug
+      const fechaReg = new Date(anio, mes - 1, dia);
 
-      const desde = fechaDesde
-        ? new Date(fechaDesde.getFullYear(), fechaDesde.getMonth(), fechaDesde.getDate())
-        : null;
+      let okDesde = true;
+      let okHasta = true;
 
-      const hasta = fechaHasta
-        ? new Date(fechaHasta.getFullYear(), fechaHasta.getMonth(), fechaHasta.getDate())
-        : null;
+      if (fechaDesde) {
+        okDesde = fechaReg >= new Date(fechaDesde.getFullYear(), fechaDesde.getMonth(), fechaDesde.getDate());
+      }
+      if (fechaHasta) {
+        okHasta = fechaReg <= new Date(fechaHasta.getFullYear(), fechaHasta.getMonth(), fechaHasta.getDate());
+      }
 
-        if (desde && hasta) {
-          return fechaReg >= desde && fechaReg <= hasta;
-        }
+      return okDesde && okHasta;
+    });
 
-        if (desde) {
-          return fechaReg >= desde;
-        }
-
-        if (hasta) {
-          return fechaReg <= hasta;
-        }
-
-        return true;
-      });
-
-      setRegistrosFiltrados(filtrados);
-  };
-
-  const formatearFecha = (fecha: string) => {
-    const date = new Date(fecha);
-
-    const dia = String(date.getDate()).padStart(2, "0");
-    const mes = String(date.getMonth() + 1).padStart(2, "0");
-    const anio = date.getFullYear();
-
-    return `${dia}/${mes}/${anio}`;
+    setRegistrosFiltrados(filtrados);
+    setPaginaActual(1);
   };
 
   const manejarLimpiar = () => {
     setFechaDesde(null);
     setFechaHasta(null);
     setRegistrosFiltrados(registros);
+    setPaginaActual(1);
+  };
+
+  // Formateo de fecha sin desfasaje
+  const formatearFecha = (fecha: string) => {
+    const [anio, mes, dia] = fecha.split("-").map(Number);
+    return `${String(dia).padStart(2, "0")}/${String(mes).padStart(2, "0")}/${anio}`;
   };
 
 
   return (
-    <div className="dashboard-historial">
-      <main className="historial-contenido">
-        <h1 className="historial-titulo">Mi Historial</h1>
+    <div className="admin-page">
+      <h1 className="historial-titulo">Historial</h1>
 
-        {/* FILTROS */}
-        <div className="filtros-container">
-          <div className="rango-fechas-wrapper">
-            <div className="campo-datepicker">
-              <label>Desde:</label>
-              <DatePicker
-                selected={fechaDesde}
-                onChange={(date: Date | null) => setFechaDesde(date)}
-                selectsStart
-                startDate={fechaDesde ?? undefined}
-                endDate={fechaHasta ?? undefined}
-                dateFormat="dd/MM/yyyy"
-                locale={es}
-                placeholderText="DD/MM/AAAA"
-                className="input-custom-datepicker"
-                portalId="root-portal"
-              />
+      {/* FILTROS */}
+      <div className="filtros-container">
+        <div className="rango-fechas-wrapper">
+          <div className="campo-datepicker">
+            <label>Desde:</label>
+            <DatePicker
+              selected={fechaDesde}
+              onChange={(date: Date | null) => setFechaDesde(date)}
+              selectsStart
+              startDate={fechaDesde ?? undefined}
+              endDate={fechaHasta ?? undefined}
+              dateFormat="dd/MM/yyyy"
+              locale={es}
+              placeholderText="DD/MM/AAAA"
+              className="input-custom-datepicker"
+              portalId="root-portal"
+            />
+          </div>
+
+          <div className="campo-datepicker">
+            <label>Hasta:</label>
+            <DatePicker
+              selected={fechaHasta}
+              onChange={(date: Date | null) => setFechaHasta(date)}
+              selectsEnd
+              startDate={fechaDesde ?? undefined}
+              endDate={fechaHasta ?? undefined}
+              minDate={fechaDesde ?? undefined}
+              dateFormat="dd/MM/yyyy"
+              locale={es}
+              placeholderText="DD/MM/AAAA"
+              className="input-custom-datepicker"
+              portalId="root-portal"
+            />
+          </div>
+
+          <div className="grupo-botones-filtros">
+            <button className="btn-historial-buscar" onClick={manejarBusqueda}>
+              BUSCAR
+            </button>
+            <button className="btn-historial-limpiar" onClick={manejarLimpiar}>
+              LIMPIAR
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* TABLA */}
+      <div className="tabla-container">
+        <table className="tablaAdminUsuarios">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Entrada</th>
+              <th>Inicio colación</th>
+              <th>Fin colación</th>
+              <th>Salida</th>
+            </tr>
+          </thead>
+          <tbody>
+            {registrosPaginados.map((r, i) => (
+              <tr key={i}>
+                <td>{formatearFecha(r.fecha)}</td>
+                <td>{r.entrada}</td>
+                <td>{r.inicioColacion}</td>
+                <td>{r.finColacion}</td>
+                <td>{r.salida}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <div className="paginacion">
+          <button onClick={() => setPaginaActual(paginaActual - 1)} disabled={paginaActual === 1}>
+            ⬅
+          </button>
+          <span>
+            Página {paginaActual} de {totalPaginas || 1}
+          </span>
+          <button
+            onClick={() => setPaginaActual(paginaActual + 1)}
+            disabled={paginaActual === totalPaginas || totalPaginas === 0}
+          >
+            ➡
+          </button>
+        </div>
+      </div>
+
+      {/* MOBILE */}
+      {/* <div className="mobile-only">
+        {registrosPaginados.map((r, i) => (
+          <div key={i} className="historial-card">
+            <div className="card-fecha">{formatearFecha(r.fecha)}</div>
+            <div className="card-row">
+              <span>Entrada</span>
+              <strong>{r.entrada}</strong>
             </div>
-
-            <div className="campo-datepicker">
-              <label>Hasta:</label>
-              <DatePicker
-                selected={fechaHasta}
-                onChange={(date: Date | null) => setFechaHasta(date)}
-                selectsEnd
-                startDate={fechaDesde ?? undefined}
-                endDate={fechaHasta ?? undefined}
-                minDate={fechaDesde ?? undefined}
-                dateFormat="dd/MM/yyyy"
-                locale={es}
-                placeholderText="DD/MM/AAAA"
-                className="input-custom-datepicker"
-                portalId="root-portal"
-              />
+            <div className="card-row">
+              <span>Inicio colación</span>
+              <strong>{r.inicioColacion}</strong>
             </div>
+            <div className="card-row">
+              <span>Fin colación</span>
+              <strong>{r.finColacion}</strong>
+            </div>
+            <div className="card-row">
+              <span>Salida</span>
+              <strong>{r.salida}</strong>
+            </div>
+          </div>
+        ))}
+      </div> */}
 
-            <div className="grupo-botones-filtros">
-              <button className="btn-historial-buscar" onClick={manejarBusqueda}>
-                BUSCAR
+      {modalWarning && (
+        <div className="modal-overlay">
+          <div className="modal-contenido">
+            <h2 className="admin-title" style={{ marginBottom: "20px" }}>
+              Atención
+            </h2>
+            <p style={{ textAlign: "center", marginBottom: "25px"}}>{mensajeWarning}</p>
+            <div className="modal-actions">
+              <button className="btn-primario" onClick={() => setModalWarning(false)}>
+                Aceptar
               </button>
-              <button className="btn-historial-limpiar" onClick={manejarLimpiar}>
-                LIMPIAR
-              </button>
             </div>
           </div>
         </div>
-        {/* TABLA DESKTOP */}
-        <div className="tabla-wrapper desktop-only">
-          <div className="tabla-header-fixed">
-            <div className="tabla-header-cell">Fecha</div>
-            <div className="tabla-header-cell">Entrada</div>
-            <div className="tabla-header-cell">Inicio colación</div>
-            <div className="tabla-header-cell">Fin colación</div>
-            <div className="tabla-header-cell">Salida</div>
-            <div className="tabla-header-cell">Total</div>
-          </div>
-
-          <div className="tabla-container-scroll">
-            <table className="tabla-sin-header">
-              <tbody>
-                {registrosFiltrados.map((r, i) => (
-                  <tr key={i}>
-                    <td>{formatearFecha(r.fecha)}</td>
-                    <td>{r.entrada}</td>
-                    <td>{r.inicioColacion}</td>
-                    <td>{r.finColacion}</td>
-                    <td>{r.salida}</td>
-                    <td>{r.total}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/* MOBILE */}
-        <div className="mobile-only">
-          {registrosFiltrados.map((r, i) => (
-            <div key={i} className="historial-card">
-              <div className="card-fecha">{r.fecha}</div>
-              <div className="card-row">
-                <span>Entrada</span>
-                <strong>{r.entrada}</strong>
-              </div>
-              <div className="card-row">
-                <span>Inicio colación</span>
-                <strong>{r.inicioColacion}</strong>
-              </div>
-              <div className="card-row">
-                <span>Fin colación</span>
-                <strong>{r.finColacion}</strong>
-              </div>
-              <div className="card-row">
-                <span>Salida</span>
-                <strong>{r.salida}</strong>
-              </div>
-              <div className="card-total">{r.total}</div>
-            </div>
-          ))}
-        </div>
-        {modalWarning && (
-          <div className="modal-overlay">
-            <div className="modal-contenido">
-              <h2 className="admin-title" style={{ marginBottom: "20px" }}>
-                Atención
-              </h2>
-
-              <p style={{ textAlign: "center", marginBottom: "25px" }}>
-                {mensajeWarning}
-              </p>
-
-              <div className="modal-actions">
-                <button
-                  className="btn-primario"
-                  onClick={() => setModalWarning(false)}
-                >
-                  Aceptar
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-      </main>
+      )}
     </div>
   );
 }

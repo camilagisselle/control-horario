@@ -35,6 +35,12 @@ const AdminUsuarios = () => {
   const [error, setError] = useState<string | null>(null);
   const [mensaje, setMensaje] = useState<string | null>(null);
 
+  const [paginaActual, setPaginaActual] = useState(1);
+  const usuariosPorPagina = 5;
+
+  const indiceUltimo = paginaActual * usuariosPorPagina;
+  const indicePrimero = indiceUltimo - usuariosPorPagina;
+
   useEffect(() => {
     cargarUsuarios();
     cargarPerfiles();
@@ -92,7 +98,7 @@ const AdminUsuarios = () => {
       const data: CrearUsuarioDTO = {
         nombre,
         correo,
-        password,
+        password: password.trim(),
         perfilId,
         estado: 1,
       };
@@ -156,7 +162,17 @@ const AdminUsuarios = () => {
   const usuariosFiltrados = usuarios.filter(
     (u) =>
       u.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
-      u.correo.toLowerCase().includes(busqueda.toLowerCase()),
+      u.correo.toLowerCase().includes(busqueda.toLowerCase()) ||
+      u.perfil.perfil_nombre.toLowerCase().includes(busqueda.toLowerCase())
+  );
+
+  const usuariosPaginados = usuariosFiltrados.slice(
+    indicePrimero,
+    indiceUltimo
+  );
+
+  const totalPaginas = Math.ceil(
+    usuariosFiltrados.length / usuariosPorPagina
   );
 
   return (
@@ -188,26 +204,25 @@ const AdminUsuarios = () => {
               <th>Nombre</th>
               <th>Correo</th>
               <th>Perfil</th>
+              <th>Estado</th>
               <th>Acciones</th>
             </tr>
           </thead>
 
           <tbody>
-            {usuariosFiltrados.map((u) => (
+          {usuariosPaginados.map((u) => (
               <tr key={u.correo}>
                 <td>{u.nombre}</td>
                 <td>{u.correo}</td>
                 <td>{u.perfil.perfil_nombre}</td>
-                <td className="accionesAdminUsuarios">
-                  <button
-                    className={`btn-estado ${
+                <td className={`btn-estado ${
                       u.estado === 1 ? "activo" : "inactivo"
                     }`}
                     onClick={() => toggleEstado(u)}
-                  >
+                >                  
                     ●
-                  </button>
-
+               </td>
+                <td className="accionesAdminUsuarios">
                   <button
                     className="btn-accion editar"
                     onClick={() => abrirModalEditar(u)}
@@ -215,12 +230,31 @@ const AdminUsuarios = () => {
                     ✏️
                   </button>
 
-                  <button className="btn-accion eliminar">🗑</button>
+                  {/* <button className="btn-accion eliminar">🗑</button> */}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+        <div className="paginacion">
+          <button
+            onClick={() => setPaginaActual(paginaActual - 1)}
+            disabled={paginaActual === 1}
+          >
+            ⬅
+          </button>
+
+          <span>
+            Página {paginaActual} de {totalPaginas}
+          </span>
+
+          <button
+            onClick={() => setPaginaActual(paginaActual + 1)}
+            disabled={paginaActual === totalPaginas}
+          >
+            ➡
+          </button>
+        </div>
       </div>
 
       {/* MODAL CREAR */}
@@ -296,17 +330,17 @@ const AdminUsuarios = () => {
 
             <div className="modal-actions">
               <button
+                  className="btn-secundario"
+                  onClick={() => setMostrarModal(false)}
+                >
+                  Cancelar
+              </button>
+              <button
                 className="btn-primario"
                 onClick={handleCrear}
                 disabled={cargando}
               >
                 {cargando ? "Guardando..." : "Crear"}
-              </button>
-              <button
-                className="btn-secundario"
-                onClick={() => setMostrarModal(false)}
-              >
-                Cancelar
               </button>
             </div>
           </div>
@@ -367,18 +401,18 @@ const AdminUsuarios = () => {
             {mensaje && <p style={{ color: "#16a34a" }}>{mensaje}</p>}
 
             <div className="modal-actions">
+                <button
+                  className="btn-secundario"
+                  onClick={() => setMostrarModalEditar(false)}
+                >
+                  Cancelar
+              </button>
               <button
                 className="btn-primario"
                 onClick={handleEditar}
                 disabled={cargando}
               >
                 {cargando ? "Guardando..." : "Guardar"}
-              </button>
-              <button
-                className="btn-secundario"
-                onClick={() => setMostrarModalEditar(false)}
-              >
-                Cancelar
               </button>
             </div>
           </div>

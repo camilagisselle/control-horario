@@ -5,18 +5,24 @@ import "./Layout.css";
 
 const Layout = () => {
   const location = useLocation();
-
   const esAdmin = location.pathname.startsWith("/admin");
 
   return (
     <div className="layout">
-      {esAdmin ? <Menuadmin /> : <AvatarMenu />}
 
-      <main className="page-content probando-leseras">
+      {/* HEADER SUPERIOR */}
+      <div className="layout-header">
+        {esAdmin ? <Menuadmin /> : <AvatarMenu />}
+      </div>
 
-          <img src="/krono2.1.png" className="registro-logo" alt="Logo" />
+      {/* CONTENIDO */}
+      <main className="page-content">
         <Outlet />
       </main>
+
+      {/* LOGO */}
+      <img src="/krono2.1.png" className="app-logo" alt="Logo" />
+
     </div>
   );
 };

@@ -4,39 +4,50 @@
   background: linear-gradient(135deg, #c9f7dd, #a7c7ff);
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
-/* Contenedor principal de las páginas */
+.layout-header {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 50;
+}
+/* MENU */
+.layout-header .avatar-wrapper,
+.layout-header .menuadmin-wrapper {
+  position: absolute;
+  top: 30px;   /* ⬅️ misma altura que el logo */
+  left: 20px;
+}
+
+/* LOGO */
+.app-logo {
+  position: absolute;
+  top: -40px;
+  right: -5px;
+  width: 200px;
+  z-index: 100;
+}
+
 .page-content {
   flex: 1;
   display: flex;
   flex-direction: column;
   position: relative;
+  padding-top: 100px;
+}
+body {
+  margin: 0;
 }
 
-/* Logo - Posición desktop */
-.registro-logo {
-  position: absolute;
-  top: -50px;
-  right: 30px;
-  width: 250px;
-  opacity: 0.95;
-  z-index: 10;
-}
+/* MOBILE */
+@media (max-width: 768px) {
 
-/* ⬇️ MODO RESPONSIVO - MUEVE EL LOGO AL FINAL */
-@media (max-width: 900px) {
-  .page-content {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .registro-logo {
-    position: relative !important;
-    top: auto !important;
-    right: auto !important;
-    order: 999; /* Lo envía al final */
-    margin: 40px auto 20px auto;
-    width: 180px; /* Más pequeño en mobile */
+  .app-logo {
+    position: static;        /* 🔥 CLAVE */
+    margin: -35px auto 10px;  /* centra */
+    width: 140px;
   }
 }

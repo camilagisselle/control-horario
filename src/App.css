@@ -1,35 +1,35 @@
-/* Reset y box-sizing */
+/* Reset y box-sizing
 * {
   box-sizing: border-box;
-}
+} */
 
 /* Estilos generales del body */
-body {
+/* body {
   margin: 0;
   font-family: "Segoe UI", sans-serif;
   background-color: #f9f9f9;
-}
+} */
 
 /* Imágenes globales */
-img {
+/* img {
   max-width: 100%;
   height: auto;
-  display: block; /* evita comportamiento inline extraño */
-}
+  display: block;
+} */
 
 /* Links y botones globales */
-a {
+/* a {
   text-decoration: none;
   color: inherit;
-}
+} */
 
-button {
+/* button {
   font-family: inherit;
   cursor: pointer;
   outline: none;
-}
+} */
 
 /* Scroll suave opcional */
-html {
+/* html {
   scroll-behavior: smooth;
-}
+} */

@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
-import { detallePerfilUsuario } from "../../services/PerfilServices";
 import { actualizarUsuario, cambiarPassword } from "../../services/UsuarioService";
 import { useAuth } from "../../auth/useAuth";
 import "./AdminPerfil.css";
-
 
 interface Usuario {
   id: number;
@@ -17,20 +15,27 @@ interface Usuario {
 }
 
 export default function AdminPerfil() {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const [perfil, setPerfil] = useState<Usuario | null>(null);
   const [passwordNueva, setPasswordNueva] = useState("");
   const [avatar, setAvatar] = useState("/avatar.jpeg");
   const [mensajeExito, setMensajeExito] = useState(false);
   const [verPassword, setVerPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  // Traer datos del usuario logueado
-  useEffect(() => {
-    if (!user?.correo) return;
-
-    detallePerfilUsuario(user.correo)
-      .then((data) => setPerfil(data))
-      .catch((error) => console.error("Error detalle:", error));
+    useEffect(() => {
+    if (user) {
+      setPerfil({
+        id: 0,
+        nombre: user.name,
+        correo: user.correo,
+        estado: 1,
+        perfil: {
+          id: 0,
+          nombre: user.role,
+        },
+      });
+    }
   }, [user]);
 
   function cambiarAvatar(e: React.ChangeEvent<HTMLInputElement>) {
@@ -46,10 +51,13 @@ export default function AdminPerfil() {
     if (!perfil || !user?.correo) return;
 
     try {
+      setLoading(true);
       // Actualizar nombre
       await actualizarUsuario(user.correo, {
         nombre: perfil.nombre,
       });
+
+      updateUser({ name: perfil.nombre });
 
       // Cambiar password si hay nueva
       if (passwordNueva.trim()) {
@@ -62,12 +70,14 @@ export default function AdminPerfil() {
 
     } catch (error) {
       console.error("Error guardando cambios:", error);
+    }finally {
+      setLoading(false); // <-- Ocultar cargando
     }
   };
 
   return (
     <main className="perfil-contenido">
-      <div className="perfil-header-top">
+      <div className="perfil-top">
         <h1>Perfil Administrador</h1>
       </div>
 
@@ -107,31 +117,39 @@ export default function AdminPerfil() {
           </div>
 
           {/* 🔐 NUEVA CONTRASEÑA */}
-          <div className="input-group">
-            <label>Nueva contraseña</label>
-            <input
-              type={verPassword ? "text" : "password"}
-              value={passwordNueva}
-              placeholder="Dejar vacío para no cambiar"
-              onChange={(e) => setPasswordNueva(e.target.value)}
-            />
-          </div>
+    <div className="input-group">
+  <label htmlFor="passwordInput">Contraseña</label>
+  <input
+    type={verPassword ? "text" : "password"}
+    id="passwordInput"
+    value={passwordNueva}
+    placeholder="Ej: 12345"
+    onChange={(e) => setPasswordNueva(e.target.value)}
+  />
 
-          <label className="checkbox-container">
-            <input
-              type="checkbox"
-              checked={verPassword}
-              onChange={() => setVerPassword(!verPassword)}
-            />
-            <span className="checkbox-text">Ver contraseña</span>
-          </label>
+  <div className="checkbox-container">
+    <input
+      type="checkbox"
+      id="verPassword"
+      checked={verPassword}
+      onChange={(e) => setVerPassword(e.target.checked)}
+    />
+    <label htmlFor="verPassword">
+      Ver contraseña
+    </label>
+  </div>
+</div>
 
           <button className="btn-guardar" onClick={guardarCambios}>
             Guardar Cambios
           </button>
         </div>
       </div>
-
+      {loading && (
+        <div className="cargando-overlay">
+        <div className="cargando-texto">Guardando, por favor espere...</div>
+        </div>
+      )}
       {mensajeExito && (
         <div className="modal-exito-overlay">
           <div className="modal-exito">

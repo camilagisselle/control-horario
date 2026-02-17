@@ -35,8 +35,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.removeItem("user");
   };
 
+  const updateUser = (data: Partial<LoginResponse>) => {
+    setUser(prev => {
+      if (!prev) return prev;
+
+      const updated = { ...prev, ...data };
+      localStorage.setItem("user", JSON.stringify(updated));
+      return updated;
+    });
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

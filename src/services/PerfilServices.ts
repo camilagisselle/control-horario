@@ -22,9 +22,6 @@ export type UsuarioAPI = {
 export const detallePerfilUsuario = async (
   correo: string
 ): Promise<UsuarioAPI> => {
-
-  console.log("correo en perfil services:", correo);
-
   const response = await api.get<UsuarioAPI>(
     `/usuario/${encodeURIComponent(correo)}`
   );
@@ -39,11 +36,3 @@ export const actualizarUsuario = async (
   const response = await api.put(`/usuario/${encodeURIComponent(correo)}`, data);
   return response.data;
 };
-
-
-// export const obtenerAccesosPorUsuario = async (
-//   correo: string
-// ): Promise<AccesoLog[]> => {
-//   const response = await api.get<AccesoLog[]>(`/acceso-log/${correo}`);
-//   return response.data;
-// };
