@@ -1,47 +1,157 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import "./AdminUsuarios.css";
+import {
+  listarUsuarios,
+  crearUsuario,
+  actualizarUsuario,
+  listarPerfiles,
+} from "../../services/UsuarioService";
+import type {
+  PerfilAPI,
+  UsuarioAPI,
+  CrearUsuarioDTO,
+} from "../../services/UsuarioService";
 
-interface Usuario {
-  id: number;
-  nombre: string;
-  correo: string;
-  rol: "Administrador" | "Colaborador";
-  activo: boolean;
-}
-
-const AdminUsuarios: React.FC = () => {
-  const [usuarios, setUsuarios] = useState<Usuario[]>([
-  { id: 1, nombre: "Camila Pinilla", correo: "camila@indracompany.cl", rol: "Colaborador", activo: true },
-  { id: 2, nombre: "Noemi Muñoz", correo: "noemi@indracompany.cl", rol: "Colaborador", activo: true },
-  { id: 3, nombre: "Juanito Pérez", correo: "jperez@indracompany.cl", rol: "Administrador", activo: true },
-  { id: 4, nombre: "María López", correo: "m.lopez@indracompany.cl", rol: "Colaborador", activo: true },
-  { id: 5, nombre: "Carlos Sanhueza", correo: "csanhueza@indracompany.cl", rol: "Colaborador", activo: true },
-  { id: 6, nombre: "Francisca Andrade", correo: "fandrade@indracompany.cl", rol: "Administrador", activo: true },
-  { id: 7, nombre: "Ricardo Morgado", correo: "rmorgado@indracompany.cl", rol: "Colaborador", activo: true },
-  { id: 8, nombre: "Valentina Rojas", correo: "vrojas@indracompany.cl", rol: "Colaborador", activo: true },
-  { id: 9, nombre: "Sebastian Vargas", correo: "svargas@indracompany.cl", rol: "Colaborador", activo: true },
-  { id: 10, nombre: "Javiera Contreras", correo: "jcontreras@indracompany.cl", rol: "Colaborador", activo: false },
-  { id: 11, nombre: "Andrés Figueroa", correo: "afigueroa@indracompany.cl", rol: "Colaborador", activo: true },
-  { id: 12, nombre: "Beatriz Solís", correo: "bsolis@indracompany.cl", rol: "Colaborador", activo: true },
-  { id: 13, nombre: "Matías Fuentes", correo: "mfuentes@indracompany.cl", rol: "Colaborador", activo: true },
-  { id: 14, nombre: "Daniela Torres", correo: "dtorres@indracompany.cl", rol: "Colaborador", activo: true },
-  { id: 15, nombre: "Gonzalo Tapia", correo: "gtapia@indracompany.cl", rol: "Colaborador", activo: true },
-  ]);
-
+const AdminUsuarios = () => {
+  const [usuarios, setUsuarios] = useState<UsuarioAPI[]>([]);
   const [busqueda, setBusqueda] = useState("");
-  const [modalAbierto, setModalAbierto] = useState(false);
-  const [pokemon, setPokemon] = useState<string>("");
-  const [modoModal, setModoModal] = useState<"nuevo" | "editar">("nuevo");
-  const [usuarioEditando, setUsuarioEditando] = useState<Usuario | null>(null);
 
-  const [form, setForm] = useState({
-    nombre: "",
-    correo: "",
-    password: "",
-    password2: "",
-    rol: "Colaborador" as "Administrador" | "Colaborador",
-    activo: true,
-  });
+  const [perfiles, setPerfiles] = useState<PerfilAPI[]>([]);
+
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [nombre, setNombre] = useState("");
+  const [correo, setCorreo] = useState("");
+  const [password, setPassword] = useState("");
+  const [repetirPassword, setRepetirPassword] = useState("");
+  const [perfilId, setPerfilId] = useState<number | "">("");
+
+  const [mostrarModalEditar, setMostrarModalEditar] = useState(false);
+  const [editarCorreo, setEditarCorreo] = useState("");
+  const [editarNombre, setEditarNombre] = useState("");
+  const [editarPerfilId, setEditarPerfilId] = useState<number | "">("");
+  const [editarEstado, setEditarEstado] = useState(1);
+
+  const [cargando, setCargando] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [mensaje, setMensaje] = useState<string | null>(null);
+
+  useEffect(() => {
+    cargarUsuarios();
+    cargarPerfiles();
+  }, []);
+
+  const cargarUsuarios = async () => {
+    const data = await listarUsuarios();
+    setUsuarios(data);
+  };
+
+  const cargarPerfiles = async () => {
+    const data = await listarPerfiles();
+    setPerfiles(data);
+  };
+
+  const abrirModalCrear = () => {
+    setNombre("");
+    setCorreo("");
+    setPassword("");
+    setRepetirPassword("");
+    setPerfilId("");
+    setError(null);
+    setMensaje(null);
+    setMostrarModal(true);
+  };
+
+  const abrirModalEditar = (usuario: UsuarioAPI) => {
+    setEditarCorreo(usuario.correo);
+    setEditarNombre(usuario.nombre);
+    setEditarPerfilId(usuario.perfil.id);
+    setEditarEstado(usuario.estado);
+    setError(null);
+    setMensaje(null);
+    setMostrarModalEditar(true);
+  };
+
+  const handleCrear = async () => {
+    setError(null);
+    setMensaje(null);
+
+    if (
+      !nombre ||
+      !correo ||
+      !password ||
+      password !== repetirPassword ||
+      perfilId === ""
+    ) {
+      setError("Completa todos los campos correctamente");
+      return;
+    }
+
+    try {
+      setCargando(true);
+
+      const data: CrearUsuarioDTO = {
+        nombre,
+        correo,
+        password,
+        perfilId,
+        estado: 1,
+      };
+
+      await crearUsuario(data);
+      await cargarUsuarios();
+
+      setMensaje("Usuario creado correctamente");
+
+      setTimeout(() => {
+        setMostrarModal(false);
+        setMensaje(null);
+      }, 1200);
+    } catch {
+      setError("Error al crear el usuario");
+    } finally {
+      setCargando(false);
+    }
+  };
+
+  const handleEditar = async () => {
+    setError(null);
+    setMensaje(null);
+
+    if (!editarCorreo || !editarNombre || editarPerfilId === "") {
+      setError("Completa todos los campos");
+      return;
+    }
+
+    try {
+      setCargando(true);
+
+      await actualizarUsuario(editarCorreo, {
+        nombre: editarNombre,
+        estado: editarEstado,
+        perfilId: Number(editarPerfilId),
+      });
+
+      await cargarUsuarios();
+
+      setMensaje("Usuario actualizado correctamente");
+
+      setTimeout(() => {
+        setMostrarModalEditar(false);
+        setMensaje(null);
+      }, 1200);
+    } catch {
+      setError("Error al actualizar el usuario");
+    } finally {
+      setCargando(false);
+    }
+  };
+
+  const toggleEstado = async (usuario: UsuarioAPI) => {
+    await actualizarUsuario(usuario.correo, {
+      estado: usuario.estado === 1 ? 0 : 1,
+    });
+    await cargarUsuarios();
+  };
 
   const usuariosFiltrados = usuarios.filter(
     (u) =>
@@ -49,112 +159,15 @@ const AdminUsuarios: React.FC = () => {
       u.correo.toLowerCase().includes(busqueda.toLowerCase()),
   );
 
-  const toggleEstado = (id: number) => {
-    setUsuarios((prev) =>
-      prev.map((u) => (u.id === id ? { ...u, activo: !u.activo } : u)),
-    );
-  };
-
-  const eliminarUsuario = (id: number) => {
-    if (window.confirm("¿Eliminar usuario?")) {
-      setUsuarios((prev) => prev.filter((u) => u.id !== id));
-    }
-  };
-
-  const abrirNuevoUsuario = () => {
-    setModoModal("nuevo");
-    setUsuarioEditando(null);
-    setForm({
-      nombre: "",
-      correo: "",
-      password: "",
-      password2: "",
-      rol: "Colaborador",
-      activo: true,
-    });
-    setModalAbierto(true);
-  };
-
-  const editarUsuario = (usuario: Usuario) => {
-    setModoModal("editar");
-    setUsuarioEditando(usuario);
-    setForm({
-      nombre: usuario.nombre,
-      correo: usuario.correo,
-      password: "",
-      password2: "",
-      rol: usuario.rol,
-      activo: usuario.activo,
-    });
-    setModalAbierto(true);
-  };
-
-  const cerrarModal = () => {
-    setModalAbierto(false);
-    setUsuarioEditando(null);
-  };
-
-  const guardarUsuario = () => {
-    if (!form.nombre || !form.correo) return;
-
-    if (form.password !== form.password2) {
-      alert("Las contraseñas no coinciden");
-      return;
-    }
-
-    if (modoModal === "editar" && usuarioEditando) {
-      setUsuarios((prev) =>
-        prev.map((u) =>
-          u.id === usuarioEditando.id
-            ? {
-                ...u,
-                nombre: form.nombre,
-                rol: form.rol,
-                activo: form.activo,
-              }
-            : u,
-        ),
-      );
-    } else {
-      setUsuarios((prev) => [
-        ...prev,
-        {
-          id: Date.now(),
-          nombre: form.nombre,
-          correo: form.correo,
-          rol: form.rol,
-          activo: form.activo,
-        },
-      ]);
-    }
-
-    cerrarModal();
-  };
-   const obtenerPokemon = async () => {
-    try {
-      const response = await fetch(
-        "https://pokeapi.co/api/v2/pokemon/pikachu"
-      );
-      const data = await response.json();
-      setPokemon(data.name);
-    } catch (error) {
-      console.error("Error al obtener Pokémon", error);
-    }
-  };
-
   return (
     <div className="admin-page">
+      <h2 className="admin-title">Usuarios</h2>
 
-      <h1 className="admin-title" onClick={obtenerPokemon}>ADMINISTRADOR DE USUARIOS</h1>
-      {pokemon && (
-      <p style={{ textAlign: "center", marginTop: "10px" }}>
-       Pokémon encontrado: <strong>{pokemon}</strong>
-       </p>
-      )}
-
+      {/* BUSCADOR Y BOTÓN */}
       <div className="admin-actions">
         <div className="search-box">
           <input
+            type="text"
             placeholder="Buscar usuario"
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
@@ -162,53 +175,47 @@ const AdminUsuarios: React.FC = () => {
           <span className="search-icon">🔍</span>
         </div>
 
-        <button className="btn-nuevo" onClick={abrirNuevoUsuario}>
+        <button className="btn-nuevo" onClick={abrirModalCrear}>
           Nuevo
         </button>
       </div>
 
-      <div className="tabla-container tablaAdminUsuarios">
-        <table>
+      {/* TABLA */}
+      <div className="tabla-container">
+        <table className="tablaAdminUsuarios">
           <thead>
             <tr>
               <th>Nombre</th>
               <th>Correo</th>
-              <th>Rol</th>
+              <th>Perfil</th>
               <th>Acciones</th>
             </tr>
           </thead>
+
           <tbody>
             {usuariosFiltrados.map((u) => (
-              <tr key={u.id}>
+              <tr key={u.correo}>
                 <td>{u.nombre}</td>
                 <td>{u.correo}</td>
-                <td>{u.rol}</td>
-                <td>
-                  {/* 👇 CONTENEDOR CLAVE */}
-                  <div className="accionesAdminUsuarios">
-                    {/* Solo íconos, sin cuadros */}
-                    <button
-                        className={`btn-estado ${u.activo ? "activo" : "inactivo"}`}
-                        onClick={() => toggleEstado(u.id)}
-                        title={u.activo ? "Usuario activo" : "Usuario inactivo"}
-                    >
-                      ●
-                    </button>
-                    <button
-                        className="btn-accion editar"
-                        onClick={() => editarUsuario(u)}
-                        title="Editar usuario"
-                    >
-                      ✏️
-                    </button>
-                    <button
-                        className="btn-accion eliminar"
-                        onClick={() => eliminarUsuario(u.id)}
-                        title="Eliminar usuario"
-                    >
-                      🗑️
-                    </button>
-                  </div>
+                <td>{u.perfil.perfil_nombre}</td>
+                <td className="accionesAdminUsuarios">
+                  <button
+                    className={`btn-estado ${
+                      u.estado === 1 ? "activo" : "inactivo"
+                    }`}
+                    onClick={() => toggleEstado(u)}
+                  >
+                    ●
+                  </button>
+
+                  <button
+                    className="btn-accion editar"
+                    onClick={() => abrirModalEditar(u)}
+                  >
+                    ✏️
+                  </button>
+
+                  <button className="btn-accion eliminar">🗑</button>
                 </td>
               </tr>
             ))}
@@ -216,96 +223,162 @@ const AdminUsuarios: React.FC = () => {
         </table>
       </div>
 
-      {modalAbierto && (
-        <div className="modal-overlay" onClick={cerrarModal}>
-          <div
-            className="modal-usuario admin-style"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2 className="modal-title">
-              {modoModal === "nuevo" ? "NUEVO USUARIO" : "EDITAR USUARIO"}
-            </h2>
+      {/* MODAL CREAR */}
+      {mostrarModal && (
+        <div className="modal-overlay">
+          <div className="modal-usuario admin-style">
+            <h3 className="modal-title">Agregar usuario</h3>
 
-            <div className="modal-grid admin-grid">
-              <div className="campo campo-full">
-                <label>Nombre</label>
+            <div className="modal-form">
+              <div className="form-group">
+                <label htmlFor="nombre">Nombre</label>
                 <input
-                  value={form.nombre}
-                  onChange={(e) => setForm({ ...form, nombre: e.target.value })}
+                  id="nombre"
+                  type="text"
+                  value={nombre}
+                  onChange={(e) => setNombre(e.target.value)}
                 />
               </div>
 
-              <div className="campo campo-full">
-                <label>Correo</label>
+              <div className="form-group">
+                <label htmlFor="correo">Correo</label>
                 <input
-                  value={form.correo}
-                  disabled={modoModal === "editar"}
-                  className={modoModal === "editar" ? "input-disabled" : ""}
-                  onChange={(e) => setForm({ ...form, correo: e.target.value })}
+                  id="correo"
+                  type="email"
+                  value={correo}
+                  onChange={(e) => setCorreo(e.target.value)}
                 />
               </div>
 
-              <div className="campo">
-                <label>Contraseña</label>
+              <div className="form-group">
+                <label htmlFor="password">Contraseña</label>
                 <input
+                  id="password"
                   type="password"
-                  value={form.password}
-                  onChange={(e) =>
-                    setForm({ ...form, password: e.target.value })
-                  }
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
 
-              <div className="campo">
-                <label>Repetir contraseña</label>
+              <div className="form-group">
+                <label htmlFor="repetirPassword">Repetir contraseña</label>
                 <input
+                  id="repetirPassword"
                   type="password"
-                  value={form.password2}
-                  onChange={(e) =>
-                    setForm({ ...form, password2: e.target.value })
-                  }
+                  value={repetirPassword}
+                  onChange={(e) => setRepetirPassword(e.target.value)}
                 />
               </div>
 
-              <div className="campo">
-                <label>Rol</label>
+              <div className="form-group">
+                <label htmlFor="perfil">Perfil</label>
                 <select
-                  value={form.rol}
+                  id="perfil"
+                  value={perfilId}
                   onChange={(e) =>
-                    setForm({
-                      ...form,
-                      rol: e.target.value as "Administrador" | "Colaborador",
-                    })
+                    setPerfilId(
+                      e.target.value === "" ? "" : Number(e.target.value),
+                    )
                   }
                 >
-                  <option value="Colaborador">Colaborador</option>
-                  <option value="Administrador">Administrador</option>
-                </select>
-              </div>
-
-              <div className="campo">
-                <label>Estado</label>
-                <select
-                  value={form.activo ? "activo" : "inactivo"}
-                  onChange={(e) =>
-                    setForm({
-                      ...form,
-                      activo: e.target.value === "activo",
-                    })
-                  }
-                >
-                  <option value="activo">Activo</option>
-                  <option value="inactivo">Inactivo</option>
+                  <option value="">Seleccionar perfil</option>
+                  {perfiles.map((p) => (
+                    <option key={p.perfil_id} value={p.perfil_id}>
+                      {p.perfil_nombre}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
 
-            <div className="modal-actions admin-actions">
-              <button className="btn-secundario" onClick={cerrarModal}>
+            {error && <p style={{ color: "#dc2626" }}>{error}</p>}
+            {mensaje && <p style={{ color: "#16a34a" }}>{mensaje}</p>}
+
+            <div className="modal-actions">
+              <button
+                className="btn-primario"
+                onClick={handleCrear}
+                disabled={cargando}
+              >
+                {cargando ? "Guardando..." : "Crear"}
+              </button>
+              <button
+                className="btn-secundario"
+                onClick={() => setMostrarModal(false)}
+              >
                 Cancelar
               </button>
-              <button className="btn-primario" onClick={guardarUsuario}>
-                Guardar
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL EDITAR */}
+      {mostrarModalEditar && (
+        <div className="modal-overlay">
+          <div className="modal-usuario admin-style">
+            <h3 className="modal-title">Editar usuario</h3>
+
+            <div className="modal-form">
+              <div className="form-group">
+                <label htmlFor="editarNombre">Nombre</label>
+                <input
+                  id="editarNombre"
+                  type="text"
+                  value={editarNombre}
+                  onChange={(e) => setEditarNombre(e.target.value)}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="editarPerfil">Perfil</label>
+                <select
+                  id="editarPerfil"
+                  value={editarPerfilId}
+                  onChange={(e) =>
+                    setEditarPerfilId(
+                      e.target.value === "" ? "" : Number(e.target.value),
+                    )
+                  }
+                >
+                  <option value="">Seleccionar perfil</option>
+                  {perfiles.map((p) => (
+                    <option key={p.perfil_id} value={p.perfil_id}>
+                      {p.perfil_nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="editarEstado">Estado</label>
+                <select
+                  id="editarEstado"
+                  value={editarEstado}
+                  onChange={(e) => setEditarEstado(Number(e.target.value))}
+                >
+                  <option value={1}>Activo</option>
+                  <option value={0}>Inactivo</option>
+                </select>
+              </div>
+            </div>
+
+            {error && <p style={{ color: "#dc2626" }}>{error}</p>}
+            {mensaje && <p style={{ color: "#16a34a" }}>{mensaje}</p>}
+
+            <div className="modal-actions">
+              <button
+                className="btn-primario"
+                onClick={handleEditar}
+                disabled={cargando}
+              >
+                {cargando ? "Guardando..." : "Guardar"}
+              </button>
+              <button
+                className="btn-secundario"
+                onClick={() => setMostrarModalEditar(false)}
+              >
+                Cancelar
               </button>
             </div>
           </div>

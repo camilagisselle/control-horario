@@ -29,15 +29,6 @@
  width: 100%;
  letter-spacing: 0.2px; /* Un pequeño espacio entre letras ayuda a la lectura */
 }
-
-/* Logo desktop */
-.perfil-logo {
- position: absolute;
- top: -70px;
- right: 0;
- height: 250px;
-}
-
 /* Tarjeta */
 .perfil-card {
  background: #e9f9f6;
@@ -137,53 +128,132 @@
  cursor: pointer;
  margin: 0 !important;
 }
-/* ================= RESPONSIVO (Tablets y Celulares) ================= */
+/* BOTÓN GUARDAR */
+.btn-guardar {
+  width: 100%;
+  max-width: 340px; /* Mismo ancho que los inputs (90px label + 240px input + gap) */
+  padding: 12px;
+  margin-top: 20px;
+  border-radius: 12px;
+  border: none;
+  background: #9b7bff;
+  color: white;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  align-self: center; /* Centra el botón */
+}
 
-@media (max-width: 850px) {
-  .perfil-contenido {
-    /* Este margen es la distancia entre el avatar del header y tu título 'Perfil' */
-    margin-top: 65px !important; 
+.btn-guardar:hover {
+  background: #8b6df5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(155, 123, 255, 0.3);
+}
+
+.btn-guardar:active {
+  transform: translateY(0);
+}
+
+/* MODAL DE ÉXITO */
+.modal-exito-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-exito {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.3s ease;
+}
+
+.exito-icon {
+  width: 60px;
+  height: 60px;
+  background: #22c55e;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  margin: 0 auto 20px;
+  animation: scaleIn 0.4s ease;
+}
+
+.modal-exito h2 {
+  color: #1f3bb3;
+  font-size: 18px;
+  margin: 0;
+}
+
+/* ANIMACIONES */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
   }
-
-  .perfil-top {
-    /* Forzamos espacio extra debajo del título antes de la tarjeta */
-    margin-bottom: 40px; 
-    z-index: 10;
-  }
-
-  .perfil-logo {
-    /* Lo movemos para que no tape el nombre de usuario */
-    top: -100px; 
-    right: 10px;
-    height: 70px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-@media (max-width: 550px) {
-  .perfil-top h1 {
-    font-size: 26px;
+@keyframes scaleIn {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .perfil-card {
+    flex-direction: column;
+    padding: 20px;
+    align-items: center;
   }
 
-  /* Las filas se vuelven columnas en celulares pequeños */
+  .perfil-info {
+    width: 100%;
+  }
+
   .perfil-info > div {
     flex-direction: column;
     align-items: flex-start;
-    gap: 5px;
   }
 
-  /* El label ocupa todo el ancho */
   .perfil-info label:not(.checkbox-container) {
     width: 100%;
   }
 
-  /* El input se expande al ancho total de la tarjeta */
   .perfil-info input:not([type="checkbox"]) {
-    max-width: 100%;
+    width: 100%;
   }
 
-  /* El checkbox se alinea a la izquierda debajo del input */
-  .checkbox-container {
-    margin-left: 0;
-    margin-top: 5px;
+  .btn-guardar {
+    max-width: 100%;
   }
 }

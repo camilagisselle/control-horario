@@ -24,17 +24,6 @@
   flex: 1;
   position: relative;
 }
-
-.logo-img {
-  position: absolute;
-  top: -80px;
-  right: 40px;
-  width: 250px;
-  height: auto;
-  object-fit: contain;
-  z-index: 10;
-}
-
 .historial-titulo {
   font-size: 28px;
   font-weight: 700;
@@ -185,13 +174,4 @@
     flex-direction: column;
   }
 
-  .logo-img {
-    position: relative;
-    top: 0;
-    right: 0;
-    margin: 40px auto 20px auto; 
-    width: 180px; 
-    display: block;
-    opacity: 0.8;
-  }
 }
