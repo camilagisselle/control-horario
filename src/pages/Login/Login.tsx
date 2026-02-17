@@ -54,8 +54,6 @@ const Login: React.FC = () => {
 
       // Llamamos a login del provider, devuelve LoginResponse
       const user = await login(email.trim(), password.trim());
-      console.log("LOGIN - data desde useAuth:", user);
-      console.log("LOGIN - TOKEN: ", user.token);
 
       // Redirección por rol
       if (user.role === "ROLE_ADMIN") {

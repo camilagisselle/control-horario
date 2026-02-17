@@ -13,31 +13,6 @@ interface HistorialItem {
   totalHoras: string;
 }
 
-interface UserSummary {
-  id: number;
-  nombre: string;
-  apellido: string;
-  correo: string;
-}
-
-const USUARIOS: UserSummary[] = [
-  { id: 1, nombre: "Camila", apellido: "Pinilla", correo: "camila@indracompany.cl" },
-  { id: 2, nombre: "Noemi", apellido: "Muñoz", correo: "noemi@indracompany.cl" },
-  { id: 3, nombre: "Juanito", apellido: "Pérez", correo: "jperez@indracompany.cl" },
-  { id: 4, nombre: "María", apellido: "López", correo: "m.lopez@indracompany.cl" },
-  { id: 5, nombre: "Carlos", apellido: "Sanhueza", correo: "csanhueza@indracompany.cl" },
-  { id: 6, nombre: "Francisca", apellido: "Andrade", correo: "fandrade@indracompany.cl" },
-  { id: 7, nombre: "Ricardo", apellido: "Morgado", correo: "rmorgado@indracompany.cl" },
-  { id: 8, nombre: "Valentina", apellido: "Rojas", correo: "vrojas@indracompany.cl" },
-  { id: 9, nombre: "Sebastian", apellido: "Vargas", correo: "svargas@indracompany.cl" },
-  { id: 10, nombre: "Javiera", apellido: "Contreras", correo: "jcontreras@indracompany.cl" },
-  { id: 11, nombre: "Andrés", apellido: "Figueroa", correo: "afigueroa@indracompany.cl" },
-  { id: 12, nombre: "Beatriz", apellido: "Solís", correo: "bsolis@indracompany.cl" },
-  { id: 13, nombre: "Matías", apellido: "Fuentes", correo: "mfuentes@indracompany.cl" },
-  { id: 14, nombre: "Daniela", apellido: "Torres", correo: "dtorres@indracompany.cl" },
-  { id: 15, nombre: "Gonzalo", apellido: "Tapia", correo: "gtapia@indracompany.cl" },
-];
-
 const AdminHistorial: React.FC = () => {
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState("Todos");
   const [filtroTabla, setFiltroTabla] = useState("");
@@ -58,7 +33,7 @@ const AdminHistorial: React.FC = () => {
           inicioColacion: item.inicioColacion,
           finColacion: item.finColacion,
           salida: item.salida,
-          totalHoras: "0" // después lo calculamos
+          totalHoras: "0" // calcular si es necesario ese dato
         }));
 
         setHistorial(historialFormateado);
@@ -69,7 +44,6 @@ const AdminHistorial: React.FC = () => {
 
     cargarHistorial();
   }, []);
-
 
   const filasFiltradas = useMemo(() => {
     let resultado = historial;
@@ -90,34 +64,38 @@ const AdminHistorial: React.FC = () => {
     setModalEdicion(true);
   };
 
-  const USUARIOS_NOMBRES = ["Todos", ...USUARIOS.map(u => `${u.nombre} ${u.apellido}`)];
+  const usuariosUnicos = useMemo(() => {
+    const correos = historial.map(h => h.usuario);
+    return ["Todos", ...Array.from(new Set(correos))];
+  }, [historial]);
 
   return (
     <div className="dashboard-historial">
       <main className="historial-contenido">
         <h1 className="historial-titulo">Historial de Usuarios</h1>
-
-       {/* 1. FILTROS */}
-<div className="admin-filtros">
-  <div data-tooltip="Filtrar por empleado" className="filter-wrapper">
-    <select 
-      className="admin-select" 
-      value={usuarioSeleccionado} 
-      onChange={(e) => setUsuarioSeleccionado(e.target.value)}
-    >
-      {USUARIOS_NOMBRES.map(n => <option key={n} value={n}>{n}</option>)}
-    </select>
-  </div>
-
-  <div data-tooltip="Buscar usuario" className="filter-wrapper search-wide">
-    <input 
-      className="admin-search" 
-      placeholder=" 🔍 Buscar por nombre al usuario"
-      value={filtroTabla}
-      onChange={(e) => setFiltroTabla(e.target.value)}
-    />
-  </div>
-</div>
+        {/* 1. FILTROS */}
+        <div className="admin-filtros">
+          <div data-tooltip="Filtrar por empleado" className="filter-wrapper">
+            <select
+              value={usuarioSeleccionado}
+              onChange={(e) => setUsuarioSeleccionado(e.target.value)}
+            >
+              {usuariosUnicos.map(u => (
+                <option key={u} value={u}>
+                  {u}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div data-tooltip="Buscar usuario" className="filter-wrapper search-wide">
+            <input 
+              className="admin-search" 
+              placeholder=" 🔍 Buscar por nombre al usuario"
+              value={filtroTabla}
+              onChange={(e) => setFiltroTabla(e.target.value)}
+            />
+          </div>
+        </div>
 
         {/* 2. TABLA DESKTOP */}
         <div className="tabla-container desktop-only">
@@ -190,7 +168,6 @@ const AdminHistorial: React.FC = () => {
                   Fecha: {registroEditando.fecha.split('-').reverse().join('/')}
                 </span>
               </p>
-
               <div className="grid-campos">
                 <div className="campo">
                   <label>Entrada</label>
@@ -209,7 +186,6 @@ const AdminHistorial: React.FC = () => {
                   <input type="time" defaultValue={registroEditando.salida} />
                 </div>
               </div>
-
               <div className="modal-actions" style={{ marginTop: '30px' }}>
                 <button className="btn-secundario" onClick={() => setModalEdicion(false)}>
                   Cancelar
@@ -224,8 +200,6 @@ const AdminHistorial: React.FC = () => {
             </div>
           </div>
         )}
-
-
       </main>
     </div>
   );
