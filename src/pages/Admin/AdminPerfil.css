@@ -1,23 +1,19 @@
 * {
   box-sizing: border-box;
-}
-
-body {
   margin: 0;
   font-family: "Segoe UI", sans-serif;
-  background: linear-gradient(135deg, #d9f7d6 0%, #c9f2f5 30%, #cfe3ff 65%, #b7d4ff 100%);
 }
 
 .perfil-contenido {
-  padding: 20px;
-  padding-top: 100px;
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 90px 40px 40px;
   position: relative;
-  min-height: 100vh;
 }
 
+/* TÍTULO */
 .perfil-header-top {
   width: 100%;
   text-align: center;
@@ -25,124 +21,225 @@ body {
 }
 
 .perfil-header-top h1 {
-  font-size: 26px;
+  font-size: 32px;
+  font-weight: 600;
   color: #1f3bb3;
-  font-weight: 700;
+  letter-spacing: 0.2px;
 }
 
-/* TARJETA PRINCIPAL */
+/* TARJETA */
 .perfil-card {
-  display: flex;
-  background: white;
+  background: #e9f9f6;
   border-radius: 20px;
-  padding: 35px; /* Más espacio interno */
-  gap: 30px;
-  width: 95%; /* Ocupa casi todo el ancho disponible */
-  max-width: 900px; /* Permitimos que sea más ancha para que no se corte el texto */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(155, 123, 255, 0.2);
+  padding: 40px;
+  display: flex;
+  gap: 40px;
+  max-width: 900px;
+  margin: 0 auto;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+  align-items: flex-start;
 }
 
+/* AVATAR */
 .perfil-avatar-grande {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 150px;
+  position: relative;
+  cursor: pointer;
 }
 
 .perfil-avatar-grande img {
-  width: 140px;
-  height: 140px;
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
+  background: #00bcd4;
+  padding: 10px;
   object-fit: cover;
-  border: 4px solid #f2f6ff;
 }
 
-/* FORMULARIO - El secreto está en el ancho mínimo */
+.perfil-avatar-grande span {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  background: #6a3df0;
+  color: white;
+  border-radius: 50%;
+  padding: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* FORMULARIO */
 .perfil-info {
   flex: 1;
-}
-
-.grid-form {
-  display: grid;
-  /* Cambiamos 1fr por minmax para que el texto nunca se corte */
-  grid-template-columns: repeat(2, minmax(200px, 1fr)); 
-  gap: 20px;
-}
-
-.form-group {
   display: flex;
   flex-direction: column;
+  gap: 15px;
 }
 
-.form-group label {
-  margin-bottom: 6px;
-  color: #1f3bb3;
-  font-weight: 700; /* Texto más negrita para que se vea claro */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-group label:not(.checkbox-container) {
   font-size: 14px;
-  white-space: nowrap; /* Evita que el nombre del campo se parta en dos líneas */
+  color: #4a6ee0;
+  font-weight: 600;
 }
 
-.form-group input {
+.input-group input:not([type="checkbox"]) {
+  width: 100%;
   padding: 12px;
   border-radius: 10px;
   border: 1px solid #e0e7ff;
   background: #f8faff;
-  color: #1f3bb3;
   font-size: 15px;
-  width: 100%;
+  color: #1f3bb3;
   outline: none;
 }
 
-/* CHECKBOX VER PASSWORD */
-.ver-password-container {
+.input-group input:disabled {
+  background: #f0f0f0;
+  cursor: not-allowed;
+}
+
+/* CHECKBOX VER CONTRASEÑA */
+.checkbox-container {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 10px;
-}
-
-.ver-password-container input {
-  width: 16px !important; /* Forzamos tamaño cuadrado */
-  height: 16px !important;
+  margin-top: 4px;
   cursor: pointer;
 }
 
-.ver-password-container label {
+.checkbox-container input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.checkbox-container .checkbox-text {
   font-size: 13px;
   color: #6a3df0;
   font-weight: 600;
-  cursor: pointer;
 }
 
 /* BOTÓN GUARDAR */
 .btn-guardar {
-  grid-column: 1 / -1;
-  padding: 14px;
+  width: 100%;
+  padding: 12px;
+  margin-top: 20px;
   border-radius: 12px;
   border: none;
   background: #9b7bff;
-  color: #fff;
+  color: white;
   font-weight: 700;
   font-size: 16px;
   cursor: pointer;
-  margin-top: 15px;
-  transition: transform 0.2s;
+  transition: all 0.2s ease;
+}
+
+.btn-guardar:hover {
+  background: #8b6df5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(155, 123, 255, 0.3);
 }
 
 .btn-guardar:active {
-  transform: scale(0.98);
+  transform: translateY(0);
 }
-/* --- MODO RESPONSIVO --- */
-@media (max-width: 850px) {
+
+/* MODAL DE ÉXITO */
+.modal-exito-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-exito {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.3s ease;
+}
+
+.exito-icon {
+  width: 60px;
+  height: 60px;
+  background: #22c55e;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  margin: 0 auto 20px;
+  animation: scaleIn 0.4s ease;
+}
+
+.modal-exito h2 {
+  color: #1f3bb3;
+  font-size: 18px;
+  margin: 0;
+}
+
+/* ANIMACIONES */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
   .perfil-card {
     flex-direction: column;
+    padding: 20px;
     align-items: center;
-    padding: 25px;
   }
 
-  .grid-form {
-    grid-template-columns: 1fr; /* En tablets/celulares una sola columna */
+  .perfil-info {
+    width: 100%;
+  }
+
+  .perfil-avatar-grande img {
+    width: 120px;
+    height: 120px;
+  }
+
+  .btn-guardar {
     width: 100%;
   }
 }

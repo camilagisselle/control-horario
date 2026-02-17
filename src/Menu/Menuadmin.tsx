@@ -2,12 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/useAuth";
 import "./Avatarmenu.css";
+import { useAuth } from "../auth/useAuth";
+
 
 const Menuadmin = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuth();
-
   const cerrarSesion = () => {
     localStorage.removeItem("user");
     navigate("/");
@@ -20,7 +21,7 @@ const Menuadmin = () => {
 
         <div className="user-info">
           <span className="label">Administrador:</span>
-          <strong>{user?.name || "Invitado"}</strong>
+          <strong>{user?.name || "Invitado"}</strong> {}
         </div>
       </div>
 

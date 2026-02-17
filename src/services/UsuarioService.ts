@@ -24,6 +24,10 @@ export type PerfilAPI = {
   perfil_nombre: string;
 };
 
+export type CambiarPasswordDTO = {
+  passwordNueva: string;
+};
+
 export const listarUsuarios = async (): Promise<UsuarioAPI[]> => {
   const response = await api.get("/usuario");
   return response.data;
@@ -47,6 +51,12 @@ export const actualizarUsuario = async (
 ): Promise<UsuarioAPI> => {
   const response = await api.put(`/usuario/${correo}`, data);
   return response.data;
+};
+
+export const cambiarPassword = async (
+  data: CambiarPasswordDTO,
+): Promise<void> => {
+  await api.put("/usuario/cambiar-password", data);
 };
 
 export const listarPerfiles = async (): Promise<PerfilAPI[]> => {

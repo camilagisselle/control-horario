@@ -22,7 +22,7 @@ export default function HistorialPage() {
   const [modalWarning, setModalWarning] = useState(false);
   const [mensajeWarning, setMensajeWarning] = useState("");
 
-    // Obtenemos el correo del usuario logueado
+  // Obtenemos el correo del usuario logueadoW
   const correoUsuario = (() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -57,7 +57,6 @@ export default function HistorialPage() {
   }, [correoUsuario]);
 
   const manejarBusqueda = () => {
-
     if (fechaDesde && fechaHasta && fechaDesde > fechaHasta) {
       setMensajeWarning("La fecha 'Desde' no puede ser mayor que la fecha 'Hasta'.");
       setModalWarning(true);
@@ -92,6 +91,16 @@ export default function HistorialPage() {
       });
 
       setRegistrosFiltrados(filtrados);
+  };
+
+  const formatearFecha = (fecha: string) => {
+    const date = new Date(fecha);
+
+    const dia = String(date.getDate()).padStart(2, "0");
+    const mes = String(date.getMonth() + 1).padStart(2, "0");
+    const anio = date.getFullYear();
+
+    return `${dia}/${mes}/${anio}`;
   };
 
   const manejarLimpiar = () => {
@@ -168,7 +177,7 @@ export default function HistorialPage() {
               <tbody>
                 {registrosFiltrados.map((r, i) => (
                   <tr key={i}>
-                    <td>{r.fecha}</td>
+                    <td>{formatearFecha(r.fecha)}</td>
                     <td>{r.entrada}</td>
                     <td>{r.inicioColacion}</td>
                     <td>{r.finColacion}</td>
