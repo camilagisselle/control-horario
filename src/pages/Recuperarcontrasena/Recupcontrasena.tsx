@@ -1,5 +1,7 @@
 import { useState } from "react";
 import "./RecupContrasena.css";
+import api from "../../services/api";
+
 
 export default function RecupContrasena() {
   const [codigo, setCodigo] = useState("");
@@ -7,20 +9,31 @@ export default function RecupContrasena() {
   const [confirm, setConfirm] = useState("");
   const [mostrarModal, setMostrarModal] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+ const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-    if (!codigo || !password || !confirm) return;
-    if (password !== confirm) return;
+  if (!codigo || !password || !confirm) return;
+  if (password !== confirm) {
+    alert("Las contraseñas no coinciden");
+    return;
+  }
 
-    // Mostrar modal de éxito
+  try {
+    await api.post("/password/change", {
+      token: codigo,
+      nuevaPassword: password,
+    });
+
     setMostrarModal(true);
 
-    // Limpiar campos
     setCodigo("");
     setPassword("");
     setConfirm("");
-  };
+  } catch (error) {
+    console.error(error);
+    alert("Error al cambiar contraseña");
+  }
+};
 
   return (
     <div className="recuperar-container">
