@@ -3,10 +3,38 @@ import "./Recuperarpassword.css";
 
 function RecuperarPassword() {
   const [mostrarModal, setMostrarModal] = useState(false);
+  const [correo, setCorreo] = useState(""); // 👈 NUEVO estado para guardar el email
 
-  const enviarCodigo = () => {
-    // Aquí después puedes conectar el envío real del correo
-    setMostrarModal(true);
+  const enviarCodigo = async () => {
+    if (!correo) {
+      alert("Por favor ingrese un correo");
+      return;
+    }
+
+    try {
+          const response = await fetch(
+      "http://localhost:8080/v1/control-horario/password/request",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            correo: correo,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Error al enviar el correo");
+      }
+
+      // Si todo sale bien mostramos tu modal
+      setMostrarModal(true);
+    } catch (error) {
+      console.error("Error:", error);
+      alert("No se pudo enviar el correo");
+    }
   };
 
   const confirmar = () => {
@@ -27,7 +55,12 @@ function RecuperarPassword() {
         <div className="card">
           <div className="form">
             <label>Ingrese e-mail:</label>
-            <input type="email" placeholder="correo@ejemplo.com" />
+            <input
+              type="email"
+              placeholder="correo@ejemplo.com"
+              value={correo}
+              onChange={(e) => setCorreo(e.target.value)}
+            />
           </div>
 
           <button onClick={enviarCodigo}>Aceptar</button>
