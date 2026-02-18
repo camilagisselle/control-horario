@@ -6,10 +6,10 @@ import "./Avatarmenu.css";
 const Menuadmin = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+
   const cerrarSesion = () => {
-    localStorage.removeItem("user");
-    navigate("/");
+    logout();
   };
 
   return (

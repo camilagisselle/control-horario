@@ -54,7 +54,7 @@ const Login: React.FC = () => {
 
       // Llamamos a login del provider, devuelve LoginResponse
       const user = await login(email.trim(), password.trim());
-
+ 
       // Redirección por rol
       if (user.role === "ROLE_ADMIN") {
         navigate("/admin/usuarios");
