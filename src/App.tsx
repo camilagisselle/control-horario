@@ -8,6 +8,7 @@ import {
 // Public pages
 import Login from "./pages/Login/Login";
 import RecuperarPassword from "./pages/Recuperarcontrasena/Recuperarpassword";
+import RecupContrasena from "./pages/Recuperarcontrasena/Recupcontrasena";
 
 // User pages
 import Registro from "./pages/Registros/Registro";
@@ -23,7 +24,6 @@ import AdminPerfil from "./pages/Admin/AdminPerfil";
 import Layout from "./Layout/Layout";
 import PublicRoute from "./auth/public.Route";
 import RequireAuth from "./auth/require.Auth";
-import RecupContrasena from "./pages/Recuperarcontrasena/Recupcontrasena";
 
 function App() {
   return (
