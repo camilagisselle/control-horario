@@ -1,9 +1,12 @@
 import { useState } from "react";
 import "./Recuperarpassword.css";
+import {useNavigate} from "react-router-dom";
 
 function RecuperarPassword() {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [correo, setCorreo] = useState(""); // 👈 NUEVO estado para guardar el email
+
+    const navigate = useNavigate();
 
   const enviarCodigo = async () => {
     if (!correo) {
@@ -39,6 +42,7 @@ function RecuperarPassword() {
 
   const confirmar = () => {
     setMostrarModal(false);
+      navigate('/');
   };
 
   return (
