@@ -21,6 +21,7 @@ import AdminHistorial from "./pages/Admin/AdminHistorial";
 import AdminPerfil from "./pages/Admin/AdminPerfil";
 // Layout único
 import Layout from "./Layout/Layout";
+import RecupContrasena from "./pages/Recuperarcontrasena/Recupcontrasena.tsx";
 /**
  * RequireAuth:
  * - Checks session from localStorage ("user")
@@ -55,6 +56,7 @@ function App() {
           {/* Public */}
           <Route path="/" element={<Login />} />
           <Route path="/recuperarpassword" element={<RecuperarPassword />} />
+            <Route path="/recupcontrasena" element={<RecupContrasena />} />
 
           {/* Todas las páginas protegidas usan el mismo Layout */}
           <Route

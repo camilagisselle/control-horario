@@ -1,13 +1,15 @@
 import { useState } from "react";
 import "./RecupContrasena.css";
 import api from "../../services/api";
+import {useNavigate} from "react-router-dom";
 
 
-export default function RecupContrasena() {
+function RecupContrasena() {
   const [codigo, setCodigo] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [mostrarModal, setMostrarModal] = useState(false);
+    const navigate = useNavigate();
 
  const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
@@ -33,6 +35,11 @@ export default function RecupContrasena() {
     console.error(error);
     alert("Error al cambiar contraseña");
   }
+};
+
+const confirmar = () => {
+    setMostrarModal(false);
+    navigate('/');
 };
 
   return (
@@ -74,11 +81,12 @@ export default function RecupContrasena() {
         <div className="modal-overlay">
           <div className="modal-box">
             <h2>¡Recuperacion de clave exitosa!</h2>
-            <p>Entrada</p>
-            <button onClick={() => setMostrarModal(false)}>OK</button>
+            <button onClick={confirmar}>OK</button>
           </div>
         </div>
       )}
     </div>
   );
 }
+
+export default RecupContrasena;
