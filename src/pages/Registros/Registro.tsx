@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "./Registro.css";
 import { crearHistorial, obtenerHistorialPorCorreo } from "../../services/HistorialService";
+import axios from "axios";
 
 export default function Registro() {
   const [hora, setHora] = useState("");
