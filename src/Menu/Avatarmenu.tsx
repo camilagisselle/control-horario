@@ -5,12 +5,11 @@ import "./AvatarMenu.css";
 
 const AvatarMenu = () => {
   const [open, setOpen] = useState(false);
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   const cerrarSesion = () => {
-    localStorage.removeItem("user");
-    navigate("/");
+    logout();
   };
 
   return (
