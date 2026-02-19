@@ -45,9 +45,7 @@ export const obtenerHistorialPorCorreo = async (correo: string) => {
   return response.data;
 };
 
-export const listarHistorial = async (): Promise<HistorialItem> => {
+export const listarHistorial = async (): Promise<HistorialItem[]> => {
   const response = await api.get("/historial");
-  console.log("Historial desde el back: " + response.data);
-
   return response.data;
 };
