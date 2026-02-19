@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import "./Registro.css";
-import { crearHistorial, obtenerHistorialPorCorreo } from "../../services/HistorialService";
+import {crearHistorial, type CrearHistorialDTO, obtenerHistorialPorCorreo} from "../../services/HistorialService";
 import axios from "axios";
 
 export default function Registro() {
@@ -53,7 +53,7 @@ export default function Registro() {
         };
 
         if (historial && historial.length > 0) {
-          const registroHoy = historial.find(r => r.fecha === hoy);
+          const registroHoy = historial.find((r: { fecha: string; }) => r.fecha === hoy);
 
           if (registroHoy) {
             if (registroHoy.salida) {
@@ -135,7 +135,7 @@ export default function Registro() {
       day: "2-digit"
     }).format(now);
     const horaActual = now.toLocaleTimeString("sv-SE");
-    const payload: any = { fecha };
+    const payload: CrearHistorialDTO = { fecha };
 
     if (accion === "Entrada") payload.entrada = horaActual;
     if (accion === "Salida") payload.salida = horaActual;
@@ -147,6 +147,12 @@ export default function Registro() {
       actualizarBotones(accion); 
       setTimeout(() => setMostrarConfirmado(true), 200);
     } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 403) {
+          alert("Este equipo no está autorizado para registrar asistencia");
+          return;
+        }
+      }
       console.error("Error registrando:", error);
     } finally {
       setProcesando(false);

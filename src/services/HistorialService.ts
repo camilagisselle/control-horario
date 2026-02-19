@@ -36,7 +36,7 @@ export const crearHistorial = async (
 
   return api.post(`/historial/${correo}`, data, {
     headers: {
-      "X-Device-Id": deviceId,
+      "UUID": deviceId,
     },
   });
 };

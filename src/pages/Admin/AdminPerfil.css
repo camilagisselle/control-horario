@@ -37,7 +37,6 @@
 /* AVATAR */
 .perfil-avatar-grande {
   position: relative;
-  cursor: pointer;
 }
 
 .perfil-avatar-grande img {
