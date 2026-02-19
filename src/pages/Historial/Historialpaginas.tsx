@@ -24,6 +24,7 @@ export default function HistorialPage() {
 
   const [paginaActual, setPaginaActual] = useState(1);
   const registrosPorPagina = 5;
+  const [cargando, setCargando] = useState(true);
 
   const correoUsuario = (() => {
     const storedUser = localStorage.getItem("user");
@@ -35,8 +36,12 @@ export default function HistorialPage() {
 
   useEffect(() => {
     const cargarRegistros = async () => {
-      if (!correoUsuario) return;
+      if (!correoUsuario) {
+        setCargando(false);
+        return;
+      }
 
+      setCargando(true);
       try {
         const data = await obtenerHistorialPorCorreo(correoUsuario);
 
@@ -53,6 +58,8 @@ export default function HistorialPage() {
         setRegistrosFiltrados(registrosFormateados);
       } catch (error) {
         console.error("Error cargando historial:", error);
+      } finally {
+        setCargando(false);
       }
     };
 
@@ -61,12 +68,19 @@ export default function HistorialPage() {
 
   const indiceUltimo = paginaActual * registrosPorPagina;
   const indicePrimero = indiceUltimo - registrosPorPagina;
-  const registrosPaginados = registrosFiltrados.slice(indicePrimero, indiceUltimo);
-  const totalPaginas = Math.ceil(registrosFiltrados.length / registrosPorPagina);
+  const registrosPaginados = registrosFiltrados.slice(
+    indicePrimero,
+    indiceUltimo
+  );
+  const totalPaginas = Math.ceil(
+    registrosFiltrados.length / registrosPorPagina
+  );
 
   const manejarBusqueda = () => {
     if (fechaDesde && fechaHasta && fechaDesde > fechaHasta) {
-      setMensajeWarning("La fecha 'Desde' no puede ser mayor que la fecha 'Hasta'.");
+      setMensajeWarning(
+        "La fecha 'Desde' no puede ser mayor que la fecha 'Hasta'."
+      );
       setModalWarning(true);
       return;
     }
@@ -79,10 +93,22 @@ export default function HistorialPage() {
       let okHasta = true;
 
       if (fechaDesde) {
-        okDesde = fechaReg >= new Date(fechaDesde.getFullYear(), fechaDesde.getMonth(), fechaDesde.getDate());
+        okDesde =
+          fechaReg >=
+          new Date(
+            fechaDesde.getFullYear(),
+            fechaDesde.getMonth(),
+            fechaDesde.getDate()
+          );
       }
       if (fechaHasta) {
-        okHasta = fechaReg <= new Date(fechaHasta.getFullYear(), fechaHasta.getMonth(), fechaHasta.getDate());
+        okHasta =
+          fechaReg <=
+          new Date(
+            fechaHasta.getFullYear(),
+            fechaHasta.getMonth(),
+            fechaHasta.getDate()
+          );
       }
 
       return okDesde && okHasta;
@@ -105,123 +131,124 @@ export default function HistorialPage() {
     return `${String(dia).padStart(2, "0")}/${String(mes).padStart(2, "0")}/${anio}`;
   };
 
-
   return (
     <div className="admin-page">
       <h1 className="historial-titulo">Historial</h1>
 
-      {/* FILTROS */}
-      <div className="filtros-container">
-        <div className="rango-fechas-wrapper">
-          <div className="campo-datepicker">
-            <label>Desde:</label>
-            <DatePicker
-              selected={fechaDesde}
-              onChange={(date: Date | null) => setFechaDesde(date)}
-              selectsStart
-              startDate={fechaDesde ?? undefined}
-              endDate={fechaHasta ?? undefined}
-              dateFormat="dd/MM/yyyy"
-              locale={es}
-              placeholderText="DD/MM/AAAA"
-              className="input-custom-datepicker"
-              portalId="root-portal"
-            />
-          </div>
-
-          <div className="campo-datepicker">
-            <label>Hasta:</label>
-            <DatePicker
-              selected={fechaHasta}
-              onChange={(date: Date | null) => setFechaHasta(date)}
-              selectsEnd
-              startDate={fechaDesde ?? undefined}
-              endDate={fechaHasta ?? undefined}
-              minDate={fechaDesde ?? undefined}
-              dateFormat="dd/MM/yyyy"
-              locale={es}
-              placeholderText="DD/MM/AAAA"
-              className="input-custom-datepicker"
-              portalId="root-portal"
-            />
-          </div>
-
-          <div className="grupo-botones-filtros">
-            <button className="btn-historial-buscar" onClick={manejarBusqueda}>
-              BUSCAR
-            </button>
-            <button className="btn-historial-limpiar" onClick={manejarLimpiar}>
-              LIMPIAR
-            </button>
+      {cargando && (
+        <div className="cargando-overlay">
+          <div className="cargando-contenido">
+            <div className="cargando-texto">Cargando historial...</div>
           </div>
         </div>
-      </div>
+      )}
 
-      {/* TABLA */}
-      <div className="tabla-container">
-        <table className="tablaAdminUsuarios">
-          <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Entrada</th>
-              <th>Inicio colación</th>
-              <th>Fin colación</th>
-              <th>Salida</th>
-            </tr>
-          </thead>
-          <tbody>
-            {registrosPaginados.map((r, i) => (
-              <tr key={i}>
-                <td>{formatearFecha(r.fecha)}</td>
-                <td>{r.entrada}</td>
-                <td>{r.inicioColacion}</td>
-                <td>{r.finColacion}</td>
-                <td>{r.salida}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {!cargando && (
+        <>
+          {/* FILTROS */}
+          <div className="filtros-container">
+            <div className="rango-fechas-wrapper">
+              <div className="campo-datepicker">
+                <label>Desde:</label>
+                <DatePicker
+                  selected={fechaDesde}
+                  onChange={(date: Date | null) => setFechaDesde(date)}
+                  selectsStart
+                  startDate={fechaDesde ?? undefined}
+                  endDate={fechaHasta ?? undefined}
+                  dateFormat="dd/MM/yyyy"
+                  locale={es}
+                  placeholderText="DD/MM/AAAA"
+                  className="input-custom-datepicker"
+                  portalId="root-portal"
+                />
+              </div>
 
-        <div className="paginacion">
-          <button onClick={() => setPaginaActual(paginaActual - 1)} disabled={paginaActual === 1}>
-            ⬅
-          </button>
-          <span>
-            Página {paginaActual} de {totalPaginas || 1}
-          </span>
-          <button
-            onClick={() => setPaginaActual(paginaActual + 1)}
-            disabled={paginaActual === totalPaginas || totalPaginas === 0}
-          >
-            ➡
-          </button>
-        </div>
-      </div>
+              <div className="campo-datepicker">
+                <label>Hasta:</label>
+                <DatePicker
+                  selected={fechaHasta}
+                  onChange={(date: Date | null) => setFechaHasta(date)}
+                  selectsEnd
+                  startDate={fechaDesde ?? undefined}
+                  endDate={fechaHasta ?? undefined}
+                  minDate={fechaDesde ?? undefined}
+                  dateFormat="dd/MM/yyyy"
+                  locale={es}
+                  placeholderText="DD/MM/AAAA"
+                  className="input-custom-datepicker"
+                  portalId="root-portal"
+                />
+              </div>
 
-      {/* MOBILE */}
-      {/* <div className="mobile-only">
-        {registrosPaginados.map((r, i) => (
-          <div key={i} className="historial-card">
-            <div className="card-fecha">{formatearFecha(r.fecha)}</div>
-            <div className="card-row">
-              <span>Entrada</span>
-              <strong>{r.entrada}</strong>
-            </div>
-            <div className="card-row">
-              <span>Inicio colación</span>
-              <strong>{r.inicioColacion}</strong>
-            </div>
-            <div className="card-row">
-              <span>Fin colación</span>
-              <strong>{r.finColacion}</strong>
-            </div>
-            <div className="card-row">
-              <span>Salida</span>
-              <strong>{r.salida}</strong>
+              <div className="grupo-botones-filtros">
+                <button
+                  className="btn-historial-buscar"
+                  onClick={manejarBusqueda}
+                >
+                  BUSCAR
+                </button>
+                <button
+                  className="btn-historial-limpiar"
+                  onClick={manejarLimpiar}
+                >
+                  LIMPIAR
+                </button>
+              </div>
             </div>
           </div>
-        ))}
-      </div> */}
+
+          {/* TABLA */}
+          <div className="tabla-container">
+            {registrosPaginados.length === 0 ? (
+              <div className="tabla-vacia">Sin resultados</div>
+            ) : (
+              <>
+                <table className="tablaAdminUsuarios">
+                  <thead>
+                    <tr>
+                      <th>Fecha</th>
+                      <th>Entrada</th>
+                      <th>Inicio colación</th>
+                      <th>Fin colación</th>
+                      <th>Salida</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {registrosPaginados.map((r, i) => (
+                      <tr key={i}>
+                        <td>{formatearFecha(r.fecha)}</td>
+                        <td>{r.entrada}</td>
+                        <td>{r.inicioColacion}</td>
+                        <td>{r.finColacion}</td>
+                        <td>{r.salida}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+
+                <div className="paginacion">
+                  <button
+                    onClick={() => setPaginaActual(paginaActual - 1)}
+                    disabled={paginaActual === 1}
+                  >
+                    ⬅
+                  </button>
+                  <span>
+                    Página {paginaActual} de {totalPaginas || 1}
+                  </span>
+                  <button
+                    onClick={() => setPaginaActual(paginaActual + 1)}
+                    disabled={paginaActual === totalPaginas || totalPaginas === 0}
+                  >
+                    ➡
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </>
+      )}
 
       {modalWarning && (
         <div className="modal-overlay">
@@ -229,9 +256,14 @@ export default function HistorialPage() {
             <h2 className="admin-title" style={{ marginBottom: "20px" }}>
               Atención
             </h2>
-            <p style={{ textAlign: "center", marginBottom: "25px"}}>{mensajeWarning}</p>
+            <p style={{ textAlign: "center", marginBottom: "25px" }}>
+              {mensajeWarning}
+            </p>
             <div className="modal-actions">
-              <button className="btn-primario" onClick={() => setModalWarning(false)}>
+              <button
+                className="btn-primario"
+                onClick={() => setModalWarning(false)}
+              >
                 Aceptar
               </button>
             </div>

@@ -2,10 +2,13 @@
   background: linear-gradient(135deg, #d9f7d6 0%, #c9f2f5 30%, #cfe3ff 65%, #b7d4ff 100%);
   display: flex;
   flex-direction: column;
+  overflow: visible; /* ✅ AGREGADO */
 }
+
 .historial-contenido {
   padding: 40px 40px 30px;
 }
+
 .historial-titulo {
   font-size: 28px;
   font-weight: 700;
@@ -21,10 +24,13 @@
   justify-content: center;
   width: 100%;
 }
+
 .admin-page {
   padding: 30px;
   background: transparent;
+  overflow: visible; /* ✅ AGREGADO */
 }
+
 .rango-fechas-wrapper {
   display: flex !important;
   flex-direction: row !important;
@@ -107,7 +113,7 @@
   background-color: #9b7bff;
   position: sticky;
   top: 0;
-  z-index: 1; /* 🔥 CAMBIO AQUÍ */
+  z-index: 1;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   flex-shrink: 0;
 }
@@ -130,8 +136,8 @@
 
 .tabla-container-scroll {
   flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow-y: auto; /* Scroll vertical cuando sea necesario */
+  overflow-x: hidden; /* ✅ Sin scroll horizontal */
 }
 
 .tabla-sin-header {
@@ -181,6 +187,44 @@
   border-radius: 10px; 
 }
 
+/* ===== TABLA CONTAINER (si existe) ===== */
+.tabla-container {
+  background: #e7ddff;
+  padding: 18px;
+  border-radius: 14px;
+  overflow-x: auto; /* ✅ Solo horizontal cuando sea necesario */
+  overflow-y: visible; /* ✅ Sin scroll vertical forzado */
+  margin-top: 32px;
+}
+
+table.tablaAdminUsuarios {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  min-width: 600px; /* ✅ Ancho mínimo */
+}
+
+th,
+td {
+  padding: 12px;
+  border-bottom: 1px solid #cfc7ff;
+  font-size: 14px;
+}
+
+.tablaAdminUsuarios thead {
+  color: white;
+  background-color: #9b7bff;
+  font-weight: 700;
+}
+
+tbody tr:hover {
+  background: #f0e8ff;
+}
+
+tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.35);
+}
+
 /* MÓVIL */
 .mobile-only { display: none; }
 
@@ -220,6 +264,17 @@
   color: #1f3bb3;
 }
 
+/* ===== CORRECCIÓN SCROLL PARA PANTALLAS GRANDES ===== */
+@media (min-width: 1200px) {
+  .tabla-container {
+    overflow-x: visible; /* ✅ Sin scroll horizontal en pantallas grandes */
+  }
+  
+  table.tablaAdminUsuarios {
+    min-width: auto;
+  }
+}
+
 @media (max-width: 900px) {
   .desktop-only { display: none; }
   .mobile-only { display: block; }
@@ -235,4 +290,42 @@
 
 .react-datepicker {
   z-index: 10000 !important;
+}
+
+/* Loading Overlay */
+.cargando-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.cargando-contenido {
+  background: white;
+  padding: 40px 60px;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.cargando-texto {
+  font-size: 18px;
+  font-weight: 600;
+  color: #6b4eff;
+}
+/* Mensaje cuando no hay resultados */
+.tabla-vacia {
+  text-align: center;
+  padding: 60px 20px;
+  font-size: 16px;
+  color: #6b7280;
+  font-weight: 500;
+  background: white;
+  border-radius: 12px;
 }

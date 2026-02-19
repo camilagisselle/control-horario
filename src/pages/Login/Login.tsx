@@ -4,13 +4,7 @@ import { useAuth } from "../../auth/useAuth";
 import "./Login.css";
 
 const Login: React.FC = () => {
-  const [avatar, setAvatar] = useState<string>(() => {
-    try {
-      return localStorage.getItem("avatar") || "/avatar.jpeg";
-    } catch {
-      return "/avatar.jpeg";
-    }
-  });
+
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,29 +13,6 @@ const Login: React.FC = () => {
 
   const navigate = useNavigate();
   const { login } = useAuth();
-
-  // Avatar (NO TOCAR)
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-
-    if (file) {
-      const reader = new FileReader();
-
-      reader.onloadend = () => {
-        const dataUrl = reader.result as string;
-
-        setAvatar(dataUrl);
-
-        try {
-          localStorage.setItem("avatar", dataUrl);
-        } catch (err) {
-          console.error("Error guardando avatar:", err);
-        }
-      };
-
-      reader.readAsDataURL(file);
-    }
-  };
 
   const handleIngresar = async () => {
     if (!email || !password) {
@@ -88,18 +59,8 @@ const Login: React.FC = () => {
         <div className="login-card">
           {/* AVATAR */}
           <div className="avatar-container">
-            <label htmlFor="avatar-upload">
-              <img src={avatar} alt="avatar" className="login-avatar" />
-            </label>
-
-            <input
-              id="avatar-upload"
-              type="file"
-              accept="image/*"
-              hidden
-              onChange={handleAvatarChange}
-            />
-          </div>
+           <img src="/avatar.jpeg" alt="avatar" className="login-avatar" />
+        </div>
 
           <h2>Inicio de sesión</h2>
 

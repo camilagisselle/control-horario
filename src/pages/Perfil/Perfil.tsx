@@ -18,7 +18,6 @@ export default function Perfil() {
   const [usuario, setUsuario] = useState<Usuario | null>(null);
   const { user, updateUser } = useAuth();
   const [password, setPassword] = useState("");
-  const [avatar, setAvatar] = useState("/avatar.jpeg");
   const [showPassword, setShowPassword] = useState(false);
   const [mensajeExito, setMensajeExito] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -37,15 +36,6 @@ export default function Perfil() {
       });
     }
   }, [user]);
-
-  const cambiarAvatar = (e: any) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = () => setAvatar(reader.result as string);
-    reader.readAsDataURL(file);
-  };
 
   const guardarCambios = async () => {
     if (!usuario) return;
@@ -74,8 +64,8 @@ export default function Perfil() {
     } catch (error) {
       console.error("Error al actualizar:", error);
       alert("Error al guardar los cambios.");
-    }finally {
-      setLoading(false); // <-- Ocultar cargando
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -88,17 +78,7 @@ export default function Perfil() {
       {/* TARJETA PERFIL */}
       <div className="perfil-card">
         <div className="perfil-avatar-grande">
-          <label htmlFor="avatarInput">
-            <img src={avatar} alt="Avatar" />
-            <span>✏</span>
-          </label>
-          <input
-            id="avatarInput"
-            type="file"
-            accept="image/*"
-            hidden
-            onChange={cambiarAvatar}
-          />
+          <img src="/avatar.jpeg" alt="Avatar" />
         </div>
 
         <div className="perfil-info">
@@ -142,11 +122,13 @@ export default function Perfil() {
           </button>
         </div>
       </div>
+
       {loading && (
         <div className="cargando-overlay">
-        <div className="cargando-texto">Guardando, por favor espere...</div>
+          <div className="cargando-texto">Guardando, por favor espere...</div>
         </div>
       )}
+
       {mensajeExito && (
         <div className="modal-exito-overlay">
           <div className="modal-exito">
