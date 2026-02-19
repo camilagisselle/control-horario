@@ -32,6 +32,7 @@ const AdminUsuarios = () => {
   const [editarEstado, setEditarEstado] = useState(1);
 
   const [cargando, setCargando] = useState(false);
+  const [cargandoInicial, setCargandoInicial] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [mensaje, setMensaje] = useState<string | null>(null);
 
@@ -42,8 +43,16 @@ const AdminUsuarios = () => {
   const indicePrimero = indiceUltimo - usuariosPorPagina;
 
   useEffect(() => {
-    cargarUsuarios();
-    cargarPerfiles();
+    const cargarDatos = async () => {
+      setCargandoInicial(true);
+      try {
+        await cargarUsuarios();
+        await cargarPerfiles();
+      } finally {
+        setCargandoInicial(false);
+      }
+    };
+    cargarDatos();
   }, []);
 
   const cargarUsuarios = async () => {
@@ -179,83 +188,101 @@ const AdminUsuarios = () => {
     <div className="admin-page">
       <h2 className="admin-title">Usuarios</h2>
 
-      {/* BUSCADOR Y BOTÓN */}
-      <div className="admin-actions">
-        <div className="search-box">
-          <input
-            type="text"
-            placeholder="Buscar usuario"
-            value={busqueda}
-            onChange={(e) => setBusqueda(e.target.value)}
-          />
-          <span className="search-icon">🔍</span>
+      {cargandoInicial && (
+        <div className="cargando-overlay">
+          <div className="cargando-contenido">
+            <div className="cargando-texto">Cargando usuarios...</div>
+          </div>
         </div>
+      )}
 
-        <button className="btn-nuevo" onClick={abrirModalCrear}>
-          Nuevo
-        </button>
-      </div>
+      {!cargandoInicial && (
+        <>
+          {/* BUSCADOR Y BOTÓN */}
+          <div className="admin-actions">
+            <div className="search-box">
+              <input
+                type="text"
+                placeholder="Buscar usuario"
+                value={busqueda}
+                onChange={(e) => setBusqueda(e.target.value)}
+              />
+              <span className="search-icon">🔍</span>
+            </div>
 
-      {/* TABLA */}
-      <div className="tabla-container">
-        <table className="tablaAdminUsuarios">
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Correo</th>
-              <th>Perfil</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
+            <button className="btn-nuevo" onClick={abrirModalCrear}>
+              Nuevo
+            </button>
+          </div>
 
-          <tbody>
-          {usuariosPaginados.map((u) => (
-              <tr key={u.correo}>
-                <td>{u.nombre}</td>
-                <td>{u.correo}</td>
-                <td>{u.perfil.perfil_nombre}</td>
-                <td className={`btn-estado ${
-                      u.estado === 1 ? "activo" : "inactivo"
-                    }`}
-                    onClick={() => toggleEstado(u)}
-                >                  
-                    ●
-               </td>
-                <td className="accionesAdminUsuarios">
+          {/* TABLA */}
+          <div className="tabla-container">
+            {usuariosPaginados.length === 0 ? (
+              <div className="tabla-vacia">Sin resultados</div>
+            ) : (
+              <>
+                <table className="tablaAdminUsuarios">
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Correo</th>
+                      <th>Perfil</th>
+                      <th>Estado</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {usuariosPaginados.map((u) => (
+                      <tr key={u.correo}>
+                        <td>{u.nombre}</td>
+                        <td>{u.correo}</td>
+                        <td>{u.perfil.perfil_nombre}</td>
+                        <td
+                          className={`btn-estado ${
+                            u.estado === 1 ? "activo" : "inactivo"
+                          }`}
+                          onClick={() => toggleEstado(u)}
+                        >
+                          ●
+                        </td>
+                        <td className="accionesAdminUsuarios">
+                          <button
+                            className="btn-accion editar"
+                            onClick={() => abrirModalEditar(u)}
+                          >
+                            ✏️
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+
+                <div className="paginacion">
                   <button
-                    className="btn-accion editar"
-                    onClick={() => abrirModalEditar(u)}
+                    onClick={() => setPaginaActual(paginaActual - 1)}
+                    disabled={paginaActual === 1}
                   >
-                    ✏️
+                    ⬅
                   </button>
 
-                  {/* <button className="btn-accion eliminar">🗑</button> */}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className="paginacion">
-          <button
-            onClick={() => setPaginaActual(paginaActual - 1)}
-            disabled={paginaActual === 1}
-          >
-            ⬅
-          </button>
+                  <span>
+                    Página {paginaActual} de {totalPaginas}
+                  </span>
 
-          <span>
-            Página {paginaActual} de {totalPaginas}
-          </span>
-
-          <button
-            onClick={() => setPaginaActual(paginaActual + 1)}
-            disabled={paginaActual === totalPaginas}
-          >
-            ➡
-          </button>
-        </div>
-      </div>
+                  <button
+                    onClick={() => setPaginaActual(paginaActual + 1)}
+                    disabled={paginaActual === totalPaginas}
+                  >
+                    ➡
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </>
+      )}
 
       {/* MODAL CREAR */}
       {mostrarModal && (
@@ -311,7 +338,7 @@ const AdminUsuarios = () => {
                   value={perfilId}
                   onChange={(e) =>
                     setPerfilId(
-                      e.target.value === "" ? "" : Number(e.target.value),
+                      e.target.value === "" ? "" : Number(e.target.value)
                     )
                   }
                 >
@@ -330,10 +357,11 @@ const AdminUsuarios = () => {
 
             <div className="modal-actions">
               <button
-                  className="btn-secundario"
-                  onClick={() => setMostrarModal(false)}
-                >
-                  Cancelar
+                className="btn-secundario"
+                onClick={() => setMostrarModal(false)}
+                disabled={cargando}
+              >
+                Cancelar
               </button>
               <button
                 className="btn-primario"
@@ -371,7 +399,7 @@ const AdminUsuarios = () => {
                   value={editarPerfilId}
                   onChange={(e) =>
                     setEditarPerfilId(
-                      e.target.value === "" ? "" : Number(e.target.value),
+                      e.target.value === "" ? "" : Number(e.target.value)
                     )
                   }
                 >
@@ -401,11 +429,12 @@ const AdminUsuarios = () => {
             {mensaje && <p style={{ color: "#16a34a" }}>{mensaje}</p>}
 
             <div className="modal-actions">
-                <button
-                  className="btn-secundario"
-                  onClick={() => setMostrarModalEditar(false)}
-                >
-                  Cancelar
+              <button
+                className="btn-secundario"
+                onClick={() => setMostrarModalEditar(false)}
+                disabled={cargando}
+              >
+                Cancelar
               </button>
               <button
                 className="btn-primario"

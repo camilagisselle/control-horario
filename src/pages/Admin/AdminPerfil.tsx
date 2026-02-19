@@ -18,7 +18,6 @@ export default function AdminPerfil() {
   const { user, updateUser } = useAuth();
   const [perfil, setPerfil] = useState<Usuario | null>(null);
   const [passwordNueva, setPasswordNueva] = useState("");
-  const [avatar, setAvatar] = useState("/avatar.jpeg");
   const [mensajeExito, setMensajeExito] = useState(false);
   const [verPassword, setVerPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -37,15 +36,6 @@ export default function AdminPerfil() {
       });
     }
   }, [user]);
-
-  function cambiarAvatar(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = () => setAvatar(reader.result as string);
-    reader.readAsDataURL(file);
-  }
 
   const guardarCambios = async () => {
     if (!perfil || !user?.correo) return;
@@ -84,17 +74,7 @@ export default function AdminPerfil() {
       <div className="perfil-card">
         {/* Avatar */}
         <div className="perfil-avatar-grande">
-          <label htmlFor="avatarInput">
-            <img src={avatar} alt="Avatar" />
-            <span>✏</span>
-          </label>
-          <input
-            id="avatarInput"
-            type="file"
-            accept="image/*"
-            hidden
-            onChange={cambiarAvatar}
-          />
+          <img src="/avatar.jpeg" alt="Avatar" />
         </div>
 
         {/* Formulario */}
