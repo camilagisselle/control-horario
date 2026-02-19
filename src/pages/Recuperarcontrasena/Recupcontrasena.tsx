@@ -1,46 +1,76 @@
 import { useState } from "react";
 import "./RecupContrasena.css";
 import api from "../../services/api";
-import {useNavigate} from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 
 function RecupContrasena() {
   const [codigo, setCodigo] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-  const [mostrarModal, setMostrarModal] = useState(false);
-    const navigate = useNavigate();
 
- const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+  const [modal, setModal] = useState({
+    open: false,
+    type: "success",
+    message: "",
+  });
 
-  if (!codigo || !password || !confirm) return;
-  if (password !== confirm) {
-    alert("Las contraseñas no coinciden");
-    return;
-  }
+  const navigate = useNavigate();
 
-  try {
-    await api.post("/password/change", {
-      token: codigo,
-      nuevaPassword: password,
-    });
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-    setMostrarModal(true);
+    if (!codigo || !password || !confirm) {
+      setModal({
+        open: true,
+        type: "warning",
+        message: "Debe completar todos los campos.",
+      });
+      return;
+    }
 
-    setCodigo("");
-    setPassword("");
-    setConfirm("");
-  } catch (error) {
-    console.error(error);
-    alert("Error al cambiar contraseña");
-  }
-};
+    if (password !== confirm) {
+      setModal({
+        open: true,
+        type: "warning",
+        message: "Las contraseñas no coinciden.",
+      });
+      return;
+    }
 
-const confirmar = () => {
-    setMostrarModal(false);
-    navigate('/');
-};
+    try {
+      await api.post("/password/change", {
+        token: codigo,
+        nuevaPassword: password,
+      });
+
+      setModal({
+        open: true,
+        type: "success",
+        message: "¡Recuperación de clave exitosa!",
+      });
+
+      setCodigo("");
+      setPassword("");
+      setConfirm("");
+
+    } catch (error) {
+      console.error(error);
+
+      setModal({
+        open: true,
+        type: "error",
+        message: "Error al cambiar contraseña.",
+      });
+    }
+  };
+
+  const cerrarModal = () => {
+    setModal({ ...modal, open: false });
+
+    if (modal.type === "success") {
+      navigate("/");
+    }
+  };
 
   return (
     <div className="recuperar-container">
@@ -50,7 +80,10 @@ const confirmar = () => {
         <form onSubmit={handleSubmit}>
           <div className="form-row">
             <label>INGRESE CÓDIGO:</label>
-            <input value={codigo} onChange={(e) => setCodigo(e.target.value)} />
+            <input
+              value={codigo}
+              onChange={(e) => setCodigo(e.target.value)}
+            />
           </div>
 
           <div className="form-row">
@@ -77,11 +110,19 @@ const confirmar = () => {
         <button className="reenviar">Reenviar Código</button>
       </div>
 
-      {mostrarModal && (
+      {/* MODAL GLOBAL */}
+      {modal.open && (
         <div className="modal-overlay">
-          <div className="modal-box">
-            <h2>¡Recuperacion de clave exitosa!</h2>
-            <button onClick={confirmar}>OK</button>
+          <div className={`modal-box modal-${modal.type}`}>
+            <h2>
+              {modal.type === "success" && "✅ Éxito"}
+              {modal.type === "error" && "❌ Error"}
+              {modal.type === "warning" && "⚠️ Atención"}
+            </h2>
+
+            <p>{modal.message}</p>
+
+            <button onClick={cerrarModal}>OK</button>
           </div>
         </div>
       )}

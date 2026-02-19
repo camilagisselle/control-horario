@@ -1,0 +1,78 @@
+/* ===== MODAL GLOBAL ESTILO SISTEMA ===== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: grid;
+  place-items: center;
+  z-index: 2000;
+}
+
+.modal-box {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  width: 400px;
+  text-align: center;
+  animation: modalFade 0.25s ease-out;
+}
+
+/* TITULO */
+.modal-box h2 {
+  color: #1e40af;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+/* MENSAJE */
+.modal-box p {
+  color: #374151;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
+/* BOTONES */
+.modal-box button {
+  min-width: 120px;
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  background: #7dd3fc;
+  color: #1e40af;
+  transition: 0.2s;
+}
+
+.modal-box button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* ANIMACIÓN */
+@keyframes modalFade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}.modal-success h2 {
+  color: #16a34a;
+}
+
+.modal-error h2 {
+  color: #dc2626;
+}
+
+.modal-warning h2 {
+  color: #d97706;
+}
+.modal-box button {
+  background-color: #28a745;
+  color: white;
+}

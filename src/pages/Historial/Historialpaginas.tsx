@@ -4,6 +4,7 @@ import { es } from "date-fns/locale";
 import "react-datepicker/dist/react-datepicker.css";
 import "./Historialpaginas.css";
 import { obtenerHistorialPorCorreo } from "../../services/HistorialService";
+import Modal from "../../Modals/modal";
 
 type Registro = {
   fecha: string;
@@ -19,12 +20,16 @@ export default function HistorialPage() {
   const [fechaHasta, setFechaHasta] = useState<Date | null>(null);
   const [registros, setRegistros] = useState<Registro[]>([]);
   const [registrosFiltrados, setRegistrosFiltrados] = useState<Registro[]>([]);
-  const [modalWarning, setModalWarning] = useState(false);
-  const [mensajeWarning, setMensajeWarning] = useState("");
-
   const [paginaActual, setPaginaActual] = useState(1);
   const registrosPorPagina = 5;
   const [cargando, setCargando] = useState(true);
+
+  const [modal, setModal] = useState({
+    open: false,
+    type: "info" as "success" | "error" | "info" | "confirm",
+    title: "",
+    message: "",
+  });
 
   const correoUsuario = (() => {
     const storedUser = localStorage.getItem("user");
@@ -56,8 +61,17 @@ export default function HistorialPage() {
 
         setRegistros(registrosFormateados);
         setRegistrosFiltrados(registrosFormateados);
+
       } catch (error) {
         console.error("Error cargando historial:", error);
+
+        setModal({
+          open: true,
+          type: "error",
+          title: "Error",
+          message: "No se pudo cargar el historial",
+        });
+
       } finally {
         setCargando(false);
       }
@@ -78,10 +92,12 @@ export default function HistorialPage() {
 
   const manejarBusqueda = () => {
     if (fechaDesde && fechaHasta && fechaDesde > fechaHasta) {
-      setMensajeWarning(
-        "La fecha 'Desde' no puede ser mayor que la fecha 'Hasta'."
-      );
-      setModalWarning(true);
+      setModal({
+        open: true,
+        type: "info",
+        title: "Atención",
+        message: "La fecha 'Desde' no puede ser mayor que la fecha 'Hasta'.",
+      });
       return;
     }
 
@@ -125,7 +141,6 @@ export default function HistorialPage() {
     setPaginaActual(1);
   };
 
-  // Formateo de fecha sin desfasaje
   const formatearFecha = (fecha: string) => {
     const [anio, mes, dia] = fecha.split("-").map(Number);
     return `${String(dia).padStart(2, "0")}/${String(mes).padStart(2, "0")}/${anio}`;
@@ -239,7 +254,9 @@ export default function HistorialPage() {
                   </span>
                   <button
                     onClick={() => setPaginaActual(paginaActual + 1)}
-                    disabled={paginaActual === totalPaginas || totalPaginas === 0}
+                    disabled={
+                      paginaActual === totalPaginas || totalPaginas === 0
+                    }
                   >
                     ➡
                   </button>
@@ -250,26 +267,16 @@ export default function HistorialPage() {
         </>
       )}
 
-      {modalWarning && (
-        <div className="modal-overlay">
-          <div className="modal-contenido">
-            <h2 className="admin-title" style={{ marginBottom: "20px" }}>
-              Atención
-            </h2>
-            <p style={{ textAlign: "center", marginBottom: "25px" }}>
-              {mensajeWarning}
-            </p>
-            <div className="modal-actions">
-              <button
-                className="btn-primario"
-                onClick={() => setModalWarning(false)}
-              >
-                Aceptar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Modal reutilizable */}
+      <Modal
+        open={modal.open}
+        type={modal.type}
+        title={modal.title}
+        message={modal.message}
+        onClose={() =>
+          setModal((prev) => ({ ...prev, open: false }))
+        }
+      />
     </div>
   );
 }

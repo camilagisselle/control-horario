@@ -409,9 +409,9 @@ tbody tr:nth-child(even) {
   background: #9b7bff;
 }
 
-.btn-secundario {
+/* .btn-secundario {
   background: #26c6da;
-}
+} */
 
 /* ===== TOOLTIP ===== */
 [data-tooltip] {
