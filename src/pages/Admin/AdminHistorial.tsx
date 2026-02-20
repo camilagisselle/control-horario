@@ -225,6 +225,7 @@ const AdminHistorial: React.FC = () => {
             )}
             
             <div className="paginacion">
+                <div className="paginacion-box">
               <button
                 onClick={() => setPaginaActual((p) => Math.max(1, p - 1))}
                 disabled={paginaActual === 1}
@@ -244,6 +245,7 @@ const AdminHistorial: React.FC = () => {
               >
                 ➡
               </button>
+            </div>
             </div>
           </div>
         </>

@@ -15,11 +15,12 @@
   width: 100%;
   z-index: 50;
 }
+
 /* MENU */
 .layout-header .avatar-wrapper,
 .layout-header .menuadmin-wrapper {
   position: absolute;
-  top: 30px;   /* ⬅️ misma altura que el logo */
+  top: 30px;
   left: 20px;
 }
 
@@ -39,54 +40,86 @@
   position: relative;
   padding-top: 100px;
 }
+
 body {
   margin: 0;
 }
 
 /* ===== PAGINACIÓN ===== */
+
 .paginacion {
   display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 18px;
-  margin-top: 24px;
-  width: 100%;
+  /* margin-top: 12px; */
 }
 
-/* BOTONES FLECHAS */
+.paginacion-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* BOTONES */
 .paginacion button {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+
   border: 1px solid rgba(155, 123, 255, 0.3);
   background: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(6px);
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
+
+  font-size: 16px;
   color: #9b7bff;
   font-weight: bold;
-}
 
-/* TEXTO PAGINA */
-.paginacion span {
-  font-size: 14px;
-  font-weight: 600;
-  color: #1f3bb3;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 140px;
-  margin-top: 28px;
+
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+
+  outline: none;
+  box-shadow: none;
+}
+
+.paginacion button:focus,
+.paginacion button:active,
+.paginacion button:focus-visible {
+  outline: none;
+  box-shadow: none;
 }
 
 .paginacion button:hover:not(:disabled) {
   background: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(14px) saturate(140%);
   transform: scale(1.05);
+}
+
+.paginacion button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* TEXTO */
+.paginacion span {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f3bb3;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 120px;
+  margin: 0;
 }
 
 /* ===== LOADING GLOBAL ===== */
@@ -120,8 +153,8 @@ body {
 }
 
 /* MOBILE */
-@media (max-width: 768px) {
 
+@media (max-width: 768px) {
   .app-logo {
     position: static;
     margin: -35px auto 10px;
