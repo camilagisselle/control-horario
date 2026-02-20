@@ -198,7 +198,6 @@ const AdminUsuarios = () => {
 
       {!cargandoInicial && (
         <>
-          {/* BUSCADOR Y BOTÓN */}
           <div className="admin-actions">
             <div className="search-box">
               <input
@@ -215,7 +214,6 @@ const AdminUsuarios = () => {
             </button>
           </div>
 
-          {/* TABLA */}
           <div className="tabla-container">
             {usuariosPaginados.length === 0 ? (
               <div className="tabla-vacia">Sin resultados</div>
@@ -352,8 +350,19 @@ const AdminUsuarios = () => {
               </div>
             </div>
 
-            {error && <p style={{ color: "#dc2626" }}>{error}</p>}
-            {mensaje && <p style={{ color: "#16a34a" }}>{mensaje}</p>}
+            {/* ✅ ALERTA ESTILÍSTICA */}
+            {error && (
+              <div className="alerta alerta-error">
+                <span className="alerta-icono">⚠️</span>
+                <span className="alerta-texto">{error}</span>
+              </div>
+            )}
+            {mensaje && (
+              <div className="alerta alerta-exito">
+                <span className="alerta-icono">✓</span>
+                <span className="alerta-texto">{mensaje}</span>
+              </div>
+            )}
 
             <div className="modal-actions">
               <button
@@ -403,7 +412,6 @@ const AdminUsuarios = () => {
                     )
                   }
                 >
-                  <option value="">Seleccionar perfil</option>
                   {perfiles.map((p) => (
                     <option key={p.perfil_id} value={p.perfil_id}>
                       {p.perfil_nombre}
@@ -425,14 +433,25 @@ const AdminUsuarios = () => {
               </div>
             </div>
 
-            {error && <p style={{ color: "#dc2626" }}>{error}</p>}
-            {mensaje && <p style={{ color: "#16a34a" }}>{mensaje}</p>}
+            {/* ✅ ALERTA ESTILÍSTICA */}
+            {error && (
+              <div className="alerta alerta-error">
+                <span className="alerta-icono">⚠️</span>
+                <span className="alerta-texto">{error}</span>
+              </div>
+            )}
+            {mensaje && (
+              <div className="alerta alerta-exito">
+                <span className="alerta-icono">✓</span>
+                <span className="alerta-texto">{mensaje}</span>
+              </div>
+            )}
 
             <div className="modal-actions">
               <button
                 className="btn-secundario"
                 onClick={() => setMostrarModalEditar(false)}
-                disabled={cargando}
+                disabled={cargando} // ✅ BLOQUEADO CUANDO GUARDA
               >
                 Cancelar
               </button>
