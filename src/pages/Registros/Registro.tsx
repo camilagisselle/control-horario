@@ -1,15 +1,22 @@
 import { useState, useEffect } from "react";
 import "./Registro.css";
 import {crearHistorial, type CrearHistorialDTO, obtenerHistorialPorCorreo} from "../../services/HistorialService";
+import Modal from "../../Modals/modal";
 import axios from "axios";
+import { getDeviceId } from "../../services/DeviceService";
 
 export default function Registro() {
   const [hora, setHora] = useState("");
-  const [mostrarModal, setMostrarModal] = useState(false);
-  const [mostrarConfirmado, setMostrarConfirmado] = useState(false);
   const [accion, setAccion] = useState("");
   const [loading, setLoading] = useState(true);
   const [procesando, setProcesando] = useState(false);
+
+  const [modal, setModal] = useState({
+    open: false,
+    type: "success" as "success" | "error" | "info" | "confirm",
+    title: "",
+    message: "",
+  });
 
   const [botonesHabilitados, setBotonesHabilitados] = useState({
     entrada: true,
@@ -73,7 +80,13 @@ export default function Registro() {
         setBotonesHabilitados(botones);
 
       } catch (error) {
-        console.error("Error obteniendo historial:", error);
+        console.error(error);
+        setModal({
+          open: true,
+          type: "error",
+          title: "Error",
+          message: "Error obteniendo historial",
+        });
       } finally {
         setLoading(false);
       }
@@ -94,7 +107,13 @@ export default function Registro() {
 
   const abrirConfirmacion = (tipo: string) => {
     setAccion(tipo);
-    setMostrarModal(true);
+
+    setModal({
+      open: true,
+      type: "confirm",
+      title: "Confirmar acción",
+      message: tipo,
+    });
   };
 
   const actualizarBotones = (accionRealizada: string) => {
@@ -115,7 +134,7 @@ export default function Registro() {
   };
 
   const confirmar = async () => {
-    setMostrarModal(false);
+    setModal(prev => ({ ...prev, open: false }));
     setProcesando(true);
 
     const storedUser = localStorage.getItem("user");
@@ -134,6 +153,7 @@ export default function Registro() {
       month: "2-digit",
       day: "2-digit"
     }).format(now);
+
     const horaActual = now.toLocaleTimeString("sv-SE");
     const payload: CrearHistorialDTO = { fecha };
 
@@ -142,18 +162,32 @@ export default function Registro() {
     if (accion === "Inicio colación") payload.inicioColacion = horaActual;
     if (accion === "Fin colación") payload.finColacion = horaActual;
 
+    const deviceId = getDeviceId();
+    console.log("UUID que vamos a enviar al back en historial:", deviceId);
+
     try {
       await crearHistorial(correo, payload);
-      actualizarBotones(accion); 
-      setTimeout(() => setMostrarConfirmado(true), 200);
+      actualizarBotones(accion);
+      setModal({
+        open: true,
+        type: "success",
+        title: "Registrado con éxito",
+        message: accion,
+      });
+
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 403) {
-          alert("Este equipo no está autorizado para registrar asistencia");
-          return;
+            setModal({
+              open: true,
+              type: "error",
+              title: "Error",
+              message: "Este equipo no está autorizado para registrar asistencia",
+            });
         }
+      }else{      
+        console.error("Error al registrar asistencia:", error);
       }
-      console.error("Error registrando:", error);
     } finally {
       setProcesando(false);
     }
@@ -174,8 +208,8 @@ export default function Registro() {
                 <button
                   key={tipo}
                   onClick={() => abrirConfirmacion(tipo)}
-                  disabled={loading || !botonesHabilitados[key] || mostrarModal || procesando}
-                  className={loading || !botonesHabilitados[key] || mostrarModal || procesando ? "deshabilitado" : ""}
+                  disabled={loading || !botonesHabilitados[key] || modal.open || procesando}
+                  className={loading || !botonesHabilitados[key] || modal.open || procesando ? "deshabilitado" : ""}
                 >
                   {tipo}
                 </button>
@@ -185,30 +219,14 @@ export default function Registro() {
         </div>
       </main>
 
-      {mostrarModal && (
-        <div className="modal-backdrop">
-          <div className="modal">
-            <h3>CONFIRMA ESTA ACCIÓN</h3>
-            <p>{accion}</p>
-            <div className="modal-botones">
-              <button className="aceptar" onClick={confirmar}>Aceptar</button>
-              <button className="cancelar" onClick={() => setMostrarModal(false)}>Cancelar</button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {mostrarConfirmado && (
-        <div className="modal-backdrop">
-          <div className="modal">
-            <h3>¡Registrado con éxito!</h3>
-            <p>{accion}</p>
-            <div className="modal-botones">
-              <button className="aceptar" onClick={() => setMostrarConfirmado(false)}>OK</button>
-            </div>
-          </div>
-        </div>
-      )}
+      <Modal
+        open={modal.open}
+        type={modal.type}
+        title={modal.title}
+        message={modal.message}
+        onClose={() => setModal(prev => ({ ...prev, open: false }))}
+        onConfirm={modal.type === "confirm" ? confirmar : undefined}
+      />
     </div>
   );
 }

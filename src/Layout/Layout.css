@@ -47,8 +47,8 @@ body {
 @media (max-width: 768px) {
 
   .app-logo {
-    position: static;        /* 🔥 CLAVE */
-    margin: -35px auto 10px;  /* centra */
+    position: static;
+    margin: -35px auto 10px;
     width: 140px;
   }
 }

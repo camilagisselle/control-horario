@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../auth/useAuth";
 import { actualizarUsuario, cambiarPassword } from "../../services/UsuarioService";
+import Modal from "../../Modals/modal";
+
 import "./Perfil.css";
 
 interface Usuario {
@@ -19,8 +21,13 @@ export default function Perfil() {
   const { user, updateUser } = useAuth();
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [mensajeExito, setMensajeExito] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [modal, setModal] = useState({
+    open: false,
+    type: "success" as "success" | "error" | "info" | "confirm",
+    title: "",
+    message: "",
+  });
 
   useEffect(() => {
     if (user) {
@@ -56,16 +63,22 @@ export default function Perfil() {
         setPassword("");
         setShowPassword(false);
       }
-
-      setMensajeExito(true);
-      setTimeout(() => setMensajeExito(false), 3000);
-
-      console.log("Perfil actualizado exitosamente");
     } catch (error) {
-      console.error("Error al actualizar:", error);
-      alert("Error al guardar los cambios.");
+      console.error(error);
+      setModal({
+        open: true,
+        type: "error",
+        title: "Error",
+        message: "Error al actualizar",
+      });
     } finally {
       setLoading(false);
+      setModal({
+        open: true,
+        type: "success",
+        title: "Perfil actualizado",
+        message: "Los cambios se guardaron correctamente",
+      });
     }
   };
 
@@ -129,14 +142,13 @@ export default function Perfil() {
         </div>
       )}
 
-      {mensajeExito && (
-        <div className="modal-exito-overlay">
-          <div className="modal-exito">
-            <div className="exito-icon">✓</div>
-            <h2>Perfil actualizado exitosamente</h2>
-          </div>
-        </div>
-      )}
+      <Modal
+        open={modal.open}
+        type={modal.type}
+        title={modal.title}
+        message={modal.message}
+        onClose={() => setModal(prev => ({ ...prev, open: false }))}
+      />
     </main>
   );
 }

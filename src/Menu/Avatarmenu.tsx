@@ -9,6 +9,8 @@ const AvatarMenu = () => {
   const navigate = useNavigate();
 
   const cerrarSesion = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("deviceId");
     logout();
   };
 

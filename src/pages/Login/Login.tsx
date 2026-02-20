@@ -2,31 +2,40 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/useAuth";
 import "./Login.css";
+import Modal from "../../Modals/modal";
 
 const Login: React.FC = () => {
-
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const [modal, setModal] = useState({
+    open: false,
+    type: "error" as "success" | "error" | "info" | "confirm",
+    title: "",
+    message: "",
+  });
+
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const handleIngresar = async () => {
-    if (!email || !password) {
-      alert("Ingresa correo y contraseña");
+    if (!email.trim() || !password.trim()) {
+      setModal({
+        open: true,
+        type: "error",
+        title: "Campos requeridos",
+        message: "Ingresa correo y contraseña",
+      });
       return;
     }
 
     try {
       setLoading(true);
 
-      // Llamamos a login del provider, devuelve LoginResponse
       const user = await login(email.trim(), password.trim());
- 
-      // Redirección por rol
+
       if (user.role === "ROLE_ADMIN") {
         navigate("/admin/usuarios");
       } else {
@@ -35,7 +44,13 @@ const Login: React.FC = () => {
 
     } catch (error) {
       console.error(error);
-      alert("Credenciales incorrectas");
+      setPassword("");
+      setModal({
+        open: true,
+        type: "error",
+        title: "Credenciales incorrectas",
+        message: "Verifica tu correo y contraseña",
+      });
     } finally {
       setLoading(false);
     }
@@ -68,7 +83,9 @@ const Login: React.FC = () => {
             type="text"
             placeholder="Usuario (email)"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
             onKeyPress={handleKeyPress}
           />
 
@@ -76,7 +93,9 @@ const Login: React.FC = () => {
             type={showPassword ? "text" : "password"}
             placeholder="Contraseña"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
             onKeyPress={handleKeyPress}
           />
 
@@ -121,6 +140,13 @@ const Login: React.FC = () => {
           </Link>
         </div>
       </div>
+      <Modal
+        open={modal.open}
+        type={modal.type}
+        title={modal.title}
+        message={modal.message}
+        onClose={() => setModal(prev => ({ ...prev, open: false }))}
+      />
     </div>
   );
 };

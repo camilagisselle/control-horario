@@ -1,48 +1,69 @@
 import { useState } from "react";
 import "./Recuperarpassword.css";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Modal from "../../Modals/modal";
 
 function RecuperarPassword() {
-  const [mostrarModal, setMostrarModal] = useState(false);
-  const [correo, setCorreo] = useState(""); // 👈 NUEVO estado para guardar el email
+  const [correo, setCorreo] = useState("");
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  const [modal, setModal] = useState({
+    open: false,
+    type: "success" as "success" | "error" | "info" | "confirm",
+    title: "",
+    message: "",
+  });
 
   const enviarCodigo = async () => {
-    if (!correo) {
-      alert("Por favor ingrese un correo");
+    if (!correo.trim()) {
+      setModal({
+        open: true,
+        type: "error",
+        title: "Correo requerido",
+        message: "Por favor ingrese un correo válido",
+      });
       return;
     }
 
     try {
-          const response = await fetch(
-      "http://localhost:8080/v1/control-horario/password/request",
+      const response = await fetch(
+        "http://localhost:8080/v1/control-horario/password/request",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            correo: correo,
+            correo: correo.trim(),
           }),
         }
       );
 
       if (!response.ok) {
-        throw new Error("Error al enviar el correo");
+        throw new Error("Error en la solicitud");
       }
-
-      // Si todo sale bien mostramos tu modal
-      setMostrarModal(true);
+      setModal({
+        open: true,
+        type: "success",
+        title: "Código enviado",
+        message: "Se ha enviado un código de verificación a su correo.",
+      });
     } catch (error) {
-      console.error("Error:", error);
-      alert("No se pudo enviar el correo");
+      console.error(error);
+      setModal({
+        open: true,
+        type: "error",
+        title: "Error",
+        message: "No se pudo enviar el correo. Intente nuevamente.",
+      });
     }
   };
 
-  const confirmar = () => {
-    setMostrarModal(false);
-      navigate('/');
+  const cerrarModal = () => {
+    setModal(prev => ({ ...prev, open: false }));
+    if (modal.type === "success") {
+      navigate("/");
+    }
   };
 
   return (
@@ -52,7 +73,7 @@ function RecuperarPassword() {
         <img src="/krono2.1.png" alt="Logo KRONO" />
       </div>
 
-      {/* CONTENIDO CENTRAL */}
+      {/* CONTENIDO */}
       <div className="content">
         <h1 className="title">RECUPERAR CONTRASEÑA</h1>
 
@@ -72,22 +93,13 @@ function RecuperarPassword() {
       </div>
 
       {/* MODAL */}
-      {mostrarModal && (
-        <div className="modal-backdrop">
-          <div className="modal">
-            <h3>Código enviado</h3>
-            <p>
-              Se ha enviado un código de verificación a su correo electrónico.
-            </p>
-
-            <div className="modal-botones">
-              <button className="aceptar" onClick={confirmar}>
-                Aceptar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <Modal
+        open={modal.open}
+        type={modal.type}
+        title={modal.title}
+        message={modal.message}
+        onClose={cerrarModal}
+      />
     </div>
   );
 }

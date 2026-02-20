@@ -9,6 +9,8 @@ const Menuadmin = () => {
   const { user, logout } = useAuth();
 
   const cerrarSesion = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("deviceId");
     logout();
   };
 

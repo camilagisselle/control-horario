@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { actualizarUsuario, cambiarPassword } from "../../services/UsuarioService";
 import { useAuth } from "../../auth/useAuth";
+import Modal from "../../Modals/modal";
 import "./AdminPerfil.css";
 
 interface Usuario {
@@ -18,11 +19,17 @@ export default function AdminPerfil() {
   const { user, updateUser } = useAuth();
   const [perfil, setPerfil] = useState<Usuario | null>(null);
   const [passwordNueva, setPasswordNueva] = useState("");
-  const [mensajeExito, setMensajeExito] = useState(false);
   const [verPassword, setVerPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
+  const [modal, setModal] = useState({
+    open: false,
+    type: "success" as "success" | "error" | "info" | "confirm",
+    title: "",
+    message: "",
+  });
+
+  useEffect(() => {
     if (user) {
       setPerfil({
         id: 0,
@@ -46,22 +53,29 @@ export default function AdminPerfil() {
       await actualizarUsuario(user.correo, {
         nombre: perfil.nombre,
       });
-
       updateUser({ name: perfil.nombre });
-
       // Cambiar password si hay nueva
       if (passwordNueva.trim()) {
         await cambiarPassword({ passwordNueva });
         setPasswordNueva("");
       }
 
-      setMensajeExito(true);
-      setTimeout(() => setMensajeExito(false), 3000);
-
     } catch (error) {
       console.error("Error guardando cambios:", error);
-    }finally {
-      setLoading(false); // <-- Ocultar cargando
+      setModal({
+        open: true,
+        type: "error",
+        title: "Error",
+        message: "No se pudieron guardar los cambios",
+      });
+    } finally {
+      setLoading(false);
+      setModal({
+        open: true,
+        type: "success",
+        title: "Perfil actualizado",
+        message: "Los cambios se guardaron correctamente",
+      });
     }
   };
 
@@ -96,48 +110,57 @@ export default function AdminPerfil() {
             <input value={perfil?.correo || ""} disabled />
           </div>
 
-          {/* 🔐 NUEVA CONTRASEÑA */}
-    <div className="input-group">
-  <label htmlFor="passwordInput">Contraseña</label>
-  <input
-    type={verPassword ? "text" : "password"}
-    id="passwordInput"
-    value={passwordNueva}
-    placeholder="Ej: 12345"
-    onChange={(e) => setPasswordNueva(e.target.value)}
-  />
+          {/* NUEVA CONTRASEÑA */}
+          <div className="input-group">
+            <label htmlFor="passwordInput">Contraseña</label>
+            <input
+              type={verPassword ? "text" : "password"}
+              id="passwordInput"
+              value={passwordNueva}
+              placeholder="Ej: 12345"
+              onChange={(e) => setPasswordNueva(e.target.value)}
+            />
 
-  <div className="checkbox-container">
-    <input
-      type="checkbox"
-      id="verPassword"
-      checked={verPassword}
-      onChange={(e) => setVerPassword(e.target.checked)}
-    />
-    <label htmlFor="verPassword">
-      Ver contraseña
-    </label>
-  </div>
-</div>
+            <div className="checkbox-container">
+              <input
+                type="checkbox"
+                id="verPassword"
+                checked={verPassword}
+                onChange={(e) => setVerPassword(e.target.checked)}
+              />
+              <label htmlFor="verPassword">Ver contraseña</label>
+            </div>
+          </div>
 
-          <button className="btn-guardar" onClick={guardarCambios}>
+          <button
+            className="btn-guardar"
+            onClick={guardarCambios}
+            disabled={loading}
+          >
             Guardar Cambios
           </button>
         </div>
       </div>
+
+      {/* Loading overlay */}
       {loading && (
         <div className="cargando-overlay">
-        <div className="cargando-texto">Guardando, por favor espere...</div>
-        </div>
-      )}
-      {mensajeExito && (
-        <div className="modal-exito-overlay">
-          <div className="modal-exito">
-            <div className="exito-icon">✓</div>
-            <h2>Perfil actualizado exitosamente</h2>
+          <div className="cargando-texto">
+            Guardando, por favor espere...
           </div>
         </div>
       )}
+
+      {/* Modal reutilizable */}
+      <Modal
+        open={modal.open}
+        type={modal.type}
+        title={modal.title}
+        message={modal.message}
+        onClose={() =>
+          setModal((prev) => ({ ...prev, open: false }))
+        }
+      />
     </main>
   );
 }
