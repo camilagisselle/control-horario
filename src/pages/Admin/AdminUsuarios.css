@@ -461,3 +461,37 @@ tbody tr:nth-child(even) {
   background: white;
   border-radius: 12px;
 }
+.alerta-flotante {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-radius: 12px;
+  background: #f0f9ff;
+  border: 2px solid #38bdf8;
+  color: #0369a1;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  animation: slideInRight 0.3s ease;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.btn-estado.cargando {
+  opacity: 0.6;
+  pointer-events: none;
+}

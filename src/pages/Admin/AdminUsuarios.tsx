@@ -36,6 +36,10 @@ const AdminUsuarios = () => {
   const [error, setError] = useState<string | null>(null);
   const [mensaje, setMensaje] = useState<string | null>(null);
 
+  // ✅ NUEVO: Estado para cambio de estado
+  const [cambiandoEstado, setCambiandoEstado] = useState<string | null>(null);
+  const [mensajeEstado, setMensajeEstado] = useState<string | null>(null);
+
   const [paginaActual, setPaginaActual] = useState(1);
   const usuariosPorPagina = 5;
 
@@ -161,11 +165,32 @@ const AdminUsuarios = () => {
     }
   };
 
+  // ✅ MODIFICADO: Toggle estado con mensaje
   const toggleEstado = async (usuario: UsuarioAPI) => {
-    await actualizarUsuario(usuario.correo, {
-      estado: usuario.estado === 1 ? 0 : 1,
-    });
-    await cargarUsuarios();
+    setCambiandoEstado(usuario.correo);
+    setMensajeEstado("Cambiando estado...");
+
+    try {
+      await actualizarUsuario(usuario.correo, {
+        estado: usuario.estado === 1 ? 0 : 1,
+      });
+      await cargarUsuarios();
+
+      setMensajeEstado(
+        `Estado cambiado a ${usuario.estado === 1 ? "inactivo" : "activo"}`
+      );
+
+      setTimeout(() => {
+        setMensajeEstado(null);
+      }, 2000);
+    } catch {
+      setMensajeEstado("Error al cambiar estado");
+      setTimeout(() => {
+        setMensajeEstado(null);
+      }, 2000);
+    } finally {
+      setCambiandoEstado(null);
+    }
   };
 
   const usuariosFiltrados = usuarios.filter(
@@ -187,6 +212,14 @@ const AdminUsuarios = () => {
   return (
     <div className="admin-page">
       <h2 className="admin-title">Usuarios</h2>
+
+      {/* ✅ NUEVO: Mensaje flotante de cambio de estado */}
+      {mensajeEstado && (
+        <div className="alerta-flotante">
+          <span className="alerta-icono">⏳</span>
+          <span className="alerta-texto">{mensajeEstado}</span>
+        </div>
+      )}
 
       {cargandoInicial && (
         <div className="cargando-overlay">
@@ -239,10 +272,15 @@ const AdminUsuarios = () => {
                         <td
                           className={`btn-estado ${
                             u.estado === 1 ? "activo" : "inactivo"
-                          }`}
-                          onClick={() => toggleEstado(u)}
+                          } ${cambiandoEstado === u.correo ? "cargando" : ""}`}
+                          onClick={() =>
+                            !cambiandoEstado && toggleEstado(u)
+                          }
+                          style={{
+                            cursor: cambiandoEstado ? "wait" : "pointer",
+                          }}
                         >
-                          ●
+                          {cambiandoEstado === u.correo ? "⏳" : "●"}
                         </td>
                         <td className="accionesAdminUsuarios">
                           <button
@@ -350,7 +388,6 @@ const AdminUsuarios = () => {
               </div>
             </div>
 
-            {/* ✅ ALERTA ESTILÍSTICA */}
             {error && (
               <div className="alerta alerta-error">
                 <span className="alerta-icono">⚠️</span>
@@ -433,7 +470,6 @@ const AdminUsuarios = () => {
               </div>
             </div>
 
-            {/* ✅ ALERTA ESTILÍSTICA */}
             {error && (
               <div className="alerta alerta-error">
                 <span className="alerta-icono">⚠️</span>
@@ -451,7 +487,7 @@ const AdminUsuarios = () => {
               <button
                 className="btn-secundario"
                 onClick={() => setMostrarModalEditar(false)}
-                disabled={cargando} // ✅ BLOQUEADO CUANDO GUARDA
+                disabled={cargando}
               >
                 Cancelar
               </button>
