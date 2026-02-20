@@ -4,7 +4,7 @@ import {
   obtenerTodosLosHistoriales,
   crearHistorial
 } from "../../services/HistorialService";
-import type { CrearHistorialDTO } from "../../services/HistorialService";
+import type { CrearHistorialDTO, HistorialDTO  } from "../../services/HistorialService";
 import Modal from "../../Modals/modal";
 import axios from "axios";
 import { getDeviceId } from "../../services/DeviceService";
@@ -18,17 +18,6 @@ interface HistorialItem {
   finColacion: string;
   salida: string;
   totalHoras: string;
-}
-
-export interface HistorialDTO {
-  id: number;
-  correoUsuario: string;
-  fecha: string;
-  entrada?: string | null;
-  inicioColacion?: string | null;
-  finColacion?: string | null;
-  salida?: string | null;
-  totalHoras?: string | number | null;
 }
 
 const AdminHistorial: React.FC = () => {

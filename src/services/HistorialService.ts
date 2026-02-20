@@ -9,22 +9,23 @@ export type CrearHistorialDTO = {
   finColacion?: string;
 };
 
+export interface HistorialDTO {
+  id: number;
+  correoUsuario: string;
+  fecha: string;
+  entrada?: string | null;
+  inicioColacion?: string | null;
+  finColacion?: string | null;
+  salida?: string | null;
+  totalHoras?: string | number | null;
+}
+
 export type ActualizarHistorialDTO = {
   entrada?: string;
   salida?: string;
   inicioColacion?: string;
   finColacion?: string;
 };
-interface HistorialItem {
-  id: number;
-  usuario: string;
-  fecha: string;
-  entrada: string;
-  inicioColacion: string;
-  finColacion: string;
-  salida: string;
-  totalHoras: string;
-}
 
 export const crearHistorial = async (
   correo: string,
@@ -39,7 +40,7 @@ export const crearHistorial = async (
   });
 };
 
-export const obtenerTodosLosHistoriales = async () => {
+export const obtenerTodosLosHistoriales = async (): Promise<HistorialDTO[]> => {
   const response = await api.get("/historial");
   return response.data;
 };
@@ -61,10 +62,5 @@ export const actualizarHistorial = async (
     },
   });
 
-  return response.data;
-};
-
-export const listarHistorial = async (): Promise<HistorialItem[]> => {
-  const response = await api.get("/historial");
   return response.data;
 };
