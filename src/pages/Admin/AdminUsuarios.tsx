@@ -365,6 +365,7 @@ const AdminUsuarios = () => {
                       </table>
 
                       <div className="paginacion">
+                        <div className="paginacion-box">
                         <button
                             onClick={() => setPaginaActual(paginaActual - 1)}
                             disabled={paginaActual === 1}
@@ -382,6 +383,7 @@ const AdminUsuarios = () => {
                         >
                           ➡
                         </button>
+                      </div>
                       </div>
                     </>
                 )}
