@@ -50,6 +50,10 @@ const AdminUsuarios = () => {
     message: "",
   });
 
+  // ✅ NUEVO: Estado para cambio de estado
+  const [cambiandoEstado, setCambiandoEstado] = useState<string | null>(null);
+  const [mensajeEstado, setMensajeEstado] = useState<string | null>(null);
+
   const [paginaActual, setPaginaActual] = useState(1);
   const usuariosPorPagina = 5;
   const indiceUltimo = paginaActual * usuariosPorPagina;
@@ -174,9 +178,34 @@ const AdminUsuarios = () => {
     }
   };
 
+  // ✅ MODIFICADO: Toggle estado con mensaje
   const toggleEstado = async (usuario: UsuarioAPI) => {
     await actualizarUsuario(usuario.correo, { estado: usuario.estado === 1 ? 0 : 1 });
     await cargarUsuarios();
+    setCambiandoEstado(usuario.correo);
+    setMensajeEstado("Cambiando estado...");
+
+    try {
+      await actualizarUsuario(usuario.correo, {
+        estado: usuario.estado === 1 ? 0 : 1,
+      });
+      await cargarUsuarios();
+
+      setMensajeEstado(
+        `Estado cambiado a ${usuario.estado === 1 ? "inactivo" : "activo"}`
+      );
+
+      setTimeout(() => {
+        setMensajeEstado(null);
+      }, 2000);
+    } catch {
+      setMensajeEstado("Error al cambiar estado");
+      setTimeout(() => {
+        setMensajeEstado(null);
+      }, 2000);
+    } finally {
+      setCambiandoEstado(null);
+    }
   };
 
   const usuariosFiltrados = usuarios.filter(
@@ -250,6 +279,112 @@ const AdminUsuarios = () => {
           <button onClick={() => setPaginaActual(paginaActual + 1)} disabled={paginaActual === totalPaginas}>➡</button>
         </div>
       </div>
+      {/* ✅ NUEVO: Mensaje flotante de cambio de estado */}
+      {mensajeEstado && (
+        <div className="alerta-flotante">
+          <span className="alerta-icono">⏳</span>
+          <span className="alerta-texto">{mensajeEstado}</span>
+        </div>
+      )}
+
+      {cargandoInicial && (
+        <div className="cargando-overlay">
+          <div className="cargando-contenido">
+            <div className="cargando-texto">Cargando usuarios...</div>
+          </div>
+        </div>
+      )}
+
+      {!cargandoInicial && (
+        <>
+          <div className="admin-actions">
+            <div className="search-box">
+              <input
+                type="text"
+                placeholder="Buscar usuario"
+                value={busqueda}
+                onChange={(e) => setBusqueda(e.target.value)}
+              />
+              <span className="search-icon">🔍</span>
+            </div>
+
+            <button className="btn-nuevo" onClick={abrirModalCrear}>
+              Nuevo
+            </button>
+          </div>
+
+          <div className="tabla-container">
+            {usuariosPaginados.length === 0 ? (
+              <div className="tabla-vacia">Sin resultados</div>
+            ) : (
+              <>
+                <table className="tablaAdminUsuarios">
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Correo</th>
+                      <th>Perfil</th>
+                      <th>Estado</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {usuariosPaginados.map((u) => (
+                      <tr key={u.correo}>
+                        <td>{u.nombre}</td>
+                        <td>{u.correo}</td>
+                        <td>{u.perfil.perfil_nombre}</td>
+                        <td
+                          className={`btn-estado ${
+                            u.estado === 1 ? "activo" : "inactivo"
+                          } ${cambiandoEstado === u.correo ? "cargando" : ""}`}
+                          onClick={() =>
+                            !cambiandoEstado && toggleEstado(u)
+                          }
+                          style={{
+                            cursor: cambiandoEstado ? "wait" : "pointer",
+                          }}
+                        >
+                          {cambiandoEstado === u.correo ? "⏳" : "●"}
+                        </td>
+                        <td className="accionesAdminUsuarios">
+                          <button
+                            className="btn-accion editar"
+                            onClick={() => abrirModalEditar(u)}
+                          >
+                            ✏️
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+
+                <div className="paginacion">
+                  <button
+                    onClick={() => setPaginaActual(paginaActual - 1)}
+                    disabled={paginaActual === 1}
+                  >
+                    ⬅
+                  </button>
+
+                  <span>
+                    Página {paginaActual} de {totalPaginas}
+                  </span>
+
+                  <button
+                    onClick={() => setPaginaActual(paginaActual + 1)}
+                    disabled={paginaActual === totalPaginas}
+                  >
+                    ➡
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </>
+      )}
 
       {/* MODAL CREAR */}
       {mostrarModal && (
@@ -283,6 +418,20 @@ const AdminUsuarios = () => {
                 </select>
               </div>
             </div>
+
+            {error && (
+              <div className="alerta alerta-error">
+                <span className="alerta-icono">⚠️</span>
+                <span className="alerta-texto">{error}</span>
+              </div>
+            )}
+            {mensaje && (
+              <div className="alerta alerta-exito">
+                <span className="alerta-icono">✓</span>
+                <span className="alerta-texto">{mensaje}</span>
+              </div>
+            )}
+
             <div className="modal-actions">
               <button className="btn-secundario" onClick={() => setMostrarModal(false)}>Cancelar</button>
               <button className="btn-primario" onClick={handleCrear} disabled={cargando}>{cargando ? "Guardando..." : "Crear"}</button>
@@ -305,6 +454,15 @@ const AdminUsuarios = () => {
                 <label htmlFor="editarPerfil">Perfil</label>
                 <select id="editarPerfil" value={editarPerfilId} onChange={(e) => setEditarPerfilId(e.target.value === "" ? "" : Number(e.target.value))}>
                   <option value="">Seleccionar perfil</option>
+                <select
+                  id="editarPerfil"
+                  value={editarPerfilId}
+                  onChange={(e) =>
+                    setEditarPerfilId(
+                      e.target.value === "" ? "" : Number(e.target.value)
+                    )
+                  }
+                >
                   {perfiles.map((p) => (
                     <option key={p.perfil_id} value={p.perfil_id}>{p.perfil_nombre}</option>
                   ))}
@@ -318,6 +476,20 @@ const AdminUsuarios = () => {
                 </select>
               </div>
             </div>
+
+            {error && (
+              <div className="alerta alerta-error">
+                <span className="alerta-icono">⚠️</span>
+                <span className="alerta-texto">{error}</span>
+              </div>
+            )}
+            {mensaje && (
+              <div className="alerta alerta-exito">
+                <span className="alerta-icono">✓</span>
+                <span className="alerta-texto">{mensaje}</span>
+              </div>
+            )}
+
             <div className="modal-actions">
               <button className="btn-secundario" onClick={() => setMostrarModalEditar(false)}>Cancelar</button>
               <button className="btn-primario" onClick={handleEditar} disabled={cargando}>{cargando ? "Guardando..." : "Guardar"}</button>
