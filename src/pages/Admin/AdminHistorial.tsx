@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "./AdminHistorial.css";
-import { 
+import {
   obtenerTodosLosHistoriales,
-  crearHistorial
+  actualizarHistorial
 } from "../../services/HistorialService";
-import type { CrearHistorialDTO, HistorialDTO  } from "../../services/HistorialService";
 import Modal from "../../Modals/modal";
-import axios from "axios";
-import { getDeviceId } from "../../services/DeviceService";
 
 interface HistorialItem {
   id: number;
@@ -23,24 +20,11 @@ interface HistorialItem {
 const AdminHistorial: React.FC = () => {
   const [historial, setHistorial] = useState<HistorialItem[]>([]);
   const [busqueda, setBusqueda] = useState("");
-  const [paginaActual, setPaginaActual] = useState(1);
-  const filasPorPagina = 5;
-  const [cargando, setCargando] = useState(true);
+  const [modalEdicion, setModalEdicion] = useState(false);
   const [registroEditando, setRegistroEditando] = useState<HistorialItem | null>(null);
-  const [editandoEntrada, setEditandoEntrada] = useState("");
-  const [editandoInicioColacion, setEditandoInicioColacion] = useState("");
-  const [editandoFinColacion, setEditandoFinColacion] = useState("");
-  const [editandoSalida, setEditandoSalida] = useState("");
-  const [guardando, setGuardando] = useState(false);
-
-  const [modal, setModal] = useState({
-    open: false,
-    type: "success" as "success" | "error" | "info" | "confirm",
-    title: "",
-    message: "",
-  });
+  const [paginaActual, setPaginaActual] = useState(1);
   const [cargandoInicial, setCargandoInicial] = useState(true);
-  
+
   const [editarEntrada, setEditarEntrada] = useState("");
   const [editarInicioColacion, setEditarInicioColacion] = useState("");
   const [editarFinColacion, setEditarFinColacion] = useState("");
@@ -48,8 +32,15 @@ const AdminHistorial: React.FC = () => {
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [mensaje, setMensaje] = useState<string | null>(null);
-  
+
   const filasPorPagina = 5;
+
+  const [modal, setModal] = useState({
+    open: false,
+    type: "success" as "success" | "error" | "info" | "confirm",
+    title: "",
+    message: "",
+  });
 
   const indiceUltimo = paginaActual * filasPorPagina;
   const indicePrimero = indiceUltimo - filasPorPagina;
@@ -72,6 +63,12 @@ const AdminHistorial: React.FC = () => {
         setHistorial(historialFormateado);
       } catch (error) {
         console.error("Error cargando historial:", error);
+        setModal({
+          open: true,
+          type: "error",
+          title: "Error",
+          message: "No se pudo cargar el historial",
+        });
       } finally {
         setCargandoInicial(false);
       }
@@ -79,40 +76,8 @@ const AdminHistorial: React.FC = () => {
     cargarHistorial();
   }, []);
 
-  const cargarHistorial = async () => {
-    setCargando(true);
-    try {
-      const data = await obtenerTodosLosHistoriales();
-      const historialFormateado = data.map((item: HistorialDTO) => ({
-        id: item.id,
-        usuario: item.correoUsuario,
-        fecha: item.fecha,
-        entrada: item.entrada || "",
-        inicioColacion: item.inicioColacion || "",
-        finColacion: item.finColacion || "",
-        salida: item.salida || "",
-        totalHoras: item.totalHoras?.toString() || "0",
-      }));
-      setHistorial(historialFormateado);
-    } catch (error) {
-      console.error("Error cargando historial:", error);
-      setModal({
-        open: true,
-        type: "error",
-        title: "Error",
-        message: "No se pudo cargar el historial",
-      });
-    } finally {
-      setCargando(false);
-    }
-  };
-
   const abrirEdicion = (registro: HistorialItem) => {
     setRegistroEditando(registro);
-    setEditandoEntrada(registro.entrada);
-    setEditandoInicioColacion(registro.inicioColacion);
-    setEditandoFinColacion(registro.finColacion);
-    setEditandoSalida(registro.salida);
     setEditarEntrada(registro.entrada);
     setEditarInicioColacion(registro.inicioColacion);
     setEditarFinColacion(registro.finColacion);
@@ -136,24 +101,6 @@ const AdminHistorial: React.FC = () => {
     try {
       setCargando(true);
 
-      const data: CrearHistorialDTO = {
-        fecha: registroEditando.fecha,
-        entrada: editandoEntrada || undefined,
-        inicioColacion: editandoInicioColacion || undefined,
-        finColacion: editandoFinColacion || undefined,
-        salida: editandoSalida || undefined,
-      };
-
-      const storedUser = localStorage.getItem("user");
-      if (!storedUser) return;
-      const user = JSON.parse(storedUser);
-      const correo = user.correo;
-
-      const deviceId = getDeviceId();
-      console.log("UUID que vamos a enviar al back en historial:", deviceId);
-
-      await crearHistorial(correo, data);
-      await cargarHistorial();
       await actualizarHistorial(registroEditando.id, {
         entrada: editarEntrada,
         inicioColacion: editarInicioColacion,
@@ -174,6 +121,7 @@ const AdminHistorial: React.FC = () => {
       }));
       setHistorial(historialFormateado);
 
+      setMensaje("Historial actualizado correctamente");
       setModal({
         open: true,
         type: "success",
@@ -181,248 +129,203 @@ const AdminHistorial: React.FC = () => {
         message: "Los cambios se guardaron correctamente",
       });
 
-      setRegistroEditando(null);
-    } catch (error) {
-       if (axios.isAxiosError(error)) {
-        if (error.response?.status === 403) {
-            setModal({
-              open: true,
-              type: "error",
-              title: "Error",
-              message: "Este equipo no está autorizado para registrar asistencia",
-            });
-        }
-        setRegistroEditando(null);
-      }else {
-        console.error("Error actualizando historial:", error);
-        setModal({
-          open: true,
-          type: "error",
-          title: "Error",
-          message: "No se pudo actualizar el registro",
-        });
-      }
-    } finally {
-      setGuardando(false);
-      setRegistroEditando(null);
       setTimeout(() => {
         setModalEdicion(false);
         setMensaje(null);
       }, 1200);
     } catch (err) {
+      console.error("Error actualizando historial:", err);
       setError("Error al actualizar el historial");
-      console.error(err);
+      setModal({
+        open: true,
+        type: "error",
+        title: "Error",
+        message: "No se pudo actualizar el registro",
+      });
     } finally {
       setCargando(false);
     }
   };
 
   const historialFiltrado = historial.filter(
-    (h) =>
-      h.usuario.toLowerCase().includes(busqueda.toLowerCase()) ||
-      h.fecha.includes(busqueda)
+      (h) =>
+          h.usuario.toLowerCase().includes(busqueda.toLowerCase()) ||
+          h.fecha.includes(busqueda)
   );
 
   const historialPaginado = historialFiltrado.slice(indicePrimero, indiceUltimo);
-  const totalPaginas = Math.max(
-    1,
-    Math.ceil(historialFiltrado.length / filasPorPagina)
-  );
+  const totalPaginas = Math.ceil(historialFiltrado.length / filasPorPagina);
 
   return (
-    <div className="admin-page">
-      <h2 className="admin-title">Historial de Usuarios</h2>
+      <div className="admin-page">
+        <h2 className="admin-title">Historial de Usuarios</h2>
 
-      {cargandoInicial && (
-        <div className="cargando-overlay">
-          {/* <div className="cargando-contenido"> */}
-            <div className="cargando-texto">Cargando historial...</div>
-          {/* </div> */}
-        </div>
-      )}
-
-      {!cargandoInicial && (
-        <>
-          <div className="admin-actions">
-            <div className="search-box">
-              <input
-                type="text"
-                placeholder="Buscar por usuario o fecha"
-                value={busqueda}
-                onChange={(e) => {
-                  setBusqueda(e.target.value);
-                  setPaginaActual(1);
-                }}
-              />
-              <span className="search-icon">🔍</span>
-            </div>
-          </div>
-
-          <div className="tabla-container">
-            {historialPaginado.length === 0 ? (
-              <div className="tabla-vacia">Sin resultados</div>
-            ) : (
-              <>
-                <table className="tablaAdminUsuarios">
-                  <thead>
-                    <tr>
-                      <th>Usuario</th>
-                      <th>Fecha</th>
-                      <th>Entrada</th>
-                      <th>Colación Inicio</th>
-                      <th>Colación Fin</th>
-                      <th>Salida</th>
-                      <th>Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {historialPaginado.map((h) => (
-                      <tr key={h.id}>
-                        <td>{h.usuario}</td>
-                        <td>{h.fecha.split("-").reverse().join("/")}</td>
-                        <td>{h.entrada}</td>
-                        <td>{h.inicioColacion}</td>
-                        <td>{h.finColacion}</td>
-                        <td>{h.salida}</td>
-                        <td className="accionesAdminUsuarios">
-                          <button className="btn-accion editar" onClick={() => abrirEdicion(h)}>
-                            ✏️
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </>
-            )}
-            
-            <div className="paginacion">
-                <div className="paginacion-box">
-              <button
-                onClick={() => setPaginaActual((p) => Math.max(1, p - 1))}
-                disabled={paginaActual === 1}
-              >
-                ⬅
-              </button>
-
-              <span>
-                Página {paginaActual} de {totalPaginas}
-              </span>
-
-              <button
-                onClick={() =>
-                  setPaginaActual((p) => Math.min(totalPaginas, p + 1))
-                }
-                disabled={paginaActual === totalPaginas}
-              >
-                ➡
-              </button>
-            </div>
-            </div>
-          </div>
-        </>
-      )}
-
-      {/* MODAL DE EDICIÓN */}
-      {registroEditando && (
-        <div className="modal-overlay">
-          <div className="modal-usuario admin-style">
-            <h3 className="modal-title">Editar Jornada</h3>
-            
-            <div className="grid-campos">
-              <div className="campo">
-                <label>Entrada</label>
-                <input 
-                  type="time" 
-                  value={editarEntrada}
-                  onChange={(e) => setEditarEntrada(e.target.value)}
-                />
-              </div>
-              <div className="campo">
-                <label>Colación Inicio</label>
-                <input 
-                  type="time" 
-                  value={editarInicioColacion}
-                  onChange={(e) => setEditarInicioColacion(e.target.value)}
-                />
-              </div>
-              <div className="campo">
-                <label>Colación Fin</label>
-                <input 
-                  type="time" 
-                  value={editarFinColacion}
-                  onChange={(e) => setEditarFinColacion(e.target.value)}
-                />
-              </div>
-              <div className="campo">
-                <label>Salida</label>
-                <input 
-                  type="time" 
-                  value={editarSalida}
-                  onChange={(e) => setEditarSalida(e.target.value)}
-                />
-              </div>
-
-              <div className="modal-actions">
-                <button
-                  className="btn-secundario"
-                  onClick={() => setRegistroEditando(null)}
-                  disabled={guardando}
-                >
-                  Cancelar
-                </button>
-                <button
-                  className="btn-primario"
-                  onClick={handleGuardarEdicion}
-                  disabled={guardando}
-                >
-                  {guardando ? "Guardando..." : "Guardar"}
-                </button>
+        {cargandoInicial && (
+            <div className="cargando-overlay">
+              <div className="cargando-contenido">
+                <div className="cargando-texto">Cargando historial...</div>
               </div>
             </div>
+        )}
 
-            {error && (
-              <div className="alerta alerta-error">
-                <span className="alerta-icono">⚠️</span>
-                <span className="alerta-texto">{error}</span>
+        {!cargandoInicial && (
+            <>
+              <div className="admin-actions">
+                <div className="search-box">
+                  <input
+                      type="text"
+                      placeholder="Buscar por usuario o fecha"
+                      value={busqueda}
+                      onChange={(e) => {
+                        setBusqueda(e.target.value);
+                        setPaginaActual(1);
+                      }}
+                  />
+                  <span className="search-icon">🔍</span>
+                </div>
               </div>
-            )}
-            {mensaje && (
-              <div className="alerta alerta-exito">
-                <span className="alerta-icono">✓</span>
-                <span className="alerta-texto">{mensaje}</span>
-              </div>
-            )}
 
-            <div className="modal-actions">
-              <button 
-                className="btn-secundario" 
-                onClick={() => setModalEdicion(false)}
-                disabled={cargando}
-              >
-                Cancelar
-              </button>
-              <button 
-                className="btn-primario" 
-                onClick={handleGuardarEdicion}
-                disabled={cargando}
-              >
-                {cargando ? "Guardando..." : "Guardar"}
-              </button>
+              <div className="tabla-container">
+                {historialPaginado.length === 0 ? (
+                    <div className="tabla-vacia">Sin resultados</div>
+                ) : (
+                    <>
+                      <table className="tablaAdminUsuarios">
+                        <thead>
+                        <tr>
+                          <th>Usuario</th>
+                          <th>Fecha</th>
+                          <th>Entrada</th>
+                          <th>Colación Inicio</th>
+                          <th>Colación Fin</th>
+                          <th>Salida</th>
+                          <th>Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {historialPaginado.map((h) => (
+                            <tr key={h.id}>
+                              <td>{h.usuario}</td>
+                              <td>{h.fecha.split("-").reverse().join("/")}</td>
+                              <td>{h.entrada}</td>
+                              <td>{h.inicioColacion}</td>
+                              <td>{h.finColacion}</td>
+                              <td>{h.salida}</td>
+                              <td className="accionesAdminUsuarios">
+                                <button className="btn-accion editar" onClick={() => abrirEdicion(h)}>
+                                  ✏️
+                                </button>
+                              </td>
+                            </tr>
+                        ))}
+                        </tbody>
+                      </table>
+
+                      <div className="paginacion">
+                        <button
+                            onClick={() => setPaginaActual(paginaActual - 1)}
+                            disabled={paginaActual === 1}
+                        >
+                          ⬅
+                        </button>
+                        <span>
+                    Página {paginaActual} de {totalPaginas}
+                  </span>
+                        <button
+                            onClick={() => setPaginaActual(paginaActual + 1)}
+                            disabled={paginaActual === totalPaginas}
+                        >
+                          ➡
+                        </button>
+                      </div>
+                    </>
+                )}
+              </div>
+            </>
+        )}
+
+        {modalEdicion && registroEditando && (
+            <div className="modal-overlay">
+              <div className="modal-usuario admin-style">
+                <h3 className="modal-title">Editar Jornada</h3>
+
+                <div className="grid-campos">
+                  <div className="campo">
+                    <label>Entrada</label>
+                    <input
+                        type="time"
+                        value={editarEntrada}
+                        onChange={(e) => setEditarEntrada(e.target.value)}
+                    />
+                  </div>
+                  <div className="campo">
+                    <label>Colación Inicio</label>
+                    <input
+                        type="time"
+                        value={editarInicioColacion}
+                        onChange={(e) => setEditarInicioColacion(e.target.value)}
+                    />
+                  </div>
+                  <div className="campo">
+                    <label>Colación Fin</label>
+                    <input
+                        type="time"
+                        value={editarFinColacion}
+                        onChange={(e) => setEditarFinColacion(e.target.value)}
+                    />
+                  </div>
+                  <div className="campo">
+                    <label>Salida</label>
+                    <input
+                        type="time"
+                        value={editarSalida}
+                        onChange={(e) => setEditarSalida(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                {error && (
+                    <div className="alerta alerta-error">
+                      <span className="alerta-icono">⚠️</span>
+                      <span className="alerta-texto">{error}</span>
+                    </div>
+                )}
+                {mensaje && (
+                    <div className="alerta alerta-exito">
+                      <span className="alerta-icono">✓</span>
+                      <span className="alerta-texto">{mensaje}</span>
+                    </div>
+                )}
+
+                <div className="modal-actions">
+                  <button
+                      className="btn-secundario"
+                      onClick={() => setModalEdicion(false)}
+                      disabled={cargando}
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                      className="btn-primario"
+                      onClick={handleGuardarEdicion}
+                      disabled={cargando}
+                  >
+                    {cargando ? "Guardando..." : "Guardar"}
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+        )}
 
-      {/* MODAL */}
-      <Modal
-        open={modal.open}
-        type={modal.type}
-        title={modal.title}
-        message={modal.message}
-        onClose={() => setModal(prev => ({ ...prev, open: false }))}
-      />
-    </div>
+        {/* MODAL */}
+        <Modal
+            open={modal.open}
+            type={modal.type}
+            title={modal.title}
+            message={modal.message}
+            onClose={() => setModal(prev => ({ ...prev, open: false }))}
+        />
+      </div>
   );
 };
 
