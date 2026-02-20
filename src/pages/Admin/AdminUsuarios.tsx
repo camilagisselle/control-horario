@@ -61,13 +61,23 @@ const AdminUsuarios = () => {
   }, []);
 
   const cargarUsuarios = async () => {
-    const data = await listarUsuarios();
-    setUsuarios(data);
+    setCargando(true);
+    try {
+      const data = await listarUsuarios();
+      setUsuarios(data);
+    } finally {
+      setCargando(false);
+    }
   };
 
   const cargarPerfiles = async () => {
-    const data = await listarPerfiles();
-    setPerfiles(data);
+    setCargando(true);
+    try {
+      const data = await listarPerfiles();
+      setPerfiles(data);
+    } finally {
+      setCargando(false);
+    }
   };
 
   const abrirModalCrear = () => {
@@ -182,7 +192,13 @@ const AdminUsuarios = () => {
   return (
     <div className="admin-page">
       <h2 className="admin-title">Usuarios</h2>
-
+      {cargando && (
+        <div className="cargando-overlay">
+          {/* <div className="cargando-contenido"> */}
+            <div className="cargando-texto">Cargando...</div>
+          {/* </div> */}
+        </div>
+      )}
       {/* BUSCADOR Y BOTÓN */}
       <div className="admin-actions">
         <div className="search-box">

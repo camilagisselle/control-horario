@@ -192,23 +192,7 @@
   font-size: 18px;
   margin: 0;
 }
-.cargando-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
-  font-size: 18px;
-  font-weight: bold;
-  color: #414ac3;
-  border-radius: 12px;
-}
- 
+
 .cargando-texto {
   padding: 20px 30px;
   background: #fff;
