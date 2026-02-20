@@ -36,6 +36,10 @@ const AdminUsuarios = () => {
   const [error, setError] = useState<string | null>(null);
   const [mensaje, setMensaje] = useState<string | null>(null);
 
+  // ✅ NUEVO: Estado para cambio de estado
+  const [cambiandoEstado, setCambiandoEstado] = useState<string | null>(null);
+  const [mensajeEstado, setMensajeEstado] = useState<string | null>(null);
+
   const [paginaActual, setPaginaActual] = useState(1);
   const usuariosPorPagina = 5;
 
@@ -161,11 +165,32 @@ const AdminUsuarios = () => {
     }
   };
 
+  // ✅ MODIFICADO: Toggle estado con mensaje
   const toggleEstado = async (usuario: UsuarioAPI) => {
-    await actualizarUsuario(usuario.correo, {
-      estado: usuario.estado === 1 ? 0 : 1,
-    });
-    await cargarUsuarios();
+    setCambiandoEstado(usuario.correo);
+    setMensajeEstado("Cambiando estado...");
+
+    try {
+      await actualizarUsuario(usuario.correo, {
+        estado: usuario.estado === 1 ? 0 : 1,
+      });
+      await cargarUsuarios();
+
+      setMensajeEstado(
+        `Estado cambiado a ${usuario.estado === 1 ? "inactivo" : "activo"}`
+      );
+
+      setTimeout(() => {
+        setMensajeEstado(null);
+      }, 2000);
+    } catch {
+      setMensajeEstado("Error al cambiar estado");
+      setTimeout(() => {
+        setMensajeEstado(null);
+      }, 2000);
+    } finally {
+      setCambiandoEstado(null);
+    }
   };
 
   const usuariosFiltrados = usuarios.filter(
@@ -188,6 +213,14 @@ const AdminUsuarios = () => {
     <div className="admin-page">
       <h2 className="admin-title">Usuarios</h2>
 
+      {/* ✅ NUEVO: Mensaje flotante de cambio de estado */}
+      {mensajeEstado && (
+        <div className="alerta-flotante">
+          <span className="alerta-icono">⏳</span>
+          <span className="alerta-texto">{mensajeEstado}</span>
+        </div>
+      )}
+
       {cargandoInicial && (
         <div className="cargando-overlay">
           <div className="cargando-contenido">
@@ -198,7 +231,6 @@ const AdminUsuarios = () => {
 
       {!cargandoInicial && (
         <>
-          {/* BUSCADOR Y BOTÓN */}
           <div className="admin-actions">
             <div className="search-box">
               <input
@@ -215,7 +247,6 @@ const AdminUsuarios = () => {
             </button>
           </div>
 
-          {/* TABLA */}
           <div className="tabla-container">
             {usuariosPaginados.length === 0 ? (
               <div className="tabla-vacia">Sin resultados</div>
@@ -241,10 +272,15 @@ const AdminUsuarios = () => {
                         <td
                           className={`btn-estado ${
                             u.estado === 1 ? "activo" : "inactivo"
-                          }`}
-                          onClick={() => toggleEstado(u)}
+                          } ${cambiandoEstado === u.correo ? "cargando" : ""}`}
+                          onClick={() =>
+                            !cambiandoEstado && toggleEstado(u)
+                          }
+                          style={{
+                            cursor: cambiandoEstado ? "wait" : "pointer",
+                          }}
                         >
-                          ●
+                          {cambiandoEstado === u.correo ? "⏳" : "●"}
                         </td>
                         <td className="accionesAdminUsuarios">
                           <button
@@ -352,8 +388,18 @@ const AdminUsuarios = () => {
               </div>
             </div>
 
-            {error && <p style={{ color: "#dc2626" }}>{error}</p>}
-            {mensaje && <p style={{ color: "#16a34a" }}>{mensaje}</p>}
+            {error && (
+              <div className="alerta alerta-error">
+                <span className="alerta-icono">⚠️</span>
+                <span className="alerta-texto">{error}</span>
+              </div>
+            )}
+            {mensaje && (
+              <div className="alerta alerta-exito">
+                <span className="alerta-icono">✓</span>
+                <span className="alerta-texto">{mensaje}</span>
+              </div>
+            )}
 
             <div className="modal-actions">
               <button
@@ -403,7 +449,6 @@ const AdminUsuarios = () => {
                     )
                   }
                 >
-                  <option value="">Seleccionar perfil</option>
                   {perfiles.map((p) => (
                     <option key={p.perfil_id} value={p.perfil_id}>
                       {p.perfil_nombre}
@@ -425,8 +470,18 @@ const AdminUsuarios = () => {
               </div>
             </div>
 
-            {error && <p style={{ color: "#dc2626" }}>{error}</p>}
-            {mensaje && <p style={{ color: "#16a34a" }}>{mensaje}</p>}
+            {error && (
+              <div className="alerta alerta-error">
+                <span className="alerta-icono">⚠️</span>
+                <span className="alerta-texto">{error}</span>
+              </div>
+            )}
+            {mensaje && (
+              <div className="alerta alerta-exito">
+                <span className="alerta-icono">✓</span>
+                <span className="alerta-texto">{mensaje}</span>
+              </div>
+            )}
 
             <div className="modal-actions">
               <button
