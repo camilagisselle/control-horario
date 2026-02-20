@@ -2,7 +2,7 @@
   background: linear-gradient(135deg, #d9f7d6 0%, #c9f2f5 30%, #cfe3ff 65%, #b7d4ff 100%);
   display: flex;
   flex-direction: column;
-  overflow: visible; /* ✅ AGREGADO */
+  overflow: visible;
 }
 
 .historial-contenido {
@@ -28,7 +28,7 @@
 .admin-page {
   padding: 30px;
   background: transparent;
-  overflow: visible; /* ✅ AGREGADO */
+  overflow: visible;
 }
 
 .rango-fechas-wrapper {
@@ -136,8 +136,8 @@
 
 .tabla-container-scroll {
   flex: 1;
-  overflow-y: auto; /* Scroll vertical cuando sea necesario */
-  overflow-x: hidden; /* ✅ Sin scroll horizontal */
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .tabla-sin-header {
@@ -172,7 +172,6 @@
   background-color: #f8faff;
 }
 
-/* SCROLLBAR */
 .tabla-container-scroll::-webkit-scrollbar { 
   width: 8px; 
 }
@@ -187,13 +186,12 @@
   border-radius: 10px; 
 }
 
-/* ===== TABLA CONTAINER (si existe) ===== */
 .tabla-container {
   background: #e7ddff;
   padding: 18px;
   border-radius: 14px;
-  overflow-x: auto; /* ✅ Solo horizontal cuando sea necesario */
-  overflow-y: visible; /* ✅ Sin scroll vertical forzado */
+  overflow-x: auto;
+  overflow-y: visible;
   margin-top: 32px;
 }
 
@@ -225,49 +223,11 @@ tbody tr:nth-child(even) {
   background: rgba(255, 255, 255, 0.35);
 }
 
-/* MÓVIL */
 .mobile-only { display: none; }
 
-.paginacion {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  margin-top: 18px;
-}
-
-.paginacion button {
-  min-width: 32px;
-  height: 32px;
-  padding: 0 10px;
-  border-radius: 8px;
-  border: 1px solid #c7d2fe;
-  background: white;
-  font-size: 13px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.paginacion button:hover:not(:disabled) {
-  background: #e0e7ff;
-  transform: translateY(-1px);
-}
-
-.paginacion button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.paginacion span {
-  font-size: 13px;
-  font-weight: 500;
-  color: #1f3bb3;
-}
-
-/* ===== CORRECCIÓN SCROLL PARA PANTALLAS GRANDES ===== */
 @media (min-width: 1200px) {
   .tabla-container {
-    overflow-x: visible; /* ✅ Sin scroll horizontal en pantallas grandes */
+    overflow-x: visible;
   }
   
   table.tablaAdminUsuarios {
@@ -292,34 +252,12 @@ tbody tr:nth-child(even) {
   z-index: 10000 !important;
 }
 
-/* Loading Overlay */
-.cargando-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-
-.cargando-contenido {
-  background: white;
-  padding: 40px 60px;
-  border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  text-align: center;
-}
-
 .cargando-texto {
   font-size: 18px;
   font-weight: 600;
   color: #6b4eff;
 }
-/* Mensaje cuando no hay resultados */
+
 .tabla-vacia {
   text-align: center;
   padding: 60px 20px;

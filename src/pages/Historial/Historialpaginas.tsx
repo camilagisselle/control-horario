@@ -15,6 +15,23 @@ type Registro = {
   total: string;
 };
 
+export interface RegistroDTO {
+  fecha: string;
+  entrada: string | null;
+  inicioColacion: string | null;
+  finColacion: string | null;
+  salida: string | null;
+  totalHoras: string | number | null;
+}
+interface RegistroAPI {
+  fecha: string;
+  entrada?: string | null;
+  inicioColacion?: string | null;
+  finColacion?: string | null;
+  salida?: string | null;
+  totalHoras?: string | number | null;
+}
+
 export default function HistorialPage() {
   const [fechaDesde, setFechaDesde] = useState<Date | null>(null);
   const [fechaHasta, setFechaHasta] = useState<Date | null>(null);
@@ -50,7 +67,7 @@ export default function HistorialPage() {
       try {
         const data = await obtenerHistorialPorCorreo(correoUsuario);
 
-        const registrosFormateados: Registro[] = data.map((item: any) => ({
+        const registrosFormateados: Registro[] = data.map((item: RegistroAPI) => ({
           fecha: item.fecha,
           entrada: item.entrada || "-",
           inicioColacion: item.inicioColacion || "-",
@@ -86,8 +103,10 @@ export default function HistorialPage() {
     indicePrimero,
     indiceUltimo
   );
-  const totalPaginas = Math.ceil(
-    registrosFiltrados.length / registrosPorPagina
+
+  const totalPaginas = Math.max(
+    1,
+    Math.ceil(registrosFiltrados.length / registrosPorPagina)
   );
 
   const manejarBusqueda = () => {
@@ -152,9 +171,9 @@ export default function HistorialPage() {
 
       {cargando && (
         <div className="cargando-overlay">
-          <div className="cargando-contenido">
+          {/* <div className="cargando-contenido"> */}
             <div className="cargando-texto">Cargando historial...</div>
-          </div>
+          {/* </div> */}
         </div>
       )}
 
@@ -250,13 +269,11 @@ export default function HistorialPage() {
                     ⬅
                   </button>
                   <span>
-                    Página {paginaActual} de {totalPaginas || 1}
+                    Página {paginaActual} de {totalPaginas}
                   </span>
                   <button
                     onClick={() => setPaginaActual(paginaActual + 1)}
-                    disabled={
-                      paginaActual === totalPaginas || totalPaginas === 0
-                    }
+                    disabled={paginaActual === totalPaginas}
                   >
                     ➡
                   </button>

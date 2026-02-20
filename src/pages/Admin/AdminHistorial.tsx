@@ -4,7 +4,7 @@ import {
   obtenerTodosLosHistoriales,
   crearHistorial
 } from "../../services/HistorialService";
-import type { CrearHistorialDTO } from "../../services/HistorialService";
+import type { CrearHistorialDTO, HistorialDTO  } from "../../services/HistorialService";
 import Modal from "../../Modals/modal";
 import axios from "axios";
 import { getDeviceId } from "../../services/DeviceService";
@@ -83,7 +83,7 @@ const AdminHistorial: React.FC = () => {
     setCargando(true);
     try {
       const data = await obtenerTodosLosHistoriales();
-      const historialFormateado = data.map((item: any) => ({
+      const historialFormateado = data.map((item: HistorialDTO) => ({
         id: item.id,
         usuario: item.correoUsuario,
         fecha: item.fecha,
@@ -91,7 +91,7 @@ const AdminHistorial: React.FC = () => {
         inicioColacion: item.inicioColacion || "",
         finColacion: item.finColacion || "",
         salida: item.salida || "",
-        totalHoras: "0",
+        totalHoras: item.totalHoras?.toString() || "0",
       }));
       setHistorial(historialFormateado);
     } catch (error) {
@@ -224,7 +224,10 @@ const AdminHistorial: React.FC = () => {
   );
 
   const historialPaginado = historialFiltrado.slice(indicePrimero, indiceUltimo);
-  const totalPaginas = Math.ceil(historialFiltrado.length / filasPorPagina);
+  const totalPaginas = Math.max(
+    1,
+    Math.ceil(historialFiltrado.length / filasPorPagina)
+  );
 
   return (
     <div className="admin-page">
@@ -232,9 +235,9 @@ const AdminHistorial: React.FC = () => {
 
       {cargandoInicial && (
         <div className="cargando-overlay">
-          <div className="cargando-contenido">
+          {/* <div className="cargando-contenido"> */}
             <div className="cargando-texto">Cargando historial...</div>
-          </div>
+          {/* </div> */}
         </div>
       )}
 
@@ -290,26 +293,32 @@ const AdminHistorial: React.FC = () => {
                     ))}
                   </tbody>
                 </table>
-
-                <div className="paginacion">
-                  <button
-                    onClick={() => setPaginaActual(paginaActual - 1)}
-                    disabled={paginaActual === 1}
-                  >
-                    ⬅
-                  </button>
-                  <span>
-                    Página {paginaActual} de {totalPaginas}
-                  </span>
-                  <button
-                    onClick={() => setPaginaActual(paginaActual + 1)}
-                    disabled={paginaActual === totalPaginas}
-                  >
-                    ➡
-                  </button>
-                </div>
               </>
             )}
+            
+            <div className="paginacion">
+                <div className="paginacion-box">
+              <button
+                onClick={() => setPaginaActual((p) => Math.max(1, p - 1))}
+                disabled={paginaActual === 1}
+              >
+                ⬅
+              </button>
+
+              <span>
+                Página {paginaActual} de {totalPaginas}
+              </span>
+
+              <button
+                onClick={() =>
+                  setPaginaActual((p) => Math.min(totalPaginas, p + 1))
+                }
+                disabled={paginaActual === totalPaginas}
+              >
+                ➡
+              </button>
+            </div>
+            </div>
           </div>
         </>
       )}
