@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import "./Registro.css";
 import {crearHistorial, type CrearHistorialDTO, obtenerHistorialPorCorreo} from "../../services/HistorialService";
 import Modal from "../../Modals/modal";
+import axios from "axios";
+import { getDeviceId } from "../../services/DeviceService";
 
 export default function Registro() {
   const [hora, setHora] = useState("");
@@ -160,11 +162,12 @@ export default function Registro() {
     if (accion === "Inicio colación") payload.inicioColacion = horaActual;
     if (accion === "Fin colación") payload.finColacion = horaActual;
 
+    const deviceId = getDeviceId();
+    console.log("UUID que vamos a enviar al back en historial:", deviceId);
+
     try {
       await crearHistorial(correo, payload);
-
       actualizarBotones(accion);
-
       setModal({
         open: true,
         type: "success",
@@ -173,14 +176,18 @@ export default function Registro() {
       });
 
     } catch (error) {
-      console.error(error);
-
-      setModal({
-        open: true,
-        type: "error",
-        title: "Error",
-        message: "Este equipo no está autorizado para registrar asistencia",
-      });
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 403) {
+            setModal({
+              open: true,
+              type: "error",
+              title: "Error",
+              message: "Este equipo no está autorizado para registrar asistencia",
+            });
+        }
+      }else{      
+        console.error("Error al registrar asistencia:", error);
+      }
     } finally {
       setProcesando(false);
     }

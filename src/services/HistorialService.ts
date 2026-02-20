@@ -32,8 +32,6 @@ export const crearHistorial = async (
 ) => {
   const deviceId = getDeviceId();
 
-  console.log("UUIDafa enviado:", deviceId);
-
   return api.post(`/historial/${correo}`, data, {
     headers: {
       "UUID": deviceId,
@@ -51,13 +49,19 @@ export const obtenerHistorialPorCorreo = async (correo: string) => {
   return response.data;
 };
 
-// ✅ NUEVA FUNCIÓN PARA ACTUALIZAR
 export const actualizarHistorial = async (
   id: number,
   data: ActualizarHistorialDTO
 ) => {
-  const response = await api.put(`/historial/${id}`, data);
-    return response.data;
+  const deviceId = getDeviceId();
+
+  const response = await api.put(`/historial/${id}`, data, {
+    headers: {
+      "UUID": deviceId,
+    },
+  });
+
+  return response.data;
 };
 
 export const listarHistorial = async (): Promise<HistorialItem[]> => {

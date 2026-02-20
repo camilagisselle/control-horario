@@ -60,13 +60,6 @@ export default function AdminPerfil() {
         setPasswordNueva("");
       }
 
-      setModal({
-        open: true,
-        type: "success",
-        title: "Perfil actualizado",
-        message: "Los cambios se guardaron correctamente",
-      });
-
     } catch (error) {
       console.error("Error guardando cambios:", error);
       setModal({
@@ -77,6 +70,12 @@ export default function AdminPerfil() {
       });
     } finally {
       setLoading(false);
+      setModal({
+        open: true,
+        type: "success",
+        title: "Perfil actualizado",
+        message: "Los cambios se guardaron correctamente",
+      });
     }
   };
 

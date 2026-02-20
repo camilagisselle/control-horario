@@ -110,7 +110,7 @@ function RecupContrasena() {
         <button className="reenviar">Reenviar Código</button>
       </div>
 
-      {/* MODAL GLOBAL */}
+      {/* MODAL */}
       {modal.open && (
         <div className="modal-overlay">
           <div className={`modal-box modal-${modal.type}`}>

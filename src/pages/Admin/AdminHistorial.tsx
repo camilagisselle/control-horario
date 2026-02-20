@@ -2,9 +2,12 @@ import React, { useState, useEffect } from "react";
 import "./AdminHistorial.css";
 import { 
   obtenerTodosLosHistoriales,
-  actualizarHistorial
+  crearHistorial
 } from "../../services/HistorialService";
-import type { ActualizarHistorialDTO } from "../../services/HistorialService";
+import type { CrearHistorialDTO } from "../../services/HistorialService";
+import Modal from "../../Modals/modal";
+import axios from "axios";
+import { getDeviceId } from "../../services/DeviceService";
 
 interface HistorialItem {
   id: number;
@@ -20,19 +23,22 @@ interface HistorialItem {
 const AdminHistorial: React.FC = () => {
   const [historial, setHistorial] = useState<HistorialItem[]>([]);
   const [busqueda, setBusqueda] = useState("");
-  const [modalEdicion, setModalEdicion] = useState(false);
-  const [registroEditando, setRegistroEditando] = useState<HistorialItem | null>(null);
   const [paginaActual, setPaginaActual] = useState(1);
   const filasPorPagina = 5;
   const [cargando, setCargando] = useState(true);
-  
+  const [registroEditando, setRegistroEditando] = useState<HistorialItem | null>(null);
   const [editandoEntrada, setEditandoEntrada] = useState("");
   const [editandoInicioColacion, setEditandoInicioColacion] = useState("");
   const [editandoFinColacion, setEditandoFinColacion] = useState("");
   const [editandoSalida, setEditandoSalida] = useState("");
   const [guardando, setGuardando] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [mensaje, setMensaje] = useState<string | null>(null);
+
+  const [modal, setModal] = useState({
+    open: false,
+    type: "success" as "success" | "error" | "info" | "confirm",
+    title: "",
+    message: "",
+  });
 
   const indiceUltimo = paginaActual * filasPorPagina;
   const indicePrimero = indiceUltimo - filasPorPagina;
@@ -58,6 +64,12 @@ const AdminHistorial: React.FC = () => {
       setHistorial(historialFormateado);
     } catch (error) {
       console.error("Error cargando historial:", error);
+      setModal({
+        open: true,
+        type: "error",
+        title: "Error",
+        message: "No se pudo cargar el historial",
+      });
     } finally {
       setCargando(false);
     }
@@ -69,41 +81,64 @@ const AdminHistorial: React.FC = () => {
     setEditandoInicioColacion(registro.inicioColacion);
     setEditandoFinColacion(registro.finColacion);
     setEditandoSalida(registro.salida);
-    setError(null);
-    setMensaje(null);
-    setModalEdicion(true);
   };
 
   const handleGuardarEdicion = async () => {
     if (!registroEditando) return;
 
-    setError(null);
-    setMensaje(null);
-
     try {
       setGuardando(true);
 
-      const data: ActualizarHistorialDTO = {
+      const data: CrearHistorialDTO = {
+        fecha: registroEditando.fecha,
         entrada: editandoEntrada || undefined,
         inicioColacion: editandoInicioColacion || undefined,
         finColacion: editandoFinColacion || undefined,
         salida: editandoSalida || undefined,
       };
 
-      await actualizarHistorial(registroEditando.id, data);
+      const storedUser = localStorage.getItem("user");
+      if (!storedUser) return;
+      const user = JSON.parse(storedUser);
+      const correo = user.correo;
+
+      const deviceId = getDeviceId();
+      console.log("UUID que vamos a enviar al back en historial:", deviceId);
+
+      await crearHistorial(correo, data);
       await cargarHistorial();
 
-      setMensaje("Historial actualizado correctamente");
+      setModal({
+        open: true,
+        type: "success",
+        title: "Historial actualizado",
+        message: "Los cambios se guardaron correctamente",
+      });
 
-      setTimeout(() => {
-        setModalEdicion(false);
-        setMensaje(null);
-      }, 1200);
+      setRegistroEditando(null);
     } catch (error) {
-      console.error("Error actualizando historial:", error);
-      setError("Error al actualizar el historial");
+       if (axios.isAxiosError(error)) {
+        if (error.response?.status === 403) {
+            setModal({
+              open: true,
+              type: "error",
+              title: "Error",
+              message: "Este equipo no está autorizado para registrar asistencia",
+            });
+        }
+        setRegistroEditando(null);
+      }else {
+        console.error("Error actualizando historial:", error);
+        setModal({
+          open: true,
+          type: "error",
+          title: "Error",
+          message: "No se pudo actualizar el registro",
+        });
+      }
     } finally {
       setGuardando(false);
+      setRegistroEditando(null);
     }
   };
 
@@ -207,7 +242,8 @@ const AdminHistorial: React.FC = () => {
         </>
       )}
 
-      {modalEdicion && registroEditando && (
+      {/* MODAL DE EDICIÓN */}
+      {registroEditando && (
         <div className="modal-overlay">
           <div className="modal-usuario admin-style">
             <h3 className="modal-title">Editar Jornada</h3>
@@ -248,30 +284,36 @@ const AdminHistorial: React.FC = () => {
                   onChange={(e) => setEditandoSalida(e.target.value)}
                 />
               </div>
-            </div>
 
-            {error && <p style={{ color: "#dc2626" }}>{error}</p>}
-            {mensaje && <p style={{ color: "#16a34a" }}>{mensaje}</p>}
-
-            <div className="modal-actions">
-              <button
-                className="btn-secundario"
-                onClick={() => setModalEdicion(false)}
-                disabled={guardando}
-              >
-                Cancelar
-              </button>
-              <button
-                className="btn-primario"
-                onClick={handleGuardarEdicion}
-                disabled={guardando}
-              >
-                {guardando ? "Guardando..." : "Guardar"}
-              </button>
+              <div className="modal-actions">
+                <button
+                  className="btn-secundario"
+                  onClick={() => setRegistroEditando(null)}
+                  disabled={guardando}
+                >
+                  Cancelar
+                </button>
+                <button
+                  className="btn-primario"
+                  onClick={handleGuardarEdicion}
+                  disabled={guardando}
+                >
+                  {guardando ? "Guardando..." : "Guardar"}
+                </button>
+              </div>
             </div>
           </div>
         </div>
       )}
+
+      {/* MODAL */}
+      <Modal
+        open={modal.open}
+        type={modal.type}
+        title={modal.title}
+        message={modal.message}
+        onClose={() => setModal(prev => ({ ...prev, open: false }))}
+      />
     </div>
   );
 };
