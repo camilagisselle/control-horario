@@ -1,12 +1,23 @@
-import { v4 as uuidv4 } from "uuid";
+import { DeviceUUID } from 'device-uuid';
 
-export const getDeviceId = () => {
-  let deviceId = localStorage.getItem("deviceId");
+const device = new DeviceUUID();
+const uuid = device.get();
+console.log(uuid);
 
-  if (!deviceId) {
-    deviceId = uuidv4();
-    localStorage.setItem("deviceId", deviceId);
-  }
+// Get device information
+const info = device.parse();
+console.log(info.browser); // Chrome
+console.log(info.os); // Windows 11
+console.log(info.isMobile); // false
 
-  return deviceId;
-};
+export function getDeviceUUID() {
+  const device = new DeviceUUID();
+  const uuid = device.get();
+
+  console.log("DEVICE UUID:", uuid);
+
+  const info = device.parse();
+  console.log("Device info:", info);
+
+  return uuid;
+}
