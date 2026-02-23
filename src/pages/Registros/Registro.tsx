@@ -3,7 +3,6 @@ import "./Registro.css";
 import {crearHistorial, type CrearHistorialDTO, obtenerHistorialPorCorreo} from "../../services/HistorialService";
 import Modal from "../../Modals/modal";
 import axios from "axios";
-import { getDeviceId } from "../../services/DeviceService";
 
 export default function Registro() {
   const [hora, setHora] = useState("");
@@ -161,9 +160,6 @@ export default function Registro() {
     if (accion === "Salida") payload.salida = horaActual;
     if (accion === "Inicio colación") payload.inicioColacion = horaActual;
     if (accion === "Fin colación") payload.finColacion = horaActual;
-
-    const deviceId = getDeviceId();
-    console.log("UUID que vamos a enviar al back en historial:", deviceId);
 
     try {
       await crearHistorial(correo, payload);

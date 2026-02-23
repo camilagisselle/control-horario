@@ -1,5 +1,5 @@
+import DeviceUUID from "device-uuid";
 import api from "./api";
-import { getDeviceId } from "./DeviceService";
 
 export type CrearHistorialDTO = {
   fecha: string;
@@ -31,11 +31,14 @@ export const crearHistorial = async (
   correo: string,
   data: CrearHistorialDTO
 ) => {
-  const deviceId = getDeviceId();
+  const device = new DeviceUUID();
+  const uuid = device.get();
+
+    console.log("UUID ANTES DE ENVIAR:", uuid);
 
   return api.post(`/historial/${correo}`, data, {
     headers: {
-      "UUID": deviceId,
+      "UUID": uuid,
     },
   });
 };
@@ -54,11 +57,14 @@ export const actualizarHistorial = async (
   id: number,
   data: ActualizarHistorialDTO
 ) => {
-  const deviceId = getDeviceId();
+  const device = new DeviceUUID();
+  const uuid = device.get();
+
+    console.log("UUID ANTES DE ENVIAR:", uuid);
 
   const response = await api.put(`/historial/${id}`, data, {
     headers: {
-      "UUID": deviceId,
+      "UUID": uuid,
     },
   });
 
