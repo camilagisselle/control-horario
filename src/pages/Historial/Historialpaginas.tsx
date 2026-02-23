@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import DatePicker from "react-datepicker";
 import { es } from "date-fns/locale";
 import "react-datepicker/dist/react-datepicker.css";
@@ -33,6 +33,7 @@ interface RegistroAPI {
 }
 
 export default function HistorialPage() {
+  const yaCargo = useRef(false);
   const [fechaDesde, setFechaDesde] = useState<Date | null>(null);
   const [fechaHasta, setFechaHasta] = useState<Date | null>(null);
   const [registros, setRegistros] = useState<Registro[]>([]);
@@ -56,7 +57,10 @@ export default function HistorialPage() {
     return null;
   })();
 
-  useEffect(() => {
+    useEffect(() => {
+    if (yaCargo.current) return;
+    yaCargo.current = true;
+
     const cargarRegistros = async () => {
       if (!correoUsuario) {
         setCargando(false);

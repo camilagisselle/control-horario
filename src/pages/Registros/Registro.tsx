@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./Registro.css";
 import {crearHistorial, type CrearHistorialDTO, obtenerHistorialPorCorreo} from "../../services/HistorialService";
 import Modal from "../../Modals/modal";
@@ -6,6 +6,7 @@ import axios from "axios";
 import { getDeviceId } from "../../services/DeviceService";
 
 export default function Registro() {
+  const yaInicializo = useRef(false);
   const [hora, setHora] = useState("");
   const [accion, setAccion] = useState("");
   const [loading, setLoading] = useState(true);
@@ -35,65 +36,72 @@ export default function Registro() {
 
   // Inicializa los botones según el historial
   useEffect(() => {
-    const initBotones = async () => {
-      const storedUser = localStorage.getItem("user");
-      if (!storedUser) return setLoading(false);
+  if (yaInicializo.current) return;
+  yaInicializo.current = true;
 
-      const user = JSON.parse(storedUser);
-      const correo = user.correo;
+  const initBotones = async () => {
+    const storedUser = localStorage.getItem("user");
+    if (!storedUser) {
+      setLoading(false);
+      return;
+    }
 
-      try {
-        const historial = await obtenerHistorialPorCorreo(correo);
+    const user = JSON.parse(storedUser);
+    const correo = user.correo;
 
-        const hoy = new Intl.DateTimeFormat("sv-SE", {
-          timeZone: "America/Santiago",
-          year: "numeric",
-          month: "2-digit",
-          day: "2-digit"
-        }).format(new Date());
+    try {
+      const historial = await obtenerHistorialPorCorreo(correo);
 
-        const botones = {
-          entrada: true,
-          salida: false,
-          inicioColacion: false,
-          finColacion: false,
-        };
+      const hoy = new Intl.DateTimeFormat("sv-SE", {
+        timeZone: "America/Santiago",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      }).format(new Date());
 
-        if (historial && historial.length > 0) {
-          const registroHoy = historial.find((r: { fecha: string; }) => r.fecha === hoy);
+      const botones = {
+        entrada: true,
+        salida: false,
+        inicioColacion: false,
+        finColacion: false,
+      };
 
-          if (registroHoy) {
-            if (registroHoy.salida) {
-              botones.entrada = false;
-              botones.salida = false;
-              botones.inicioColacion = false;
-              botones.finColacion = false;
-            } else {
-              botones.entrada = !registroHoy.entrada;
-              botones.salida = !!registroHoy.entrada && !registroHoy.salida;
-              botones.inicioColacion = !!registroHoy.entrada && registroHoy.inicioColacion === null;
-              botones.finColacion = registroHoy.inicioColacion !== null && registroHoy.finColacion === null;
-            }
+      if (historial && historial.length > 0) {
+        const registroHoy = historial.find((r: { fecha: string }) => r.fecha === hoy);
+
+        if (registroHoy) {
+          if (registroHoy.salida) {
+            botones.entrada = false;
+            botones.salida = false;
+            botones.inicioColacion = false;
+            botones.finColacion = false;
+          } else {
+            botones.entrada = !registroHoy.entrada;
+            botones.salida = !!registroHoy.entrada && !registroHoy.salida;
+            botones.inicioColacion = !!registroHoy.entrada && registroHoy.inicioColacion === null;
+            botones.finColacion = registroHoy.inicioColacion !== null && registroHoy.finColacion === null;
           }
         }
-
-        setBotonesHabilitados(botones);
-
-      } catch (error) {
-        console.error(error);
-        setModal({
-          open: true,
-          type: "error",
-          title: "Error",
-          message: "Error obteniendo historial",
-        });
-      } finally {
-        setLoading(false);
       }
-    };
 
-    initBotones();
-  }, []);
+      setBotonesHabilitados(botones);
+
+    } catch (error) {
+      console.error(error);
+      setModal({
+        open: true,
+        type: "error",
+        title: "Error",
+        message: "Error obteniendo historial",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  initBotones();
+}, []);
+
 
   // Tipos
   type BotonKey = "entrada" | "salida" | "inicioColacion" | "finColacion";
