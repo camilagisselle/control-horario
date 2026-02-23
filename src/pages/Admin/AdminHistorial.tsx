@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./AdminHistorial.css";
 import {
   obtenerTodosLosHistoriales,
@@ -18,6 +18,7 @@ interface HistorialItem {
 }
 
 const AdminHistorial: React.FC = () => {
+  const yaCargo = useRef(false);
   const [historial, setHistorial] = useState<HistorialItem[]>([]);
   const [busqueda, setBusqueda] = useState("");
   const [modalEdicion, setModalEdicion] = useState(false);
@@ -45,36 +46,40 @@ const AdminHistorial: React.FC = () => {
   const indiceUltimo = paginaActual * filasPorPagina;
   const indicePrimero = indiceUltimo - filasPorPagina;
 
-  useEffect(() => {
-    const cargarHistorial = async () => {
-      setCargandoInicial(true);
-      try {
-        const data = await obtenerTodosLosHistoriales();
-        const historialFormateado = data.map((item: any) => ({
-          id: item.id,
-          usuario: item.correoUsuario,
-          fecha: item.fecha,
-          entrada: item.entrada,
-          inicioColacion: item.inicioColacion,
-          finColacion: item.finColacion,
-          salida: item.salida,
-          totalHoras: "0",
-        }));
-        setHistorial(historialFormateado);
-      } catch (error) {
-        console.error("Error cargando historial:", error);
-        setModal({
-          open: true,
-          type: "error",
-          title: "Error",
-          message: "No se pudo cargar el historial",
-        });
-      } finally {
-        setCargandoInicial(false);
-      }
-    };
-    cargarHistorial();
-  }, []);
+      useEffect(() => {
+      if (yaCargo.current) return;
+      yaCargo.current = true;
+
+      const cargarHistorial = async () => {
+        setCargandoInicial(true);
+        try {
+          const data = await obtenerTodosLosHistoriales();
+          const historialFormateado = data.map((item: any) => ({
+            id: item.id,
+            usuario: item.correoUsuario,
+            fecha: item.fecha,
+            entrada: item.entrada,
+            inicioColacion: item.inicioColacion,
+            finColacion: item.finColacion,
+            salida: item.salida,
+            totalHoras: "0",
+          }));
+          setHistorial(historialFormateado);
+        } catch (error) {
+          console.error("Error cargando historial:", error);
+          setModal({
+            open: true,
+            type: "error",
+            title: "Error",
+            message: "No se pudo cargar el historial",
+          });
+        } finally {
+          setCargandoInicial(false);
+        }
+      };
+
+      cargarHistorial();
+    }, []);
 
   const abrirEdicion = (registro: HistorialItem) => {
     setRegistroEditando(registro);

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import "./AdminUsuarios.css";
 import Modal from "../../Modals/modal";
 import {
@@ -22,6 +22,7 @@ interface GlobalModal {
 }
 
 const AdminUsuarios = () => {
+  const yaCargo = useRef(false);
   const [usuarios, setUsuarios] = useState<UsuarioAPI[]>([]);
   const [busqueda, setBusqueda] = useState("");
 
@@ -63,18 +64,22 @@ const AdminUsuarios = () => {
   const indiceUltimo = paginaActual * usuariosPorPagina;
   const indicePrimero = indiceUltimo - usuariosPorPagina;
 
-  useEffect(() => {
-    const cargarDatos = async () => {
-      setCargandoInicial(true);
-      try {
-        await cargarUsuarios();
-        await cargarPerfiles();
-      } finally {
-        setCargandoInicial(false);
-      }
-    };
-    cargarDatos();
-  }, []);
+    useEffect(() => {
+      if (yaCargo.current) return;
+      yaCargo.current = true;
+
+      const cargarDatos = async () => {
+        setCargandoInicial(true);
+        try {
+          await cargarUsuarios();
+          await cargarPerfiles();
+        } finally {
+          setCargandoInicial(false);
+        }
+      };
+
+      cargarDatos();
+    }, []);
 
   const cargarUsuarios = async () => {
     setCargando(true);
