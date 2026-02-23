@@ -110,7 +110,7 @@ const AdminUsuarios = () => {
   const abrirModalEditar = (usuario: UsuarioAPI) => {
     setEditarCorreo(usuario.correo);
     setEditarNombre(usuario.nombre);
-    setEditarPerfilId(usuario.perfil.id);
+    setEditarPerfilId(usuario.perfil.perfil_id);
     setEditarEstado(usuario.estado);
     setError(null);
     setMensaje(null);
@@ -122,11 +122,11 @@ const AdminUsuarios = () => {
     setMensaje(null);
 
     if (
-        !nombre ||
-        !correo ||
-        !password ||
-        password !== repetirPassword ||
-        perfilId === ""
+      !nombre ||
+      !correo ||
+      !password ||
+      password !== repetirPassword ||
+      perfilId === ""
     ) {
       setError("Completa todos los campos correctamente");
       setModal({
@@ -240,7 +240,7 @@ const AdminUsuarios = () => {
       await cargarUsuarios();
 
       setMensajeEstado(
-          `Estado cambiado a ${usuario.estado === 1 ? "inactivo" : "activo"}`
+        `Estado cambiado a ${usuario.estado === 1 ? "inactivo" : "activo"}`,
       );
 
       setTimeout(() => {
@@ -257,333 +257,330 @@ const AdminUsuarios = () => {
   };
 
   const usuariosFiltrados = usuarios.filter(
-      (u) =>
-          u.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
-          u.correo.toLowerCase().includes(busqueda.toLowerCase()) ||
-          u.perfil.perfil_nombre.toLowerCase().includes(busqueda.toLowerCase())
+    (u) =>
+      u.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
+      u.correo.toLowerCase().includes(busqueda.toLowerCase()) ||
+      u.perfil.perfil_nombre.toLowerCase().includes(busqueda.toLowerCase()),
   );
 
   const usuariosPaginados = usuariosFiltrados.slice(
-      indicePrimero,
-      indiceUltimo
+    indicePrimero,
+    indiceUltimo,
   );
 
-  const totalPaginas = Math.ceil(
-      usuariosFiltrados.length / usuariosPorPagina
-  );
+  const totalPaginas = Math.ceil(usuariosFiltrados.length / usuariosPorPagina);
 
   return (
-      <div className="admin-page">
-        <h2 className="admin-title">Usuarios</h2>
+    <div className="admin-page">
+      <h2 className="admin-title">Usuarios</h2>
       {cargando && (
         <div className="cargando-overlay">
           {/* <div className="cargando-contenido"> */}
-            <div className="cargando-texto">Cargando...</div>
+          <div className="cargando-texto">Cargando...</div>
           {/* </div> */}
         </div>
       )}
-        {/* ✅ NUEVO: Mensaje flotante de cambio de estado */}
-        {mensajeEstado && (
-            <div className="alerta-flotante">
-              <span className="alerta-icono">⏳</span>
-              <span className="alerta-texto">{mensajeEstado}</span>
+      {/* ✅ NUEVO: Mensaje flotante de cambio de estado */}
+      {mensajeEstado && (
+        <div className="alerta-flotante">
+          <span className="alerta-icono">⏳</span>
+          <span className="alerta-texto">{mensajeEstado}</span>
+        </div>
+      )}
+
+      {cargandoInicial && (
+        <div className="cargando-overlay">
+          <div className="cargando-contenido">
+            <div className="cargando-texto">Cargando usuarios...</div>
+          </div>
+        </div>
+      )}
+
+      {!cargandoInicial && (
+        <>
+          <div className="admin-actions">
+            <div className="search-box">
+              <input
+                type="text"
+                placeholder="Buscar usuario"
+                value={busqueda}
+                onChange={(e) => setBusqueda(e.target.value)}
+              />
+              <span className="search-icon">🔍</span>
             </div>
-        )}
 
-        {cargandoInicial && (
-            <div className="cargando-overlay">
-              <div className="cargando-contenido">
-                <div className="cargando-texto">Cargando usuarios...</div>
-              </div>
-            </div>
-        )}
+            <button className="btn-nuevo" onClick={abrirModalCrear}>
+              Nuevo
+            </button>
+          </div>
 
-        {!cargandoInicial && (
-            <>
-              <div className="admin-actions">
-                <div className="search-box">
-                  <input
-                      type="text"
-                      placeholder="Buscar usuario"
-                      value={busqueda}
-                      onChange={(e) => setBusqueda(e.target.value)}
-                  />
-                  <span className="search-icon">🔍</span>
-                </div>
+          <div className="tabla-container">
+            {usuariosPaginados.length === 0 ? (
+              <div className="tabla-vacia">Sin resultados</div>
+            ) : (
+              <>
+                <table className="tablaAdminUsuarios">
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Correo</th>
+                      <th>Perfil</th>
+                      <th>Estado</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
 
-                <button className="btn-nuevo" onClick={abrirModalCrear}>
-                  Nuevo
-                </button>
-              </div>
-
-              <div className="tabla-container">
-                {usuariosPaginados.length === 0 ? (
-                    <div className="tabla-vacia">Sin resultados</div>
-                ) : (
-                    <>
-                      <table className="tablaAdminUsuarios">
-                        <thead>
-                        <tr>
-                          <th>Nombre</th>
-                          <th>Correo</th>
-                          <th>Perfil</th>
-                          <th>Estado</th>
-                          <th>Acciones</th>
-                        </tr>
-                        </thead>
-
-                        <tbody>
-                        {usuariosPaginados.map((u) => (
-                            <tr key={u.correo}>
-                              <td>{u.nombre}</td>
-                              <td>{u.correo}</td>
-                              <td>{u.perfil.perfil_nombre}</td>
-                              <td
-                                  className={`btn-estado ${
-                                      u.estado === 1 ? "activo" : "inactivo"
-                                  } ${cambiandoEstado === u.correo ? "cargando" : ""}`}
-                                  onClick={() =>
-                                      !cambiandoEstado && toggleEstado(u)
-                                  }
-                                  style={{
-                                    cursor: cambiandoEstado ? "wait" : "pointer",
-                                  }}
-                              >
-                                {cambiandoEstado === u.correo ? "⏳" : "●"}
-                              </td>
-                              <td className="accionesAdminUsuarios">
-                                <button
-                                    className="btn-accion editar"
-                                    onClick={() => abrirModalEditar(u)}
-                                >
-                                  ✏️
-                                </button>
-                              </td>
-                            </tr>
-                        ))}
-                        </tbody>
-                      </table>
-
-                      <div className="paginacion">
-                        <div className="paginacion-box">
-                        <button
-                            onClick={() => setPaginaActual(paginaActual - 1)}
-                            disabled={paginaActual === 1}
+                  <tbody>
+                    {usuariosPaginados.map((u) => (
+                      <tr key={u.correo}>
+                        <td>{u.nombre}</td>
+                        <td>{u.correo}</td>
+                        <td>{u.perfil.perfil_nombre}</td>
+                        <td
+                          className={`btn-estado ${
+                            u.estado === 1 ? "activo" : "inactivo"
+                          } ${cambiandoEstado === u.correo ? "cargando" : ""}`}
+                          onClick={() => !cambiandoEstado && toggleEstado(u)}
+                          style={{
+                            cursor: cambiandoEstado ? "wait" : "pointer",
+                          }}
                         >
-                          ⬅
-                        </button>
+                          {cambiandoEstado === u.correo ? "⏳" : "●"}
+                        </td>
+                        <td className="accionesAdminUsuarios">
+                          <button
+                            className="btn-accion editar"
+                            onClick={() => abrirModalEditar(u)}
+                          >
+                            ✏️
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
 
-                        <span>
-                    Página {paginaActual} de {totalPaginas}
-                  </span>
-
-                        <button
-                            onClick={() => setPaginaActual(paginaActual + 1)}
-                            disabled={paginaActual === totalPaginas}
-                        >
-                          ➡
-                        </button>
-                      </div>
-                      </div>
-                    </>
-                )}
-              </div>
-            </>
-        )}
-
-        {/* MODAL CREAR */}
-        {mostrarModal && (
-            <div className="modal-overlay">
-              <div className="modal-usuario admin-style">
-                <h3 className="modal-title">Agregar usuario</h3>
-
-                <div className="modal-form">
-                  <div className="form-group">
-                    <label htmlFor="nombre">Nombre</label>
-                    <input
-                        id="nombre"
-                        type="text"
-                        value={nombre}
-                        onChange={(e) => setNombre(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="correo">Correo</label>
-                    <input
-                        id="correo"
-                        type="email"
-                        value={correo}
-                        onChange={(e) => setCorreo(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="password">Contraseña</label>
-                    <input
-                        id="password"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="repetirPassword">Repetir contraseña</label>
-                    <input
-                        id="repetirPassword"
-                        type="password"
-                        value={repetirPassword}
-                        onChange={(e) => setRepetirPassword(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="perfil">Perfil</label>
-                    <select
-                        id="perfil"
-                        value={perfilId}
-                        onChange={(e) =>
-                            setPerfilId(
-                                e.target.value === "" ? "" : Number(e.target.value)
-                            )
-                        }
+                <div className="paginacion">
+                  <div className="paginacion-box">
+                    <button
+                      onClick={() => setPaginaActual(paginaActual - 1)}
+                      disabled={paginaActual === 1}
                     >
-                      <option value="">Seleccionar perfil</option>
-                      {perfiles.map((p) => (
-                          <option key={p.perfil_id} value={p.perfil_id}>
-                            {p.perfil_nombre}
-                          </option>
-                      ))}
-                    </select>
+                      ⬅
+                    </button>
+
+                    <span>
+                      Página {paginaActual} de {totalPaginas}
+                    </span>
+
+                    <button
+                      onClick={() => setPaginaActual(paginaActual + 1)}
+                      disabled={paginaActual === totalPaginas}
+                    >
+                      ➡
+                    </button>
                   </div>
                 </div>
+              </>
+            )}
+          </div>
+        </>
+      )}
 
-                {error && (
-                    <div className="alerta alerta-error">
-                      <span className="alerta-icono">⚠️</span>
-                      <span className="alerta-texto">{error}</span>
-                    </div>
-                )}
-                {mensaje && (
-                    <div className="alerta alerta-exito">
-                      <span className="alerta-icono">✓</span>
-                      <span className="alerta-texto">{mensaje}</span>
-                    </div>
-                )}
+      {/* MODAL CREAR */}
+      {mostrarModal && (
+        <div className="modal-overlay">
+          <div className="modal-usuario admin-style">
+            <h3 className="modal-title">Agregar usuario</h3>
 
-                <div className="modal-actions">
-                  <button
-                      className="btn-secundario"
-                      onClick={() => setMostrarModal(false)}
-                      disabled={cargando}
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                      className="btn-primario"
-                      onClick={handleCrear}
-                      disabled={cargando}
-                  >
-                    {cargando ? "Guardando..." : "Crear"}
-                  </button>
-                </div>
+            <div className="modal-form">
+              <div className="form-group">
+                <label htmlFor="nombre">Nombre</label>
+                <input
+                  id="nombre"
+                  type="text"
+                  value={nombre}
+                  onChange={(e) => setNombre(e.target.value)}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="correo">Correo</label>
+                <input
+                  id="correo"
+                  type="email"
+                  value={correo}
+                  onChange={(e) => setCorreo(e.target.value)}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="password">Contraseña</label>
+                <input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="repetirPassword">Repetir contraseña</label>
+                <input
+                  id="repetirPassword"
+                  type="password"
+                  value={repetirPassword}
+                  onChange={(e) => setRepetirPassword(e.target.value)}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="perfil">Perfil</label>
+                <select
+                  id="perfil"
+                  value={perfilId}
+                  onChange={(e) =>
+                    setPerfilId(
+                      e.target.value === "" ? "" : Number(e.target.value),
+                    )
+                  }
+                >
+                  <option value="">Seleccionar perfil</option>
+                  {perfiles.map((p) => (
+                    <option key={p.perfil_id} value={p.perfil_id}>
+                      {p.perfil_nombre}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
-        )}
 
-        {/* MODAL EDITAR */}
-        {mostrarModalEditar && (
-            <div className="modal-overlay">
-              <div className="modal-usuario admin-style">
-                <h3 className="modal-title">Editar usuario</h3>
+            {error && (
+              <div className="alerta alerta-error">
+                <span className="alerta-icono">⚠️</span>
+                <span className="alerta-texto">{error}</span>
+              </div>
+            )}
+            {mensaje && (
+              <div className="alerta alerta-exito">
+                <span className="alerta-icono">✓</span>
+                <span className="alerta-texto">{mensaje}</span>
+              </div>
+            )}
 
-                <div className="modal-form">
-                  <div className="form-group">
-                    <label htmlFor="editarNombre">Nombre</label>
-                    <input
-                        id="editarNombre"
-                        type="text"
-                        value={editarNombre}
-                        onChange={(e) => setEditarNombre(e.target.value)}
-                    />
-                  </div>
+            <div className="modal-actions">
+              <button
+                className="btn-secundario"
+                onClick={() => setMostrarModal(false)}
+                disabled={cargando}
+              >
+                Cancelar
+              </button>
+              <button
+                className="btn-primario"
+                onClick={handleCrear}
+                disabled={cargando}
+              >
+                {cargando ? "Guardando..." : "Crear"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
-                  <div className="form-group">
-                    <label htmlFor="editarPerfil">Perfil</label>
-                    <select
-                        id="editarPerfil"
-                        value={editarPerfilId}
-                        onChange={(e) =>
-                            setEditarPerfilId(
-                                e.target.value === "" ? "" : Number(e.target.value)
-                            )
-                        }
-                    >
-                      {perfiles.map((p) => (
-                          <option key={p.perfil_id} value={p.perfil_id}>
-                            {p.perfil_nombre}
-                          </option>
-                      ))}
-                    </select>
-                  </div>
+      {/* MODAL EDITAR */}
+      {mostrarModalEditar && (
+        <div className="modal-overlay">
+          <div className="modal-usuario admin-style">
+            <h3 className="modal-title">Editar usuario</h3>
 
-                  <div className="form-group">
-                    <label htmlFor="editarEstado">Estado</label>
-                    <select
-                        id="editarEstado"
-                        value={editarEstado}
-                        onChange={(e) => setEditarEstado(Number(e.target.value))}
-                    >
-                      <option value={1}>Activo</option>
-                      <option value={0}>Inactivo</option>
-                    </select>
-                  </div>
-                </div>
+            <div className="modal-form">
+              <div className="form-group">
+                <label htmlFor="editarNombre">Nombre</label>
+                <input
+                  id="editarNombre"
+                  type="text"
+                  value={editarNombre}
+                  onChange={(e) => setEditarNombre(e.target.value)}
+                />
+              </div>
 
-                {error && (
-                    <div className="alerta alerta-error">
-                      <span className="alerta-icono">⚠️</span>
-                      <span className="alerta-texto">{error}</span>
-                    </div>
-                )}
-                {mensaje && (
-                    <div className="alerta alerta-exito">
-                      <span className="alerta-icono">✓</span>
-                      <span className="alerta-texto">{mensaje}</span>
-                    </div>
-                )}
+              <div className="form-group">
+                <label htmlFor="editarPerfil">Perfil</label>
+                <select
+                  id="editarPerfil"
+                  value={editarPerfilId}
+                  onChange={(e) =>
+                    setEditarPerfilId(
+                      e.target.value === "" ? "" : Number(e.target.value),
+                    )
+                  }
+                >
+                  <option value="">Seleccionar perfil</option>
+                  {perfiles.map((p) => (
+                    <option key={p.perfil_id} value={p.perfil_id}>
+                      {p.perfil_nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-                <div className="modal-actions">
-                  <button
-                      className="btn-secundario"
-                      onClick={() => setMostrarModalEditar(false)}
-                      disabled={cargando}
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                      className="btn-primario"
-                      onClick={handleEditar}
-                      disabled={cargando}
-                  >
-                    {cargando ? "Guardando..." : "Guardar"}
-                  </button>
-                </div>
+              <div className="form-group">
+                <label htmlFor="editarEstado">Estado</label>
+                <select
+                  id="editarEstado"
+                  value={editarEstado}
+                  onChange={(e) => setEditarEstado(Number(e.target.value))}
+                >
+                  <option value={1}>Activo</option>
+                  <option value={0}>Inactivo</option>
+                </select>
               </div>
             </div>
-        )}
 
-        {/* MODAL GLOBAL */}
-        <Modal
-            open={modal.open}
-            type={modal.type}
-            title={modal.title}
-            message={modal.message}
-            onClose={() => setModal((prev) => ({ ...prev, open: false }))}
-            onConfirm={modal.onConfirm}
-        />
-      </div>
+            {error && (
+              <div className="alerta alerta-error">
+                <span className="alerta-icono">⚠️</span>
+                <span className="alerta-texto">{error}</span>
+              </div>
+            )}
+            {mensaje && (
+              <div className="alerta alerta-exito">
+                <span className="alerta-icono">✓</span>
+                <span className="alerta-texto">{mensaje}</span>
+              </div>
+            )}
+
+            <div className="modal-actions">
+              <button
+                className="btn-secundario"
+                onClick={() => setMostrarModalEditar(false)}
+                disabled={cargando}
+              >
+                Cancelar
+              </button>
+              <button
+                className="btn-primario"
+                onClick={handleEditar}
+                disabled={cargando}
+              >
+                {cargando ? "Guardando..." : "Guardar"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL GLOBAL */}
+      <Modal
+        open={modal.open}
+        type={modal.type}
+        title={modal.title}
+        message={modal.message}
+        onClose={() => setModal((prev) => ({ ...prev, open: false }))}
+        onConfirm={modal.onConfirm}
+      />
+    </div>
   );
 };
 
