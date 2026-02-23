@@ -57,16 +57,7 @@ export const actualizarHistorial = async (
   id: number,
   data: ActualizarHistorialDTO
 ) => {
-  const device = new DeviceUUID();
-  const uuid = device.get();
-
-    console.log("UUID ANTES DE ENVIAR:", uuid);
-
   const response = await api.put(`/historial/${id}`, data, {
-    headers: {
-      "UUID": uuid,
-    },
   });
-
   return response.data;
 };
