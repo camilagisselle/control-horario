@@ -4,9 +4,9 @@ export type UsuarioAPI = {
   correo: string;
   nombre: string;
   estado: number;
+  id: number | null;
   perfil: {
-    id: number;
-    nombre: string;
+    perfil_id: number;
     perfil_nombre: string;
   };
 };
