@@ -17,6 +17,24 @@ interface HistorialItem {
   totalHoras: string;
 }
 
+export interface HistorialDTO {
+  id: number;
+  correoUsuario: string;
+  fecha: string;
+  entrada?: string | null;
+  inicioColacion?: string | null;
+  finColacion?: string | null;
+  salida?: string | null;
+  totalHoras?: string | number | null;
+}
+
+interface ActualizarHistorialDTO {
+  entrada?: string;
+  inicioColacion?: string;
+  finColacion?: string;
+  salida?: string;
+}
+
 const AdminHistorial: React.FC = () => {
   const yaCargo = useRef(false);
   const [historial, setHistorial] = useState<HistorialItem[]>([]);
@@ -46,47 +64,47 @@ const AdminHistorial: React.FC = () => {
   const indiceUltimo = paginaActual * filasPorPagina;
   const indicePrimero = indiceUltimo - filasPorPagina;
 
-      useEffect(() => {
-      if (yaCargo.current) return;
-      yaCargo.current = true;
+  useEffect(() => {
+    if (yaCargo.current) return;
+    yaCargo.current = true;
 
-      const cargarHistorial = async () => {
-        setCargandoInicial(true);
-        try {
-          const data = await obtenerTodosLosHistoriales();
-          const historialFormateado = data.map((item: any) => ({
-            id: item.id,
-            usuario: item.correoUsuario,
-            fecha: item.fecha,
-            entrada: item.entrada,
-            inicioColacion: item.inicioColacion,
-            finColacion: item.finColacion,
-            salida: item.salida,
-            totalHoras: "0",
-          }));
-          setHistorial(historialFormateado);
-        } catch (error) {
-          console.error("Error cargando historial:", error);
-          setModal({
-            open: true,
-            type: "error",
-            title: "Error",
-            message: "No se pudo cargar el historial",
-          });
-        } finally {
-          setCargandoInicial(false);
-        }
-      };
+    const cargarHistorial = async () => {
+      setCargandoInicial(true);
+      try {
+        const data = await obtenerTodosLosHistoriales();
+        const historialFormateado: HistorialItem[] = data.map((item: HistorialDTO) => ({
+          id: item.id,
+          usuario: item.correoUsuario,
+          fecha: item.fecha || "-",
+          entrada: item.entrada || "-",
+          inicioColacion: item.inicioColacion || "-",
+          finColacion: item.finColacion || "-",
+          salida: item.salida || "-",
+          totalHoras: String(item.totalHoras ?? "0"),
+        }));
+        setHistorial(historialFormateado);
+      } catch (error) {
+        console.error("Error cargando historial:", error);
+        setModal({
+          open: true,
+          type: "error",
+          title: "Error",
+          message: "No se pudo cargar el historial",
+        });
+      } finally {
+        setCargandoInicial(false);
+      }
+    };
 
-      cargarHistorial();
-    }, []);
+    cargarHistorial();
+  }, []);
 
   const abrirEdicion = (registro: HistorialItem) => {
     setRegistroEditando(registro);
-    setEditarEntrada(registro.entrada);
-    setEditarInicioColacion(registro.inicioColacion);
-    setEditarFinColacion(registro.finColacion);
-    setEditarSalida(registro.salida);
+    setEditarEntrada(registro.entrada ?? "");
+    setEditarInicioColacion(registro.inicioColacion && registro.inicioColacion !== "-" ? registro.inicioColacion : "");
+    setEditarFinColacion(registro.finColacion && registro.finColacion !== "-" ? registro.finColacion : "");
+    setEditarSalida(registro.salida && registro.salida !== "-" ? registro.salida : "");
     setError(null);
     setMensaje(null);
     setModalEdicion(true);
@@ -97,43 +115,31 @@ const AdminHistorial: React.FC = () => {
 
     setError(null);
     setMensaje(null);
-
-    if (!editarEntrada || !editarSalida) {
-      setError("Entrada y Salida son obligatorios");
-      return;
-    }
-
+    setCargando(true);
     try {
-      setCargando(true);
+      const payload: Partial<ActualizarHistorialDTO> = {
+        entrada: editarEntrada || undefined,
+        inicioColacion: editarInicioColacion || undefined,
+        finColacion: editarFinColacion || undefined,
+        salida: editarSalida || undefined,
+      };
 
-      await actualizarHistorial(registroEditando.id, {
-        entrada: editarEntrada,
-        inicioColacion: editarInicioColacion,
-        finColacion: editarFinColacion,
-        salida: editarSalida,
-      });
-
+      await actualizarHistorial(registroEditando!.id, payload);
       const data = await obtenerTodosLosHistoriales();
-      const historialFormateado = data.map((item: any) => ({
-        id: item.id,
-        usuario: item.correoUsuario,
-        fecha: item.fecha,
-        entrada: item.entrada,
-        inicioColacion: item.inicioColacion,
-        finColacion: item.finColacion,
-        salida: item.salida,
-        totalHoras: "0",
+
+      const historialFormateado: HistorialItem[] = data.map((item: HistorialDTO) => ({
+          id: item.id,
+          usuario: item.correoUsuario,
+          fecha: item.fecha ?? "",
+          entrada: item.entrada ?? "",
+          inicioColacion: item.inicioColacion ?? "",
+          finColacion: item.finColacion ?? "",
+          salida: item.salida ?? "",
+          totalHoras: String(item.totalHoras ?? "0"),
       }));
+
       setHistorial(historialFormateado);
-
       setMensaje("Historial actualizado correctamente");
-      setModal({
-        open: true,
-        type: "success",
-        title: "Historial actualizado",
-        message: "Los cambios se guardaron correctamente",
-      });
-
       setTimeout(() => {
         setModalEdicion(false);
         setMensaje(null);
@@ -167,10 +173,13 @@ const AdminHistorial: React.FC = () => {
 
         {cargandoInicial && (
             <div className="cargando-overlay">
-              <div className="cargando-contenido">
-                <div className="cargando-texto">Cargando historial...</div>
-              </div>
+              <div className="cargando-texto">Cargando historial...</div>
             </div>
+        )}
+        {cargando && (
+          <div className="cargando-overlay">
+            <div className="cargando-texto">Guardando cambios...</div>
+          </div>
         )}
 
         {!cargandoInicial && (

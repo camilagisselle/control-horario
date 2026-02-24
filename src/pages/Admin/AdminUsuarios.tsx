@@ -158,13 +158,6 @@ const AdminUsuarios = () => {
       await cargarUsuarios();
 
       setMensaje("Usuario creado correctamente");
-      setModal({
-        open: true,
-        type: "success",
-        title: "Usuario creado con éxito",
-        message: "Los cambios se guardaron correctamente",
-      });
-
       setTimeout(() => {
         setMostrarModal(false);
         setMensaje(null);
@@ -209,13 +202,6 @@ const AdminUsuarios = () => {
       await cargarUsuarios();
 
       setMensaje("Usuario actualizado correctamente");
-      setModal({
-        open: true,
-        type: "success",
-        title: "Usuario actualizado",
-        message: "Los cambios se guardaron correctamente",
-      });
-
       setTimeout(() => {
         setMostrarModalEditar(false);
         setMensaje(null);
@@ -280,9 +266,7 @@ const AdminUsuarios = () => {
       <h2 className="admin-title">Usuarios</h2>
       {cargando && (
         <div className="cargando-overlay">
-          {/* <div className="cargando-contenido"> */}
           <div className="cargando-texto">Cargando...</div>
-          {/* </div> */}
         </div>
       )}
       {/* ✅ NUEVO: Mensaje flotante de cambio de estado */}
@@ -295,9 +279,7 @@ const AdminUsuarios = () => {
 
       {cargandoInicial && (
         <div className="cargando-overlay">
-          <div className="cargando-contenido">
-            <div className="cargando-texto">Cargando usuarios...</div>
-          </div>
+          <div className="cargando-texto">Cargando usuarios...</div>
         </div>
       )}
 
