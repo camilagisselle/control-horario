@@ -186,10 +186,14 @@ export default function HistorialPage() {
                 <DatePicker
                   selected={fechaDesde}
                   onChange={(date: Date | null) => setFechaDesde(date)}
+                  selectsStart
+                  startDate={fechaDesde ?? undefined}
+                  endDate={fechaHasta ?? undefined}
                   dateFormat="dd/MM/yyyy"
                   locale={es}
                   placeholderText="DD/MM/AAAA"
                   className="input-custom-datepicker"
+                  portalId="root-portal"
                 />
               </div>
 
@@ -198,11 +202,15 @@ export default function HistorialPage() {
                 <DatePicker
                   selected={fechaHasta}
                   onChange={(date: Date | null) => setFechaHasta(date)}
+                  selectsEnd
+                  startDate={fechaDesde ?? undefined}
+                  endDate={fechaHasta ?? undefined}
                   minDate={fechaDesde ?? undefined}
                   dateFormat="dd/MM/yyyy"
                   locale={es}
                   placeholderText="DD/MM/AAAA"
                   className="input-custom-datepicker"
+                  portalId="root-portal"
                 />
               </div>
 

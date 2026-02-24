@@ -267,6 +267,8 @@ tbody tr:nth-child(even) {
   background: white;
   border-radius: 12px;
 }
+
+/* desde aqui */
 .pagination-container {
   display: flex;
   justify-content: center;
