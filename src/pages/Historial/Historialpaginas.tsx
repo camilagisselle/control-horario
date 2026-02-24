@@ -23,6 +23,7 @@ export interface RegistroDTO {
   salida: string | null;
   totalHoras: string | number | null;
 }
+
 interface RegistroAPI {
   fecha: string;
   entrada?: string | null;
@@ -57,7 +58,7 @@ export default function HistorialPage() {
     return null;
   })();
 
-    useEffect(() => {
+  useEffect(() => {
     if (yaCargo.current) return;
     yaCargo.current = true;
 
@@ -103,10 +104,7 @@ export default function HistorialPage() {
 
   const indiceUltimo = paginaActual * registrosPorPagina;
   const indicePrimero = indiceUltimo - registrosPorPagina;
-  const registrosPaginados = registrosFiltrados.slice(
-    indicePrimero,
-    indiceUltimo
-  );
+  const registrosPaginados = registrosFiltrados.slice(indicePrimero, indiceUltimo);
 
   const totalPaginas = Math.max(
     1,
@@ -175,15 +173,12 @@ export default function HistorialPage() {
 
       {cargando && (
         <div className="cargando-overlay">
-          {/* <div className="cargando-contenido"> */}
-            <div className="cargando-texto">Cargando historial...</div>
-          {/* </div> */}
+          <div className="cargando-texto">Cargando historial...</div>
         </div>
       )}
 
       {!cargando && (
         <>
-          {/* FILTROS */}
           <div className="filtros-container">
             <div className="rango-fechas-wrapper">
               <div className="campo-datepicker">
@@ -220,23 +215,16 @@ export default function HistorialPage() {
               </div>
 
               <div className="grupo-botones-filtros">
-                <button
-                  className="btn-historial-buscar"
-                  onClick={manejarBusqueda}
-                >
+                <button className="btn-historial-buscar" onClick={manejarBusqueda}>
                   BUSCAR
                 </button>
-                <button
-                  className="btn-historial-limpiar"
-                  onClick={manejarLimpiar}
-                >
+                <button className="btn-historial-limpiar" onClick={manejarLimpiar}>
                   LIMPIAR
                 </button>
               </div>
             </div>
           </div>
 
-          {/* TABLA */}
           <div className="tabla-container">
             {registrosPaginados.length === 0 ? (
               <div className="tabla-vacia">Sin resultados</div>
@@ -265,22 +253,27 @@ export default function HistorialPage() {
                   </tbody>
                 </table>
 
-                <div className="paginacion">
-                  <button
-                    onClick={() => setPaginaActual(paginaActual - 1)}
-                    disabled={paginaActual === 1}
-                  >
-                    ⬅
-                  </button>
-                  <span>
-                    Página {paginaActual} de {totalPaginas}
-                  </span>
-                  <button
-                    onClick={() => setPaginaActual(paginaActual + 1)}
-                    disabled={paginaActual === totalPaginas}
-                  >
-                    ➡
-                  </button>
+                {/* PAGINACIÓN CORREGIDA */}
+                <div className="pagination-container">
+                  <div className="pagination-box">
+                    <button
+                      onClick={() => setPaginaActual(paginaActual - 1)}
+                      disabled={paginaActual === 1}
+                    >
+                      ⬅
+                    </button>
+
+                    <span className="pagination-text">
+                      Página {paginaActual} de {totalPaginas}
+                    </span>
+
+                    <button
+                      onClick={() => setPaginaActual(paginaActual + 1)}
+                      disabled={paginaActual === totalPaginas}
+                    >
+                      ➡
+                    </button>
+                  </div>
                 </div>
               </>
             )}
@@ -288,15 +281,12 @@ export default function HistorialPage() {
         </>
       )}
 
-      {/* Modal reutilizable */}
       <Modal
         open={modal.open}
         type={modal.type}
         title={modal.title}
         message={modal.message}
-        onClose={() =>
-          setModal((prev) => ({ ...prev, open: false }))
-        }
+        onClose={() => setModal((prev) => ({ ...prev, open: false }))}
       />
     </div>
   );

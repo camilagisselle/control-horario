@@ -267,3 +267,40 @@ tbody tr:nth-child(even) {
   background: white;
   border-radius: 12px;
 }
+
+/* desde aqui */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination-box {
+  background: #f3efff;
+  padding: 4px 14px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border: 1px solid rgba(155, 123, 255, 0.25);
+}
+
+.pagination-box button {
+  background: #e7ddff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #1c2d8f;
+}
+
+.pagination-box button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination-text {
+  font-weight: 700;
+  color: #6b4eff;
+}
