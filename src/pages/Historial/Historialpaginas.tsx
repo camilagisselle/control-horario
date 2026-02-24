@@ -87,12 +87,6 @@ export default function HistorialPage() {
       } catch (error) {
         console.error("Error cargando historial:", error);
 
-        setModal({
-          open: true,
-          type: "error",
-          title: "Error",
-          message: "No se pudo cargar el historial",
-        });
 
       } finally {
         setCargando(false);
