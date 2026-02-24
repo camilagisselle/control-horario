@@ -28,6 +28,13 @@ export interface HistorialDTO {
   totalHoras?: string | number | null;
 }
 
+interface ActualizarHistorialDTO {
+  entrada?: string;
+  inicioColacion?: string;
+  finColacion?: string;
+  salida?: string;
+}
+
 const AdminHistorial: React.FC = () => {
   const yaCargo = useRef(false);
   const [historial, setHistorial] = useState<HistorialItem[]>([]);
@@ -94,10 +101,10 @@ const AdminHistorial: React.FC = () => {
 
   const abrirEdicion = (registro: HistorialItem) => {
     setRegistroEditando(registro);
-    setEditarEntrada(registro.entrada);
-    setEditarInicioColacion(registro.inicioColacion);
-    setEditarFinColacion(registro.finColacion);
-    setEditarSalida(registro.salida);
+    setEditarEntrada(registro.entrada ?? "");
+    setEditarInicioColacion(registro.inicioColacion && registro.inicioColacion !== "-" ? registro.inicioColacion : "");
+    setEditarFinColacion(registro.finColacion && registro.finColacion !== "-" ? registro.finColacion : "");
+    setEditarSalida(registro.salida && registro.salida !== "-" ? registro.salida : "");
     setError(null);
     setMensaje(null);
     setModalEdicion(true);
@@ -108,26 +115,26 @@ const AdminHistorial: React.FC = () => {
 
     setError(null);
     setMensaje(null);
-
+    setCargando(true);
     try {
-      setCargando(true);
+      const payload: Partial<ActualizarHistorialDTO> = {
+        entrada: editarEntrada || undefined,
+        inicioColacion: editarInicioColacion || undefined,
+        finColacion: editarFinColacion || undefined,
+        salida: editarSalida || undefined,
+      };
 
-      await actualizarHistorial(registroEditando.id, {
-        entrada: editarEntrada,
-        inicioColacion: editarInicioColacion,
-        finColacion: editarFinColacion,
-        salida: editarSalida,
-      });
-
+      await actualizarHistorial(registroEditando!.id, payload);
       const data = await obtenerTodosLosHistoriales();
+
       const historialFormateado: HistorialItem[] = data.map((item: HistorialDTO) => ({
           id: item.id,
           usuario: item.correoUsuario,
-          fecha: item.fecha || "-",
-          entrada: item.entrada || "-",
-          inicioColacion: item.inicioColacion || "-",
-          finColacion: item.finColacion || "-",
-          salida: item.salida || "-",
+          fecha: item.fecha ?? "",
+          entrada: item.entrada ?? "",
+          inicioColacion: item.inicioColacion ?? "",
+          finColacion: item.finColacion ?? "",
+          salida: item.salida ?? "",
           totalHoras: String(item.totalHoras ?? "0"),
       }));
 
@@ -168,6 +175,11 @@ const AdminHistorial: React.FC = () => {
             <div className="cargando-overlay">
               <div className="cargando-texto">Cargando historial...</div>
             </div>
+        )}
+        {cargando && (
+          <div className="cargando-overlay">
+            <div className="cargando-texto">Guardando cambios...</div>
+          </div>
         )}
 
         {!cargandoInicial && (
