@@ -109,11 +109,6 @@ const AdminHistorial: React.FC = () => {
     setError(null);
     setMensaje(null);
 
-    if (!editarEntrada || !editarSalida) {
-      setError("Entrada y Salida son obligatorios");
-      return;
-    }
-
     try {
       setCargando(true);
 
