@@ -54,32 +54,28 @@ const AdminUsuarios = () => {
     message: "",
   });
 
-  // ✅ NUEVO: Estado para cambio de estado
-  const [cambiandoEstado, setCambiandoEstado] = useState<string | null>(null);
-  const [mensajeEstado, setMensajeEstado] = useState<string | null>(null);
-
   const [paginaActual, setPaginaActual] = useState(1);
   const usuariosPorPagina = 5;
 
   const indiceUltimo = paginaActual * usuariosPorPagina;
   const indicePrimero = indiceUltimo - usuariosPorPagina;
 
-    useEffect(() => {
-      if (yaCargo.current) return;
-      yaCargo.current = true;
+  useEffect(() => {
+    if (yaCargo.current) return;
+    yaCargo.current = true;
 
-      const cargarDatos = async () => {
-        setCargandoInicial(true);
-        try {
-          await cargarUsuarios();
-          await cargarPerfiles();
-        } finally {
-          setCargandoInicial(false);
-        }
-      };
+    const cargarDatos = async () => {
+      setCargandoInicial(true);
+      try {
+        await cargarUsuarios();
+        await cargarPerfiles();
+      } finally {
+        setCargandoInicial(false);
+      }
+    };
 
-      cargarDatos();
-    }, []);
+    cargarDatos();
+  }, []);
 
   const cargarUsuarios = async () => {
     setCargando(true);
@@ -219,34 +215,6 @@ const AdminUsuarios = () => {
     }
   };
 
-  // ✅ MODIFICADO: Toggle estado con mensaje
-  const toggleEstado = async (usuario: UsuarioAPI) => {
-    setCambiandoEstado(usuario.correo);
-    setMensajeEstado("Cambiando estado...");
-
-    try {
-      await actualizarUsuario(usuario.correo, {
-        estado: usuario.estado === 1 ? 0 : 1,
-      });
-      await cargarUsuarios();
-
-      setMensajeEstado(
-        `Estado cambiado a ${usuario.estado === 1 ? "inactivo" : "activo"}`,
-      );
-
-      setTimeout(() => {
-        setMensajeEstado(null);
-      }, 2000);
-    } catch {
-      setMensajeEstado("Error al cambiar estado");
-      setTimeout(() => {
-        setMensajeEstado(null);
-      }, 2000);
-    } finally {
-      setCambiandoEstado(null);
-    }
-  };
-
   const usuariosFiltrados = usuarios.filter(
     (u) =>
       u.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
@@ -267,13 +235,6 @@ const AdminUsuarios = () => {
       {cargando && (
         <div className="cargando-overlay">
           <div className="cargando-texto">Cargando...</div>
-        </div>
-      )}
-      {/* ✅ NUEVO: Mensaje flotante de cambio de estado */}
-      {mensajeEstado && (
-        <div className="alerta-flotante">
-          <span className="alerta-icono">⏳</span>
-          <span className="alerta-texto">{mensajeEstado}</span>
         </div>
       )}
 
@@ -323,16 +284,15 @@ const AdminUsuarios = () => {
                         <td>{u.nombre}</td>
                         <td>{u.correo}</td>
                         <td>{u.perfil.perfil_nombre}</td>
-                        <td
-                          className={`btn-estado ${
-                            u.estado === 1 ? "activo" : "inactivo"
-                          } ${cambiandoEstado === u.correo ? "cargando" : ""}`}
-                          onClick={() => !cambiandoEstado && toggleEstado(u)}
-                          style={{
-                            cursor: cambiandoEstado ? "wait" : "pointer",
-                          }}
-                        >
-                          {cambiandoEstado === u.correo ? "⏳" : "●"}
+                        <td>
+                          <span
+                            className={`estado-indicador ${
+                              u.estado === 1 ? "activo" : "inactivo"
+                            }`}
+                            title={u.estado === 1 ? "Activo" : "Inactivo"}
+                          >
+                            ●
+                          </span>
                         </td>
                         <td className="accionesAdminUsuarios">
                           <button

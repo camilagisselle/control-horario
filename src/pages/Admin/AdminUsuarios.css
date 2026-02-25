@@ -131,19 +131,6 @@ tbody tr:nth-child(even) {
   transform: scale(1.05);
 }
 
-.btn-estado {
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.btn-estado.activo {
-  color: #22c55e;
-}
-
-.btn-estado.inactivo {
-  color: #ef4444;
-}
-
 .btn-accion.editar {
   color: #4f46e5;
 }
@@ -333,12 +320,11 @@ tbody tr:nth-child(even) {
   .tabla-container {
     overflow-x: visible;
   }
-  
+
   table {
     min-width: auto;
   }
 }
-
 
 @media (max-width: 768px) {
   .admin-page {
@@ -453,8 +439,15 @@ tbody tr:nth-child(even) {
     transform: translateX(0);
   }
 }
+.estado-indicador {
+  font-size: 18px;
+  cursor: default;
+}
 
-.btn-estado.cargando {
-  opacity: 0.6;
-  pointer-events: none;
+.estado-indicador.activo {
+  color: #22c55e;
+}
+
+.estado-indicador.inactivo {
+  color: #ef4444;
 }
