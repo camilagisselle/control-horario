@@ -119,15 +119,14 @@ table {
 }
 
 .tablaAdminUsuarios {
-  table-layout: fixed;
+  table-layout: fixed; /* evita que las columnas invadan otras */
   width: 100%;
 }
 
-th,
-td {
-  padding: 12px;
-  border-bottom: 1px solid #cfc7ff;
-  font-size: 14px;
+.tablaAdminUsuarios th,
+.tablaAdminUsuarios td {
+  word-break: break-word;     /* corta correos largos */
+  overflow-wrap: break-word;  /* asegura el salto */
 }
 
 .tablaAdminUsuarios thead {
