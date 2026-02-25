@@ -158,15 +158,46 @@ const AdminHistorial: React.FC = () => {
     }
   };
 
-  const historialFiltrado = historial.filter(
-      (h) =>
-          h.usuario.toLowerCase().includes(busqueda.toLowerCase()) ||
-          h.fecha.includes(busqueda)
-  );
+  const hoy = new Date().toISOString().slice(0, 10);
+
+  const convertirBusquedaFecha = (texto: string) => {
+    const partes = texto.split(/[\/-]/);
+
+    if (partes.length === 3) {
+      const [dia, mes, anio] = partes;
+      return `${anio}-${mes}-${dia}`;
+    }
+
+    if (partes.length === 2) {
+      const [dia, mes] = partes;
+      return `-${mes.padStart(2, "0")}-${dia.padStart(2, "0")}`;
+    }
+
+    return texto;
+  };
+
+  const busquedaFecha = convertirBusquedaFecha(busqueda);
+
+  const historialBase = busqueda
+    ? historial
+    : historial.filter(h => h.fecha === hoy);
+
+  const historialFiltrado = historialBase.filter((h) => {
+    const usuarioMatch = h.usuario.toLowerCase().includes(busqueda.toLowerCase());
+
+    const fechaISO = h.fecha; // YYYY-MM-DD
+    const fechaMatch =
+      fechaISO.includes(busquedaFecha) ||
+      fechaISO.split("-").reverse().join("/").includes(busqueda);
+
+    return usuarioMatch || fechaMatch;
+  });
 
   const historialPaginado = historialFiltrado.slice(indicePrimero, indiceUltimo);
   const totalPaginas = Math.ceil(historialFiltrado.length / filasPorPagina);
-
+  const sinRegistrosHoy = !busqueda && historialBase.length === 0;
+  const sinResultadosBusqueda = busqueda && historialFiltrado.length === 0;
+  
   return (
       <div className="admin-page">
         <h2 className="admin-title">Historial de Usuarios</h2>
@@ -200,9 +231,15 @@ const AdminHistorial: React.FC = () => {
               </div>
 
               <div className="tabla-container">
-                {historialPaginado.length === 0 ? (
-                    <div className="tabla-vacia">Sin resultados</div>
-                ) : (
+                  {sinRegistrosHoy ? (
+                    <div className="tabla-vacia">
+                      No hay registros para el día de hoy
+                    </div>
+                  ) : sinResultadosBusqueda ? (
+                    <div className="tabla-vacia">
+                      No se encontraron resultados para la búsqueda
+                    </div>
+                  ) : (
                     <>
                       <table className="tablaAdminUsuarios">
                         <thead>
@@ -237,24 +274,24 @@ const AdminHistorial: React.FC = () => {
 
                       <div className="paginacion">
                         <div className="paginacion-box">
-                        <button
-                            onClick={() => setPaginaActual(paginaActual - 1)}
-                            disabled={paginaActual === 1}
-                        >
-                          ⬅
+                          <button
+                              onClick={() => setPaginaActual(paginaActual - 1)}
+                              disabled={paginaActual === 1}
+                          >
+                            ⬅
+                          </button>
+                          <span>
+                            Página {paginaActual} de {totalPaginas}
+                          </span>
+                          <button
+                              onClick={() => setPaginaActual(paginaActual + 1)}
+                              disabled={paginaActual === totalPaginas}
+                          >
+                            ➡
                         </button>
-                        <span>
-                    Página {paginaActual} de {totalPaginas}
-                  </span>
-                        <button
-                            onClick={() => setPaginaActual(paginaActual + 1)}
-                            disabled={paginaActual === totalPaginas}
-                        >
-                          ➡
-                        </button>
-                        </div>
                       </div>
-                    </>
+                    </div>
+                  </>
                 )}
               </div>
             </>
