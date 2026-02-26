@@ -383,4 +383,8 @@ tbody tr:nth-child(even) {
     justify-content: center;
     align-items: center;
     gap: 20px;
+    flex-wrap: wrap; 
+}
+.paginacion-box button {
+    flex-shrink: 0; 
 }

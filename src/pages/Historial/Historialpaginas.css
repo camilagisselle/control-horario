@@ -270,37 +270,20 @@ tbody tr:nth-child(even) {
 
 /* desde aqui */
 .pagination-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
+  width: 100%;
+  margin-top: 15px;
 }
 
 .pagination-box {
-  background: #f3efff;
-  padding: 4px 14px;
-  border-radius: 7px;
+  width: 100%;
   display: flex;
+  justify-content: center;
   align-items: center;
   gap: 20px;
-  border: 1px solid rgba(155, 123, 255, 0.25);
+  flex-wrap: wrap;
 }
 
 .pagination-box button {
-  background: #e7ddff;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 600;
-  color: #1c2d8f;
+  flex-shrink: 0;
 }
 
-.pagination-box button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.pagination-text {
-  font-weight: 700;
-  color: #6b4eff;
-}
