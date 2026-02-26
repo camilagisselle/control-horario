@@ -377,14 +377,3 @@ tbody tr:nth-child(even) {
   background: white;
   border-radius: 12px;
 }
-.paginacion-box {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    flex-wrap: wrap; 
-}
-.paginacion-box button {
-    flex-shrink: 0; 
-}
