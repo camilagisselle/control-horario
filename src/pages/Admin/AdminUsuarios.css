@@ -308,3 +308,139 @@ tbody tr:nth-child(even) {
     word-break: break-word;
     overflow-wrap: break-word;
 }
+/* Evitar scroll horizontal innecesario en pantallas grandes */
+@media (min-width: 1200px) {
+  .tabla-container {
+    overflow-x: visible;
+  }
+
+  table {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-page {
+    padding: 24px 16px 40px;
+  }
+
+  .admin-title {
+    margin-bottom: 40px;
+    font-size: 22px;
+  }
+
+  .admin-actions {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+
+  .modal-usuario.admin-style {
+    padding: 22px 18px;
+  }
+
+  .modal-form {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .modal-actions button {
+    width: 100%;
+  }
+}
+
+.modal-form select {
+  color: #111111;
+  background-color: #ffffff;
+}
+
+.modal-form select option {
+  color: #111111;
+  background-color: #ffffff;
+}
+
+.modal-form select option:checked,
+.modal-form select option:hover {
+  background-color: #e0e7ff;
+  color: #111111;
+}
+
+.modal-form select option[value=""] {
+  color: #6b7280;
+}
+
+.modal-form select option {
+  color: #1f2937;
+  background: #ffffff;
+}
+
+.cargando-contenido {
+  background: white;
+  padding: 40px 60px;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.cargando-texto {
+  font-size: 18px;
+  font-weight: 600;
+  color: #6b4eff;
+}
+
+.tabla-vacia {
+  text-align: center;
+  padding: 60px 20px;
+  font-size: 16px;
+  color: #6b7280;
+  font-weight: 500;
+  background: white;
+  border-radius: 12px;
+}
+.alerta-flotante {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-radius: 12px;
+  background: #f0f9ff;
+  border: 2px solid #38bdf8;
+  color: #0369a1;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  animation: slideInRight 0.3s ease;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.estado-indicador {
+  font-size: 18px;
+  cursor: default;
+}
+
+.estado-indicador.activo {
+  color: #22c55e;
+}
+
+.estado-indicador.inactivo {
+  color: #ef4444;
+}
