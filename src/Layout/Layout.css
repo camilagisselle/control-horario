@@ -49,13 +49,16 @@ body {
 
 .paginacion {
   display: flex;
-  justify-content: center;
+  /*justify-content: center;*/
   /* margin-top: 12px; */
 }
 
 .paginacion-box {
+  width: 100%;
+  min-width: 600px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
   padding: 6px 12px;
   border-radius: 12px;
@@ -63,6 +66,11 @@ body {
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.6);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  flex-wrap: wrap;
+}
+
+.paginacion-box button {
+  flex-shrink: 0;
 }
 
 /* BOTONES */

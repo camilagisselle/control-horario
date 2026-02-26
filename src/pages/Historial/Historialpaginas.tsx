@@ -247,9 +247,8 @@ export default function HistorialPage() {
                   </tbody>
                 </table>
 
-                {/* PAGINACIÓN CORREGIDA */}
-                <div className="pagination-container">
-                  <div className="pagination-box">
+                <div className="paginacion">
+                  <div className="paginacion-box">
                     <button
                       onClick={() => setPaginaActual(paginaActual - 1)}
                       disabled={paginaActual === 1}
@@ -257,7 +256,7 @@ export default function HistorialPage() {
                       ⬅
                     </button>
 
-                    <span className="pagination-text">
+                    <span>
                       Página {paginaActual} de {totalPaginas}
                     </span>
 
@@ -267,6 +266,7 @@ export default function HistorialPage() {
                     >
                       ➡
                     </button>
+                    
                   </div>
                 </div>
               </>
@@ -283,5 +283,4 @@ export default function HistorialPage() {
         onClose={() => setModal((prev) => ({ ...prev, open: false }))}
       />
     </div>
-  );
-}
+);  }
