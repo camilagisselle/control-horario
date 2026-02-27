@@ -2,11 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import "./AdminHistorial.css";
 import {
   obtenerTodosLosHistoriales,
-  actualizarHistorial
+  actualizarHistorial, obtenerHistorialPorFecha
 } from "../../services/HistorialService";
 import Modal from "../../Modals/modal";
 import DatePicker from "react-datepicker";
 import { es } from "date-fns/locale";
+import { format } from 'date-fns';
 
 type Registro = {
   fecha: string;
@@ -54,10 +55,9 @@ const AdminHistorial: React.FC = () => {
   const [paginaActual, setPaginaActual] = useState(1);
   const [cargandoInicial, setCargandoInicial] = useState(true);
 
-  const [fechaDesde, setFechaDesde] = useState<Date | null>(null);
-  const [fechaHasta, setFechaHasta] = useState<Date | null>(null);
+  const [fechaDesde, setFechaDesde] = useState<Date | null>(new Date());
+  const [fechaHasta, setFechaHasta] = useState<Date | null>(new Date());
   const [registros, setRegistros] = useState<Registro[]>([]);
-  const [registrosFiltrados, setRegistrosFiltrados] = useState<Registro[]>([]);
 
   const [editarEntrada, setEditarEntrada] = useState("");
   const [editarInicioColacion, setEditarInicioColacion] = useState("");
@@ -83,79 +83,46 @@ const AdminHistorial: React.FC = () => {
     if (yaCargo.current) return;
     yaCargo.current = true;
 
-    const cargarHistorial = async () => {
-      setCargandoInicial(true);
-      try {
-        const data = await obtenerTodosLosHistoriales();
-        const historialFormateado: HistorialItem[] = data.map((item: HistorialDTO) => ({
-          id: item.id,
-          usuario: item.correoUsuario,
-          fecha: item.fecha || "-",
-          entrada: item.entrada || "-",
-          inicioColacion: item.inicioColacion || "-",
-          finColacion: item.finColacion || "-",
-          salida: item.salida || "-",
-          totalHoras: String(item.totalHoras ?? "0"),
-        }));
-        setHistorial(historialFormateado);
-      } catch (error) {
-        console.error("Error cargando historial:", error);
-        setModal({
-          open: true,
-          type: "error",
-          title: "Error",
-          message: "No se pudo cargar el historial",
-        });
-      } finally {
-        setCargandoInicial(false);
-      }
-      const manejarBusqueda = () => {
-    if (fechaDesde && fechaHasta && fechaDesde > fechaHasta) {
-      setModal({
-        open: true,
-        type: "info",
-        title: "Atención",
-        message: "La fecha 'Desde' no puede ser mayor que la fecha 'Hasta'.",
-      });
+    cargarHistorial();
+  }, []);
+
+  const cargarHistorial = async () => {
+    if (fechaDesde===null || fechaHasta===null) {
+      mostrarModal("La fechas no puedes ser nulas.");
       return;
     }
 
-    const filtrados = registros.filter((r) => {
-      const [anio, mes, dia] = r.fecha.split("-").map(Number);
-      const fechaReg = new Date(anio, mes - 1, dia);
+    if (fechaDesde! > fechaHasta!) {
+      mostrarModal("La fecha 'Desde' no puede ser mayor que la fecha 'Hasta'.");
+      return;
+    }
 
-      let okDesde = true;
-      let okHasta = true;
-
-      if (fechaDesde) {
-        okDesde =
-          fechaReg >=
-          new Date(
-            fechaDesde.getFullYear(),
-            fechaDesde.getMonth(),
-            fechaDesde.getDate()
-          );
-      }
-      if (fechaHasta) {
-        okHasta =
-          fechaReg <=
-          new Date(
-            fechaHasta.getFullYear(),
-            fechaHasta.getMonth(),
-            fechaHasta.getDate()
-          );
-      }
-
-      return okDesde && okHasta;
-    });
-
-    setRegistrosFiltrados(filtrados);
-    setPaginaActual(1);
+    setCargandoInicial(true);
+    try {
+      const data = await obtenerHistorialPorFecha(format(fechaDesde!, 'yyyy-MM-dd'), format(fechaHasta!, 'yyyy-MM-dd'))
+      const historialFormateado: HistorialItem[] = data.map((item: HistorialDTO) => ({
+        id: item.id,
+        usuario: item.correoUsuario,
+        fecha: item.fecha || "-",
+        entrada: item.entrada || "-",
+        inicioColacion: item.inicioColacion || "-",
+        finColacion: item.finColacion || "-",
+        salida: item.salida || "-",
+        totalHoras: String(item.totalHoras ?? "0"),
+      }));
+      setHistorial(historialFormateado);
+    } catch (error) {
+      console.error("Error cargando historial:", error);
+      setModal({
+        open: true,
+        type: "error",
+        title: "Error",
+        message: "No se pudo cargar el historial",
+      });
+    } finally {
+      setCargandoInicial(false);
+    }
   };
-    };
-
-    cargarHistorial();
-  }, []);
 
   const abrirEdicion = (registro: HistorialItem) => {
     setRegistroEditando(registro);
@@ -167,54 +134,20 @@ const AdminHistorial: React.FC = () => {
     setMensaje(null);
     setModalEdicion(true);
   };
-  const manejarBusqueda = () => {
-    if (fechaDesde && fechaHasta && fechaDesde > fechaHasta) {
-      setModal({
-        open: true,
-        type: "info",
-        title: "Atención",
-        message: "La fecha 'Desde' no puede ser mayor que la fecha 'Hasta'.",
-      });
-      return;
-    }
 
-    const filtrados = registros.filter((r) => {
-      const [anio, mes, dia] = r.fecha.split("-").map(Number);
-      const fechaReg = new Date(anio, mes - 1, dia);
-
-      let okDesde = true;
-      let okHasta = true;
-
-      if (fechaDesde) {
-        okDesde =
-          fechaReg >=
-          new Date(
-            fechaDesde.getFullYear(),
-            fechaDesde.getMonth(),
-            fechaDesde.getDate()
-          );
-      }
-      if (fechaHasta) {
-        okHasta =
-          fechaReg <=
-          new Date(
-            fechaHasta.getFullYear(),
-            fechaHasta.getMonth(),
-            fechaHasta.getDate()
-          );
-      }
-
-      return okDesde && okHasta;
+  const mostrarModal = (msg: string) => {
+    setModal({
+      open: true,
+      type: "info",
+      title: "Atención",
+      message: msg,
     });
-
-    setRegistrosFiltrados(filtrados);
-    setPaginaActual(1);
-  };
+  }
 
   const manejarLimpiar = () => {
-      setFechaDesde(null);
-      setFechaHasta(null);
-      setRegistrosFiltrados(registros);
+      setFechaDesde(new Date());
+      setFechaHasta(new Date());
+      setRegistros(registros);
       setPaginaActual(1);
     };
 
@@ -351,7 +284,7 @@ const AdminHistorial: React.FC = () => {
                   <button
                     className="btn-buscar"
                     type="button"
-                    onClick={manejarBusqueda}
+                    onClick={cargarHistorial}
                 > 
                   Buscar
                 </button>

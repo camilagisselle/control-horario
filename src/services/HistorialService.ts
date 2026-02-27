@@ -53,6 +53,11 @@ export const obtenerHistorialPorCorreo = async (correo: string) => {
   return response.data;
 };
 
+export const obtenerHistorialPorFecha = async (fechastart: string, fechaend: string) => {
+  const response = await api.get(`/historial/fecha/${fechastart}/${fechaend}`);
+  return response.data;
+};
+
 export const actualizarHistorial = async (
   id: number,
   data: ActualizarHistorialDTO
