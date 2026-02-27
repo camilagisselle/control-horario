@@ -5,7 +5,17 @@ import {
   actualizarHistorial
 } from "../../services/HistorialService";
 import Modal from "../../Modals/modal";
+import DatePicker from "react-datepicker";
+import { es } from "date-fns/locale";
 
+type Registro = {
+  fecha: string;
+  entrada: string;
+  inicioColacion: string;
+  finColacion: string;
+  salida: string;
+  total: string;
+};
 interface HistorialItem {
   id: number;
   usuario: string;
@@ -43,6 +53,11 @@ const AdminHistorial: React.FC = () => {
   const [registroEditando, setRegistroEditando] = useState<HistorialItem | null>(null);
   const [paginaActual, setPaginaActual] = useState(1);
   const [cargandoInicial, setCargandoInicial] = useState(true);
+
+  const [fechaDesde, setFechaDesde] = useState<Date | null>(null);
+  const [fechaHasta, setFechaHasta] = useState<Date | null>(null);
+  const [registros, setRegistros] = useState<Registro[]>([]);
+  const [registrosFiltrados, setRegistrosFiltrados] = useState<Registro[]>([]);
 
   const [editarEntrada, setEditarEntrada] = useState("");
   const [editarInicioColacion, setEditarInicioColacion] = useState("");
@@ -94,6 +109,49 @@ const AdminHistorial: React.FC = () => {
       } finally {
         setCargandoInicial(false);
       }
+      const manejarBusqueda = () => {
+    if (fechaDesde && fechaHasta && fechaDesde > fechaHasta) {
+      setModal({
+        open: true,
+        type: "info",
+        title: "Atención",
+        message: "La fecha 'Desde' no puede ser mayor que la fecha 'Hasta'.",
+      });
+      return;
+    }
+
+    const filtrados = registros.filter((r) => {
+      const [anio, mes, dia] = r.fecha.split("-").map(Number);
+      const fechaReg = new Date(anio, mes - 1, dia);
+
+      let okDesde = true;
+      let okHasta = true;
+
+      if (fechaDesde) {
+        okDesde =
+          fechaReg >=
+          new Date(
+            fechaDesde.getFullYear(),
+            fechaDesde.getMonth(),
+            fechaDesde.getDate()
+          );
+      }
+      if (fechaHasta) {
+        okHasta =
+          fechaReg <=
+          new Date(
+            fechaHasta.getFullYear(),
+            fechaHasta.getMonth(),
+            fechaHasta.getDate()
+          );
+      }
+
+      return okDesde && okHasta;
+    });
+
+    setRegistrosFiltrados(filtrados);
+    setPaginaActual(1);
+  };
     };
 
     cargarHistorial();
@@ -109,6 +167,56 @@ const AdminHistorial: React.FC = () => {
     setMensaje(null);
     setModalEdicion(true);
   };
+  const manejarBusqueda = () => {
+    if (fechaDesde && fechaHasta && fechaDesde > fechaHasta) {
+      setModal({
+        open: true,
+        type: "info",
+        title: "Atención",
+        message: "La fecha 'Desde' no puede ser mayor que la fecha 'Hasta'.",
+      });
+      return;
+    }
+
+    const filtrados = registros.filter((r) => {
+      const [anio, mes, dia] = r.fecha.split("-").map(Number);
+      const fechaReg = new Date(anio, mes - 1, dia);
+
+      let okDesde = true;
+      let okHasta = true;
+
+      if (fechaDesde) {
+        okDesde =
+          fechaReg >=
+          new Date(
+            fechaDesde.getFullYear(),
+            fechaDesde.getMonth(),
+            fechaDesde.getDate()
+          );
+      }
+      if (fechaHasta) {
+        okHasta =
+          fechaReg <=
+          new Date(
+            fechaHasta.getFullYear(),
+            fechaHasta.getMonth(),
+            fechaHasta.getDate()
+          );
+      }
+
+      return okDesde && okHasta;
+    });
+
+    setRegistrosFiltrados(filtrados);
+    setPaginaActual(1);
+  };
+
+  const manejarLimpiar = () => {
+      setFechaDesde(null);
+      setFechaHasta(null);
+      setRegistrosFiltrados(registros);
+      setPaginaActual(1);
+    };
 
   const handleGuardarEdicion = async () => {
     if (!registroEditando) return;
@@ -185,20 +293,78 @@ const AdminHistorial: React.FC = () => {
         {!cargandoInicial && (
             <>
               <div className="admin-actions">
-                <div className="search-box">
-                  <input
-                      type="text"
-                      placeholder="Buscar por usuario o fecha"
-                      value={busqueda}
-                      onChange={(e) => {
-                        setBusqueda(e.target.value);
-                        setPaginaActual(1);
-                      }}
-                  />
-                  <span className="search-icon">🔍</span>
-                </div>
-              </div>
+          {/* 📅 FILTRO POR FECHA + 🔎 BUSCADOR DENTRO */}
+          <div className="rango-fechas-wrapper">
+            {/* 🔍 BUSCADOR */}
+            <div className="search-box search-box-inline">
+              <input
+                type="text"
+                placeholder="Buscar por usuario"
+                value={busqueda}
+                onChange={(e) => {
+                  setBusqueda(e.target.value);
+                  setPaginaActual(1);
+                }}
+              />
+              <span className="search-icon">🔍</span>
+            </div>
 
+            <div className="campo-datepicker">
+              <label>Desde:</label>
+              <DatePicker
+                selected={fechaDesde}
+                onChange={(date: Date | null) => {
+                  setFechaDesde(date);
+                  setPaginaActual(1);
+                }}
+                selectsStart
+                startDate={fechaDesde ?? undefined}
+                endDate={fechaHasta ?? undefined}
+                dateFormat="dd/MM/yyyy"
+                locale={es}
+                placeholderText="DD/MM/AAAA"
+                className="input-custom-datepicker"
+              />
+            </div>
+
+            <div className="campo-datepicker">
+              <label>Hasta:</label>
+              <DatePicker
+                selected={fechaHasta}
+                onChange={(date: Date | null) => {
+                  setFechaHasta(date);
+                  setPaginaActual(1);
+                }}
+                selectsEnd
+                startDate={fechaDesde ?? undefined}
+                endDate={fechaHasta ?? undefined}
+                minDate={fechaDesde ?? undefined}
+                dateFormat="dd/MM/yyyy"
+                locale={es}
+                placeholderText="DD/MM/AAAA"
+                className="input-custom-datepicker"
+              />
+            </div>
+
+            {/* ✅ BOTONES */}
+            <div className="acciones-filtro">
+                  <button
+                    className="btn-buscar"
+                    type="button"
+                    onClick={manejarBusqueda}
+                > 
+                  Buscar
+                </button>
+              <button
+                className="btn-limpiar"
+                type="button"
+                onClick={manejarLimpiar}
+              >
+                Limpiar
+              </button>
+            </div>
+          </div>
+        </div>
               <div className="tabla-container">
                 {historialPaginado.length === 0 ? (
                     <div className="tabla-vacia">Sin resultados</div>

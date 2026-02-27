@@ -76,7 +76,7 @@
 
 .admin-actions {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin-bottom: 30px;
   position: relative;
@@ -97,6 +97,16 @@
   outline: none;
   font-size: 14px;
 }
+.search-box.search-box-inline {
+  width: 260px;          /* ajusta a gusto */
+  flex: 1;               /* que pueda crecer */
+  min-width: 220px;
+}
+
+.search-box.search-box-inline input {
+  height: 42px;          /* igual que ya tenías */
+}
+
 
 .search-icon {
   position: absolute;
@@ -376,4 +386,108 @@ tbody tr:nth-child(even) {
   font-weight: 500;
   background: white;
   border-radius: 12px;
+}
+
+/* contenedor de los datepickers + botones */
+.rango-fechas-wrapper {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-items: center;
+  gap: 20px;
+
+  background: rgba(255, 255, 255, 0.6);
+  padding: 10px 25px;
+  border-radius: 50px;
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  border: 1px solid rgba(155, 123, 255, 0.4);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+/* bloque “Desde/Hasta” */
+.campo-datepicker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.campo-datepicker label {
+  font-size: 13px;
+  color: #1f3bb3;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+/* input del DatePicker */
+.input-custom-datepicker {
+  padding: 8px;
+  border-radius: 12px;
+  border: 1px solid #9b7bff;
+  text-align: center;
+  color: #1f3bb3;
+  width: 110px;
+  font-size: 13px;
+  background: white;
+  outline: none;
+}
+
+.acciones-filtro,
+.acciones-filltro {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 12px !important;
+  justify-content: center;
+  align-items: center;
+
+  border-left: 2px solid rgba(155, 123, 255, 0.3);
+  padding-left: 15px;
+  margin-left: 5px;
+}
+
+.btn-buscar,
+.btn-limpiar {
+  background: #9b7bff !important;
+  color: white !important;
+  border: none;
+
+  padding: 8px 20px;
+  border-radius: 15px;
+  cursor: pointer;
+
+  font-weight: bold;
+  font-size: 13px;
+  transition: all 0.3s ease;
+}
+
+.btn-buscar:hover,
+.btn-limpiar:hover {
+  filter: brightness(0.95);
+  transform: translateY(-1px);
+}
+
+/* Datepicker arriba de todo */
+.react-datepicker-popper {
+  z-index: 10000 !important;
+}
+.react-datepicker {
+  z-index: 10000 !important;
+}
+
+/* responsive */
+@media (max-width: 900px) {
+  .rango-fechas-wrapper {
+    flex-direction: column !important;
+    border-radius: 20px;
+    gap: 15px;
+  }
+
+  .acciones-filtro,
+  .acciones-filltro {
+    border-left: none;
+    padding-left: 0;
+    margin-left: 0;
+  }
 }
